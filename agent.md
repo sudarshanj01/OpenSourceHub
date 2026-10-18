@@ -87,11 +87,20 @@ Every micro-application must adhere to these product-ready security and data man
 
 ---
 
-## 📊 5. Master Progress Tracker (`TRACKER.md`)
+## 📊 5. Master Progress Tracker & Human Verification Protocol (MANDATORY)
 
 The root [`TRACKER.md`](TRACKER.md) is the single source of truth for project completion state across all chat sessions.
-- Whenever a project is completed, its status in `TRACKER.md` must be updated to `✅ DONE`.
-- When starting a new session or project, AI agents and contributors must consult `TRACKER.md` to see what is done and pick the next planned item.
+
+### 🚫 The "Never Mark DONE Autonomously" Rule:
+1. **AI Agents MUST NOT Mark a Project `✅ DONE` Without Explicit Human Verification**:
+   - An agent can NEVER decide on its own that a project is `✅ DONE`.
+   - When a project is built and running in Docker, the agent must keep the status as `🔄 IN_PROGRESS` in [`TRACKER.md`](TRACKER.md).
+   - The agent's responsibility is solely to present the local test URLs (e.g. `http://localhost:<port>` and `http://localhost:<port>/admin`) so the repo owner can personally test and inspect the running app.
+2. **STRICT Anti-Nagging Rule (Do NOT Ask "Are We Done? Can We Move Next?"):**
+   - **Never pester the owner** with questions like *"Is it done?"*, *"Can we mark completed?"*, or *"Can we move to the next project?"*. Repeatedly asking "done? done? done?" is strictly prohibited.
+   - The owner is mature and experienced. They will thoroughly test the application, request multiple rounds of modifications, refinements, or feature adjustments over several turns.
+   - When the owner is fully satisfied with the feature set and UX, **they will tell the agent on their own accord** (e.g., *"It's good, mark as completed and push"*).
+   - **Only after** the owner gives that explicit green light does the agent mark `✅ DONE` in [`TRACKER.md`](TRACKER.md), finalize git commits, and request push confirmation.
 
 ---
 
@@ -104,7 +113,7 @@ Every AI coding assistant (Antigravity, Cursor, Claude, Copilot, ChatGPT) workin
      > *"I am going to execute `git push origin <branch>`. Shall I proceed?"*
    - ONLY when the user (Sudarshan / repo owner) explicitly responds with a confirmation (e.g. *"yes"*) is the agent permitted to execute `git push`.
 2. **Prerequisites Before Requesting Push**:
-   - The project MUST be verified, healthy in Docker, and marked as `✅ DONE` in [`TRACKER.md`](TRACKER.md).
+   - The project MUST be verified, healthy in Docker, and the owner has explicitly signaled satisfaction and instructed the agent to mark it as `✅ DONE` in [`TRACKER.md`](TRACKER.md).
    - All code, schemas, and documentation must be committed cleanly to the local git branch.
 
 ---

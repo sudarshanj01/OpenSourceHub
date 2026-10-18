@@ -7,8 +7,8 @@
 
 ## 📈 Overall Progress
 
-- **Completed:** 2 / 100
-- **In Progress:** 0 / 100
+- **Completed:** 1 / 100
+- **In Progress:** 1 / 100
 - **Planned:** 98 / 100
 
 | Status Legend | Meaning |
@@ -33,7 +33,7 @@
 | **008** | `008-blood-test-report-formatter` | Pathology Lab Test Report Formatter | Diagnostic & Pathology Labs | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/008-blood-test-report-formatter` |
 | **009** | `009-dietitian-meal-macro-planner` | Nutritionist Diet Chart & Meal Planner | Dietitians & Nutritionists | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/009-dietitian-meal-macro-planner` |
 | **010** | `010-hospital-bed-occupancy-board` | Nursing Home Bed Occupancy Live Board | Independent Nursing Homes | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/010-hospital-bed-occupancy-board` |
-| **011** | `011-digital-qr-menu-board` | **Live Digital QR Menu Board** | Cafes, Diners & Small Hotels | Next.js 14, Tailwind, Prisma, PostgreSQL 16 | `✅ DONE` | [`projects/011-digital-qr-menu-board`](projects/011-digital-qr-menu-board/) |
+| **011** | `011-digital-qr-menu-board` | **Live Digital QR Menu Board** | Cafes, Diners & Small Hotels | Next.js 14, Tailwind, Prisma, PostgreSQL 16 | `🔄 IN_PROGRESS` | [`projects/011-digital-qr-menu-board`](projects/011-digital-qr-menu-board/) |
 | **012** | `012-table-kot-token-display` | Kitchen Order Token (KOT) & Table Display | Restaurant Kitchens & Food Trucks | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/012-table-kot-token-display` |
 | **013** | `013-bakery-preorder-batch-manager` | Custom Cake & Bakery Pre-order Calendar | Home Bakers & Pastry Shops | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/013-bakery-preorder-batch-manager` |
 | **014** | `014-street-food-daily-pnl-ledger` | Street Food Stall Daily Cash & PnL Ledger | Street Food Vendors | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/014-street-food-daily-pnl-ledger` |
