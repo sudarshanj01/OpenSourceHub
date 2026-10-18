@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: utility-app
+    restart: unless-stopped
+    ports:
+      # Local development port mapping:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_PATH=/app/data/app.db
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+# =========================================================================
+# 🌐 PRODUCTION READY DEPLOYMENT (CUSTOM DOMAIN + AUTOMATIC SSL/HTTPS)
+# =========================================================================
+# When you are ready to point your real domain (e.g. app.mybusiness.com):
+#
+# Step 1: Ensure DNS 'A' record for your domain points to your server's IP.
+# Step 2: Configure your .env file with:
+#           DOMAIN=app.mybusiness.com
+#           ACME_EMAIL=admin@mybusiness.com
+# Step 3: In the 'app' service above, comment out 'ports:' and replace with:
+#           expose:
+#             - "3000"
+# Step 4: Uncomment the 'caddy' service block below:
+#
+#  caddy:
+#    image: caddy:2.8.4-alpine
+#    container_name: utility-caddy-proxy
+#    restart: unless-stopped
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    environment:
+#      - DOMAIN=${DOMAIN}
+#      - ACME_EMAIL=${ACME_EMAIL}
+#    volumes:
+#      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+#      - caddy_data:/data
+#      - caddy_config:/config
+#    depends_on:
+#      - app
+#
+#volumes:
+#  caddy_data:
+#  caddy_config:
