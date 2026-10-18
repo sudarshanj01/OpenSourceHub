@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Printer, ArrowLeft, Stethoscope, Phone, Mail, MapPin } from 'lucide-react';
 import PrintButton from './PrintButton';
+import WhatsAppShareButton from './WhatsAppShareButton';
 
 interface PrescriptionPageProps {
   params: {
@@ -36,7 +37,7 @@ export default async function PrescriptionPage({ params }: PrescriptionPageProps
   return (
     <div className="min-h-screen bg-slate-100 py-6 sm:py-10 px-4 print:bg-white print:p-0">
       {/* Top Floating Action Bar (Hidden during Print) */}
-      <div className="max-w-3xl mx-auto mb-6 flex items-center justify-between no-print">
+      <div className="max-w-3xl mx-auto mb-6 flex flex-wrap items-center justify-between gap-3 no-print">
         <Link
           href="/"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 transition-all shadow-sm"
@@ -46,6 +47,13 @@ export default async function PrescriptionPage({ params }: PrescriptionPageProps
         </Link>
 
         <div className="flex items-center gap-2">
+          <WhatsAppShareButton
+            phone={appointment.patientPhone}
+            patientName={appointment.patientName}
+            clinicName={clinic.clinicName}
+            doctorName={clinic.doctorName}
+            bookingRef={appointment.bookingRef}
+          />
           <PrintButton />
         </div>
       </div>
@@ -146,21 +154,17 @@ export default async function PrescriptionPage({ params }: PrescriptionPageProps
             )}
           </div>
 
-          {/* Signature & Validation Footer */}
-          <div className="mt-16 pt-8 border-t border-slate-200 flex justify-between items-end text-xs">
-            <div className="text-slate-400 max-w-xs space-y-1">
+          {/* Prescription Footer */}
+          <div className="mt-16 pt-8 border-t border-slate-200 flex flex-wrap justify-between items-end gap-4 text-xs">
+            <div className="text-slate-400 max-w-sm space-y-1">
               <p className="font-medium text-slate-600">Instructions:</p>
               <p>• Take medications strictly as prescribed after food unless advised otherwise.</p>
               <p>• Please bring this prescription slip for follow-up review.</p>
             </div>
 
-            <div className="text-center">
-              <div className="w-48 border-b border-slate-400 pb-1 mb-1.5 font-medium text-slate-900">
-                {clinic.doctorName}
-              </div>
-              <span className="text-slate-400 text-[10px] uppercase tracking-wider">
-                Authorized Doctor's Signature
-              </span>
+            <div className="text-right text-[11px] text-slate-400">
+              <p className="font-semibold text-slate-700">{clinic.clinicName}</p>
+              <p className="mt-0.5 text-slate-400">Digital Consultation Record</p>
             </div>
           </div>
         </div>

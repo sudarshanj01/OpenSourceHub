@@ -26,6 +26,7 @@ import {
   Trash2,
   Printer,
   ExternalLink,
+  MessageCircle,
 } from 'lucide-react';
 
 interface DoctorProfile {
@@ -335,12 +336,30 @@ export default function Home() {
     }
   };
 
+  // Open WhatsApp Web with Prescription Link
+  const openWhatsAppForAppt = (appt: Appointment) => {
+    const cleanPhone = (appt.patientPhone || '').replace(/\D/g, '');
+    const currentUrl = `${window.location.origin}/prescription/${appt.id}`;
+    const clinicTitle = profile?.clinicName || 'Clinic';
+    const doctorTitle = profile?.doctorName || 'Doctor';
+
+    const message = `Hello ${appt.patientName}, here is your digital medical prescription from ${clinicTitle} (${doctorTitle}) for appointment ${appt.bookingRef}.\n\n🔗 View / Print Prescription Slip:\n${currentUrl}\n\nWishing you good health!`;
+
+    const encoded = encodeURIComponent(message);
+    const waUrl = cleanPhone
+      ? `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encoded}`
+      : `https://api.whatsapp.com/send?text=${encoded}`;
+
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+  };
+
   // Save Doctor Prescription / Notes
-  const handleSaveNotes = async (andPrint = false) => {
+  const handleSaveNotes = async (andPrint = false, andWhatsApp = false) => {
     if (!selectedApptForNotes) return;
     try {
       setSavingNotes(true);
       const apptId = selectedApptForNotes.id;
+      const targetAppt = selectedApptForNotes;
       const res = await fetch(`/api/appointments/${apptId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -351,6 +370,9 @@ export default function Home() {
         fetchAdminAppointments();
         if (andPrint) {
           window.open(`/prescription/${apptId}`, '_blank');
+        }
+        if (andWhatsApp) {
+          openWhatsAppForAppt(targetAppt);
         }
       }
     } catch (e) {
@@ -859,20 +881,31 @@ export default function Home() {
 
                       {appt.doctorNotes && (
                         <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-xs text-emerald-950 space-y-2">
-                          <div className="flex items-center justify-between">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
                             <span className="font-bold flex items-center gap-1.5 text-emerald-800">
                               <span className="font-serif text-base font-black">℞</span>
                               Doctor's Medical Prescription:
                             </span>
-                            <a
-                              href={`/prescription/${appt.id}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold text-[11px] shadow-sm transition-all"
-                            >
-                              <Printer className="w-3 h-3" />
-                              Download / Print PDF
-                            </a>
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => openWhatsAppForAppt(appt)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold text-[11px] shadow-sm transition-all"
+                                title="Share via WhatsApp"
+                              >
+                                <MessageCircle className="w-3 h-3" />
+                                WhatsApp
+                              </button>
+                              <a
+                                href={`/prescription/${appt.id}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 px-2.5 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold text-[11px] shadow-sm transition-all"
+                              >
+                                <Printer className="w-3 h-3" />
+                                Download / Print PDF
+                              </a>
+                            </div>
                           </div>
                           <p className="whitespace-pre-line text-slate-800 bg-white p-2.5 rounded-lg border border-emerald-100 font-mono text-[11px] leading-relaxed">
                             {appt.doctorNotes}
@@ -1101,16 +1134,27 @@ export default function Home() {
                             </button>
 
                             {appt.doctorNotes && (
-                              <a
-                                href={`/prescription/${appt.id}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-xs text-emerald-700 font-semibold flex items-center gap-1 hover:text-emerald-900 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200"
-                                title="Print or Download PDF"
-                              >
-                                <Printer className="w-3 h-3" />
-                                Print Rx
-                              </a>
+                              <div className="flex items-center gap-1.5">
+                                <a
+                                  href={`/prescription/${appt.id}`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-xs text-teal-700 font-semibold flex items-center gap-1 hover:text-teal-900 bg-teal-50 px-2 py-0.5 rounded border border-teal-200"
+                                  title="Print or Download PDF"
+                                >
+                                  <Printer className="w-3 h-3" />
+                                  Print Rx
+                                </a>
+                                <button
+                                  type="button"
+                                  onClick={() => openWhatsAppForAppt(appt)}
+                                  className="text-xs text-emerald-700 font-semibold flex items-center gap-1 hover:text-emerald-900 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200"
+                                  title="Share to Patient WhatsApp"
+                                >
+                                  <MessageCircle className="w-3 h-3" />
+                                  WhatsApp
+                                </button>
+                              </div>
                             )}
                           </div>
 
@@ -1208,16 +1252,27 @@ export default function Home() {
                                   </button>
 
                                   {appt.doctorNotes && (
-                                    <a
-                                      href={`/prescription/${appt.id}`}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                      className="inline-flex items-center gap-1 text-[11px] text-emerald-800 hover:text-emerald-950 font-bold bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-200 transition-all"
-                                      title="Print or Save as PDF"
-                                    >
-                                      <Printer className="w-3 h-3" />
-                                      Print Rx
-                                    </a>
+                                    <div className="inline-flex items-center gap-1.5">
+                                      <a
+                                        href={`/prescription/${appt.id}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="inline-flex items-center gap-1 text-[11px] text-teal-800 hover:text-teal-950 font-bold bg-teal-50 hover:bg-teal-100 px-2 py-0.5 rounded-md border border-teal-200 transition-all"
+                                        title="Print or Save as PDF"
+                                      >
+                                        <Printer className="w-3 h-3" />
+                                        Print Rx
+                                      </a>
+                                      <button
+                                        type="button"
+                                        onClick={() => openWhatsAppForAppt(appt)}
+                                        className="inline-flex items-center gap-1 text-[11px] text-emerald-800 hover:text-emerald-950 font-bold bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-200 transition-all"
+                                        title="Share to Patient WhatsApp"
+                                      >
+                                        <MessageCircle className="w-3 h-3" />
+                                        WhatsApp
+                                      </button>
+                                    </div>
                                   )}
                                 </div>
                               </td>
@@ -1379,6 +1434,15 @@ export default function Home() {
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Save & Print PDF</span>
+              </button>
+              <button
+                type="button"
+                disabled={savingNotes}
+                onClick={() => handleSaveNotes(false, true)}
+                className="px-4 py-2 text-xs font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm flex items-center justify-center gap-1.5"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>Save & WhatsApp</span>
               </button>
             </div>
           </div>
