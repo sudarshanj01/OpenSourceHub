@@ -93,7 +93,23 @@ The root [`TRACKER.md`](TRACKER.md) is the single source of truth for project co
 - Whenever a project is completed, its status in `TRACKER.md` must be updated to `✅ DONE`.
 - When starting a new session or project, AI agents and contributors must consult `TRACKER.md` to see what is done and pick the next planned item.
 
-## 📁 5. Project Directory Blueprint
+---
+
+## 🛑 6. Strict Git Push Protocol (MANDATORY RULE)
+
+Every AI coding assistant (Antigravity, Cursor, Claude, Copilot, ChatGPT) working in this repository MUST strictly follow this mandatory rule:
+1. **Never Run `git push` Autonomously**:
+   - Under NO circumstances may an AI agent execute `git push` automatically or without direct explicit human authorization.
+   - The agent MUST explicitly prompt the user first:  
+     > *"I am going to execute `git push origin <branch>`. Shall I proceed?"*
+   - ONLY when the user (Sudarshan / repo owner) explicitly responds with a confirmation (e.g. *"yes"*) is the agent permitted to execute `git push`.
+2. **Prerequisites Before Requesting Push**:
+   - The project MUST be verified, healthy in Docker, and marked as `✅ DONE` in [`TRACKER.md`](TRACKER.md).
+   - All code, schemas, and documentation must be committed cleanly to the local git branch.
+
+---
+
+## 📁 7. Project Directory Blueprint
 
 Each project inside `projects/<project-id>/` must follow this layout:
 
