@@ -1,8 +1,8 @@
-# 📖 OpenSourceHub Master Handbook (ganete.md)
+# 🤖 OpenSourceHub Master AI & Developer Manual (`agent.md`)
 
 Welcome to **OpenSourceHub** — the launchpad of 100 self-contained, self-deployable open-source utility applications built for every occupation on Earth.
 
-This document (`ganete.md`) is the master operational manual and design standard for the entire repository. Every project inside `projects/` must strictly comply with the guidelines defined here.
+This document (`agent.md`) is the master operational manual, AI context definition, and design standard for the entire repository. Every project inside `projects/` must strictly comply with the guidelines defined here. Both human developers and AI coding agents (Claude, Cursor, Copilot, ChatGPT, Antigravity) can read this file to immediately understand the architecture, standards, and expansion workflows.
 
 ---
 
@@ -62,7 +62,7 @@ Each project inside `projects/<project-id>/` must follow this layout:
 
 ```text
 projects/<project-id>/
-├── ganete.md                # Project-specific manual, stack details & operational guide
+├── agent.md                 # Project-specific AI & developer manual, stack details & operational guide
 ├── README.md                # 60-second quickstart overview
 ├── docker-compose.yml       # Pinned services + commented Caddy reverse proxy
 ├── .env.example             # Clean environment variable defaults
@@ -72,9 +72,9 @@ projects/<project-id>/
 
 ---
 
-## 📋 5. Required Contents of Project-Level `ganete.md`
+## 📋 5. Required Contents of Project-Level `agent.md`
 
-Every project must maintain its own `ganete.md` containing:
+Every project must maintain its own `agent.md` containing:
 1. **Project Name & Occupational Persona**: Who uses it and what real-world pain it solves.
 2. **Exact Tech Stack & Architecture**: Pinned container tags, libraries, and communication flows.
 3. **Database Schema & Data Model**: Tables, fields, relationships, and indices.
@@ -82,6 +82,7 @@ Every project must maintain its own `ganete.md` containing:
 5. **Local Deployment Steps**: 1-minute quickstart commands.
 6. **Production Deployment Steps**: Domain mapping, SSL setup, and reverse proxy activation.
 7. **Troubleshooting & Backup**: How to dump and restore the PostgreSQL database, and inspect logs.
+8. **AI Prompt Extension Notes**: Context instructions for AI agents on how to safely add features to that specific project.
 
 ---
 
