@@ -56,7 +56,26 @@ Every project subfolder MUST include:
 
 ---
 
-## 📁 4. Project Directory Blueprint
+## 🔒 4. Universal Security & Demo-Data Lifecycle Standards
+
+Every micro-application must adhere to these product-ready security and data management rules:
+
+1. **Zero Credential Leaks in UI (Never Print Secrets)**:
+   - **Never display default passwords, PINs, or credentials in the frontend UI** (no placeholders like `"Default PIN: 1234"`, no explanatory notes revealing defaults).
+   - Initial credentials must be configurable via `.env` (documented only in `.env.example`).
+   - Public API endpoints (e.g. `GET /api/profile`, `GET /api/settings`) MUST explicitly strip out secret fields (`adminPin`, password hashes, tokens) before responding.
+   - Authentication must use dedicated verification endpoints (e.g. `POST /api/auth/verify`) rather than comparing values in client-side code.
+
+2. **One-Click Clean-Slate / Data Purge**:
+   - Seeding realistic sample data is vital so users can explore the app immediately upon `docker compose up -d`.
+   - However, when deploying for real business use, users must NOT be forced to run SQL scripts to clean up test data.
+   - **Every app MUST provide**:
+     - Single-item delete buttons (with confirmation) on every data record.
+     - A prominent, confirmation-guarded **"Clear Demo Data"** action in the admin dashboard to purge test records in 1 click and begin fresh operations.
+
+---
+
+## 📁 5. Project Directory Blueprint
 
 Each project inside `projects/<project-id>/` must follow this layout:
 

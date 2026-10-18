@@ -65,13 +65,21 @@ This document is the dedicated AI context handbook and developer specification f
 
 ## 🔌 4. API Endpoints
 
-- `GET /api/profile` - Fetch clinic profile and operating hours.
-- `PUT /api/profile` - Update doctor profile, working hours, slot duration, and PIN.
+- `GET /api/profile` - Fetch clinic profile and operating hours (sensitive fields like `adminPin` are automatically stripped).
+- `PUT /api/profile` - Update doctor profile, working hours, slot duration, and PIN (PIN is only updated if non-empty).
+- `POST /api/auth/verify` - Secure backend PIN verification endpoint (`{ "pin": "..." }`).
 - `GET /api/slots?date=YYYY-MM-DD` - Generate active slots, taking into account lunch breaks and existing bookings.
 - `GET /api/appointments?date=...&status=...&query=...` - Query appointments with search filters.
 - `POST /api/appointments` - Book a slot and issue a unique `DOC-XXXX` token.
 - `PATCH /api/appointments/[id]` - Update appointment status or doctor clinical notes.
-- `DELETE /api/appointments/[id]` - Remove an appointment.
+- `DELETE /api/appointments/[id]` - Remove an individual appointment.
+- `DELETE /api/appointments` - Purge all appointments or filtered by date (used by "Clear Demo Data").
+
+---
+
+## 🔒 5. Security & Demo Data Management
+- **Zero Credential Leaks in UI**: The clinic PIN is never printed in UI placeholders, error messages, or demo hints. Initial access is configured in `.env` via `ADMIN_PIN=1234`.
+- **Clean Slate Guarantee**: Users can delete any individual appointment row or click "Clear Demo Data" in the doctor dashboard to wipe all test records with one click before launching live.
 
 ---
 

@@ -102,3 +102,23 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to book appointment' }, { status: 500 });
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const date = searchParams.get('date');
+
+    if (date) {
+      const res = await prisma.appointment.deleteMany({
+        where: { appointmentDate: date },
+      });
+      return NextResponse.json({ success: true, count: res.count, message: `Cleared appointments for ${date}` });
+    }
+
+    const res = await prisma.appointment.deleteMany();
+    return NextResponse.json({ success: true, count: res.count, message: 'All appointments cleared successfully' });
+  } catch (error) {
+    console.error('Error clearing appointments:', error);
+    return NextResponse.json({ error: 'Failed to clear appointments' }, { status: 500 });
+  }
+}

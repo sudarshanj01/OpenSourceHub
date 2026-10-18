@@ -28,6 +28,7 @@ services:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-clinicdb}?schema=public
       - NODE_ENV=production
       - PORT=3000
+      - ADMIN_PIN=${ADMIN_PIN:-1234}
     depends_on:
       db:
         condition: service_healthy

@@ -23,6 +23,7 @@ import {
   Activity,
   CalendarDays,
   Lock,
+  Trash2,
 } from 'lucide-react';
 
 interface DoctorProfile {
@@ -266,15 +267,50 @@ export default function Home() {
     }
   };
 
-  // Handle PIN unlock
-  const handlePinSubmit = (e: React.FormEvent) => {
+  // Handle PIN unlock via secure backend verification
+  const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (profile && adminPinInput === profile.adminPin) {
-      setIsAdminAuthenticated(true);
-      setAdminPinError(false);
-      setAdminPinInput('');
-    } else {
+    try {
+      const res = await fetch('/api/auth/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: adminPinInput }),
+      });
+      if (res.ok) {
+        setIsAdminAuthenticated(true);
+        setAdminPinError(false);
+        setAdminPinInput('');
+      } else {
+        setAdminPinError(true);
+      }
+    } catch (err) {
       setAdminPinError(true);
+    }
+  };
+
+  // Delete single appointment
+  const handleDeleteAppointment = async (id: string) => {
+    if (!confirm('Are you sure you want to permanently delete this appointment?')) return;
+    try {
+      const res = await fetch(`/api/appointments/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        fetchAdminAppointments();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Clear all appointments (purge demo/test data)
+  const handleClearAllAppointments = async () => {
+    if (!confirm('Are you sure you want to delete ALL appointments? This is useful to clear test/demo data before real clinic operations.')) return;
+    try {
+      const res = await fetch('/api/appointments', { method: 'DELETE' });
+      if (res.ok) {
+        fetchAdminAppointments();
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -846,14 +882,14 @@ export default function Home() {
                       type="password"
                       maxLength={6}
                       autoFocus
-                      placeholder="Default PIN: 1234"
+                      placeholder="Enter 4-digit PIN"
                       value={adminPinInput}
                       onChange={(e) => setAdminPinInput(e.target.value)}
                       className="w-full text-center text-xl tracking-widest font-mono py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
                     />
                     {adminPinError && (
                       <p className="text-xs text-rose-600 font-medium mt-1.5">
-                        Invalid PIN. (Default is 1234)
+                        Incorrect PIN. Please try again.
                       </p>
                     )}
                   </div>
@@ -886,6 +922,15 @@ export default function Home() {
                     >
                       <PlusCircle className="w-4 h-4" />
                       Add Walk-In Patient
+                    </button>
+
+                    <button
+                      onClick={handleClearAllAppointments}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-rose-200 hover:bg-rose-50 text-rose-700 transition-all"
+                      title="Delete all demo / test appointments"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Clear Demo Data
                     </button>
 
                     <button
@@ -1046,17 +1091,26 @@ export default function Home() {
                               </td>
 
                               <td className="py-3.5 px-4 text-right">
-                                <select
-                                  value={appt.status}
-                                  onChange={(e) => handleStatusChange(appt.id, e.target.value)}
-                                  className="text-xs font-semibold py-1 px-2 border border-slate-300 rounded-lg bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-teal-500"
-                                >
-                                  <option value="CONFIRMED">Confirmed</option>
-                                  <option value="IN_CONSULTATION">In Consultation</option>
-                                  <option value="COMPLETED">Completed</option>
-                                  <option value="CANCELLED">Cancelled</option>
-                                  <option value="NO_SHOW">No Show</option>
-                                </select>
+                                <div className="flex items-center justify-end gap-1.5">
+                                  <select
+                                    value={appt.status}
+                                    onChange={(e) => handleStatusChange(appt.id, e.target.value)}
+                                    className="text-xs font-semibold py-1 px-2 border border-slate-300 rounded-lg bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                                  >
+                                    <option value="CONFIRMED">Confirmed</option>
+                                    <option value="IN_CONSULTATION">In Consultation</option>
+                                    <option value="COMPLETED">Completed</option>
+                                    <option value="CANCELLED">Cancelled</option>
+                                    <option value="NO_SHOW">No Show</option>
+                                  </select>
+                                  <button
+                                    onClick={() => handleDeleteAppointment(appt.id)}
+                                    className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                                    title="Delete appointment"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))
@@ -1383,13 +1437,16 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700">Admin PIN (6 digits max)</label>
+                <label className="font-semibold text-slate-700">Change Admin PIN (Optional)</label>
                 <input
-                  type="text"
-                  value={settingsForm.adminPin || '1234'}
+                  type="password"
+                  maxLength={6}
+                  placeholder="Enter new 4 to 6-digit PIN to update"
+                  value={settingsForm.adminPin || ''}
                   onChange={(e) => setSettingsForm({ ...settingsForm, adminPin: e.target.value })}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-300 rounded-xl"
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-300 rounded-xl font-mono"
                 />
+                <span className="text-[10px] text-slate-400 mt-0.5 block">Leave blank to keep existing access PIN.</span>
               </div>
 
               <div className="flex justify-end gap-2 pt-3">

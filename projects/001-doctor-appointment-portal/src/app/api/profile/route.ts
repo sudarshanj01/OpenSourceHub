@@ -25,7 +25,10 @@ export async function GET() {
         },
       });
     }
-    return NextResponse.json(profile);
+
+    // Return safe profile data excluding sensitive credentials
+    const { adminPin, ...safeProfile } = profile;
+    return NextResponse.json(safeProfile);
   } catch (error) {
     console.error('Error fetching doctor profile:', error);
     return NextResponse.json({ error: 'Failed to fetch doctor profile' }, { status: 500 });
@@ -59,12 +62,13 @@ export async function PUT(request: Request) {
           breakStartHour: body.breakStartHour ?? profile.breakStartHour,
           breakEndHour: body.breakEndHour ?? profile.breakEndHour,
           activeDays: body.activeDays ?? profile.activeDays,
-          adminPin: body.adminPin ?? profile.adminPin,
+          adminPin: (body.adminPin && body.adminPin.trim() !== '') ? body.adminPin.trim() : profile.adminPin,
         },
       });
     }
 
-    return NextResponse.json(profile);
+    const { adminPin, ...safeProfile } = profile;
+    return NextResponse.json(safeProfile);
   } catch (error) {
     console.error('Error updating doctor profile:', error);
     return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });

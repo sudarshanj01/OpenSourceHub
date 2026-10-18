@@ -50,8 +50,15 @@ Open `http://localhost:3000`.
 
 ---
 
-## 🤖 7. AI Instructions for Extending This App
+## 🔒 7. Security & Clean-Slate Standards
+- **Zero Credential Leaks in UI**: Never show default passwords/PINs in UI placeholders or errors. Passwords must be verified on the backend (`POST /api/auth/verify`) and never returned in public GET responses.
+- **Demo Data Purge**: Provide individual delete buttons on all records and a prominent, confirmation-guarded "Clear Demo Data" action in the admin dashboard so production users can purge seed data in 1 click.
+
+---
+
+## 🤖 8. AI Instructions for Extending This App
 When an AI agent is asked to add features to this project:
 - Preserve PostgreSQL compatibility and update `prisma/schema.prisma` followed by `npx prisma db push` or migrations.
 - Maintain responsive, mobile-first design with Tailwind CSS.
 - Do NOT introduce external third-party closed SaaS dependencies.
+- Follow the Zero Credential Leak and Clean-Slate principles for all newly generated forms and views.
