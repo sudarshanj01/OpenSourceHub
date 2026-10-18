@@ -1,0 +1,75 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: qr-menu-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-menudb}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-menudb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qr-menu-app
+    restart: unless-stopped
+    ports:
+      - "3011:3011"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-menudb}?schema=public
+      - NODE_ENV=production
+      - PORT=3011
+      - ADMIN_PIN=${ADMIN_PIN:-1234}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:3011/api/menu || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+# =========================================================================
+# 🌐 PRODUCTION READY DEPLOYMENT (CUSTOM DOMAIN + AUTOMATIC SSL/HTTPS)
+# =========================================================================
+# To deploy to production with your custom domain (e.g. menu.yourcafe.com):
+#
+# 1. Point DNS 'A' record for your domain to your server's public IP address.
+# 2. Add your domain and email to .env:
+#      DOMAIN=menu.yourcafe.com
+#      ACME_EMAIL=admin@yourcafe.com
+# 3. In the 'app' service above, comment out 'ports: - "3011:3011"' and replace with:
+#      expose:
+#        - "3011"
+# 4. Uncomment the 'caddy' reverse proxy block below:
+#
+#  caddy:
+#    image: caddy:2.8.4-alpine
+#    container_name: qr-menu-caddy
+#    restart: unless-stopped
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    environment:
+#      - DOMAIN=${DOMAIN}
+#      - ACME_EMAIL=${ACME_EMAIL}
+#    volumes:
+#      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+#      - caddy_data:/data
+#      - caddy_config:/config
+#    depends_on:
+#      - app
+#
+#volumes:
+#  caddy_data:
+#  caddy_config:

@@ -24,6 +24,7 @@ yarn-error.log*
 **/.next/
 **/build/
 **/dist/
+*.tsbuildinfo
 
 # Python
 **/__pycache__/

@@ -1,0 +1,73 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model RestaurantProfile {
+  id                      String   @id @default(uuid())
+  name                    String   @default("The Rustic Skillet Bistro")
+  tagline                 String   @default("Artisanal Comfort Food & Craft Sips")
+  description             String   @default("Locally sourced ingredients, hand-crafted wood-fired recipes, and refreshing beverages made fresh every day.")
+  currencySymbol          String   @default("$")
+  currencyCode            String   @default("USD")
+  taxPercentage           Float    @default(8.5)
+  serviceChargePercentage Float    @default(0.0)
+  address                 String   @default("124 Market Square, Culinary District")
+  phone                   String   @default("+1 (555) 789-4321")
+  email                   String   @default("hello@rusticskillet.example")
+  wifiSsid                String   @default("RusticSkillet_Guest")
+  wifiPassword            String   @default("FreshFood2026")
+  openingHours            String   @default("Tue - Sun: 11:00 AM – 10:00 PM (Closed Mon)")
+  tableCount              Int      @default(16)
+  adminPin                String   @default("1234")
+  themeColor              String   @default("amber")
+  bannerUrl               String?
+  logoUrl                 String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  icon        String?
+  sortOrder   Int        @default(0)
+  isActive    Boolean    @default(true)
+  items       MenuItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([sortOrder])
+}
+
+model MenuItem {
+  id              String   @id @default(uuid())
+  categoryId      String
+  category        Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name            String
+  description     String
+  price           Float
+  isAvailable     Boolean  @default(true)
+  isVegetarian    Boolean  @default(false)
+  isVegan         Boolean  @default(false)
+  isGlutenFree    Boolean  @default(false)
+  isSpicy         Boolean  @default(false)
+  isChefSpecial   Boolean  @default(false)
+  calories        Int?
+  prepTimeMinutes Int?
+  badge           String?
+  imageUrl        String?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([isAvailable])
+  @@index([sortOrder])
+}
