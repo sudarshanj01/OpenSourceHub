@@ -23,8 +23,12 @@ To guarantee maintainability, reliability, and ease of deployment, all projects 
 - **Pinned Version**: Always pin to `postgres:16-alpine`. Never use `:latest`.
 - **Persistence**: All database data must be mounted to a local volume (`./data/postgres` or a named volume) so data is never lost across container restarts.
 
-### B. Frontend Standard
-- **Next.js (App Router, TypeScript, Tailwind CSS)**: Modern, responsive, mobile-first interfaces with clean typography and icons (Lucide React).
+### B. Frontend Standard (Mobile-First is Priority #1)
+- **Mobile-First UX**: All target users (small business owners, staff, patients, customers) primarily access software on mobile phones (320px–420px screen widths). 
+  - Interfaces must be mobile-first: large touch targets (minimum 44x44px for buttons), responsive modals, and clean spacing.
+  - Wide data tables MUST provide a dedicated mobile card view (`block md:hidden`) alongside desktop tables (`hidden md:block`) so mobile users never suffer awkward horizontal scrolling.
+  - Navigation bars must be compact and responsive with collapsible or icon-friendly tabs.
+- **Tech**: Next.js (App Router, TypeScript, Tailwind CSS, Lucide React icons).
 
 ### C. Backend Strategy
 - **Compact & Utility Apps**: For streamlined micro-utilities, use the built-in Next.js backend (App Router Route Handlers & Server Actions with Prisma ORM or Drizzle). This delivers a single lightweight app container alongside PostgreSQL.
@@ -66,12 +70,15 @@ Every micro-application must adhere to these product-ready security and data man
    - Public API endpoints (e.g. `GET /api/profile`, `GET /api/settings`) MUST explicitly strip out secret fields (`adminPin`, password hashes, tokens) before responding.
    - Authentication must use dedicated verification endpoints (e.g. `POST /api/auth/verify`) rather than comparing values in client-side code.
 
-2. **One-Click Clean-Slate / Data Purge**:
-   - Seeding realistic sample data is vital so users can explore the app immediately upon `docker compose up -d`.
-   - However, when deploying for real business use, users must NOT be forced to run SQL scripts to clean up test data.
-   - **Every app MUST provide**:
-     - Single-item delete buttons (with confirmation) on every data record.
-     - A prominent, confirmation-guarded **"Clear Demo Data"** action in the admin dashboard to purge test records in 1 click and begin fresh operations.
+2. **Production-Grade Data Management**:
+   - Seeding realistic sample data is helpful for immediate out-of-the-box exploration upon `docker compose up -d`.
+   - When deploying to production, users must be able to delete records cleanly one-by-one from the UI with single-click delete buttons (and confirmation modals).
+   - Avoid tacky demo buttons in primary navigation (e.g., do not add large "Clear Demo Data" buttons in the header toolbar; keep dashboards clean and production-styled).
+
+3. **Session Persistence (`sessionStorage`)**:
+   - Once an administrator or operator enters their access PIN/password, the session MUST persist across browser page refreshes using `sessionStorage`.
+   - The user must not be kicked out when refreshing the page.
+   - The session automatically terminates when the browser tab or window closes, or when the user explicitly clicks "Lock / Logout".
 
 ---
 

@@ -140,6 +140,11 @@ export default function Home() {
 
   useEffect(() => {
     fetchProfile();
+    try {
+      if (typeof window !== 'undefined' && sessionStorage.getItem('clinic_admin_session') === 'true') {
+        setIsAdminAuthenticated(true);
+      }
+    } catch (e) {}
   }, []);
 
   // Load Slots whenever selectedDate changes
@@ -277,6 +282,9 @@ export default function Home() {
         body: JSON.stringify({ pin: adminPinInput }),
       });
       if (res.ok) {
+        try {
+          sessionStorage.setItem('clinic_admin_session', 'true');
+        } catch (e) {}
         setIsAdminAuthenticated(true);
         setAdminPinError(false);
         setAdminPinInput('');
@@ -288,24 +296,19 @@ export default function Home() {
     }
   };
 
+  // Lock and clear session
+  const handleLogout = () => {
+    try {
+      sessionStorage.removeItem('clinic_admin_session');
+    } catch (e) {}
+    setIsAdminAuthenticated(false);
+  };
+
   // Delete single appointment
   const handleDeleteAppointment = async (id: string) => {
     if (!confirm('Are you sure you want to permanently delete this appointment?')) return;
     try {
       const res = await fetch(`/api/appointments/${id}`, { method: 'DELETE' });
-      if (res.ok) {
-        fetchAdminAppointments();
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  // Clear all appointments (purge demo/test data)
-  const handleClearAllAppointments = async () => {
-    if (!confirm('Are you sure you want to delete ALL appointments? This is useful to clear test/demo data before real clinic operations.')) return;
-    try {
-      const res = await fetch('/api/appointments', { method: 'DELETE' });
       if (res.ok) {
         fetchAdminAppointments();
       }
@@ -463,38 +466,40 @@ export default function Home() {
             <nav className="flex space-x-1 sm:space-x-2 bg-slate-100 p-1 rounded-xl">
               <button
                 onClick={() => setActiveTab('book')}
-                className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all ${
+                className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all ${
                   activeTab === 'book'
                     ? 'bg-white text-teal-700 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <Calendar className="w-4 h-4" />
-                <span>Book Slot</span>
+                <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Book Slot</span>
+                <span className="sm:hidden">Book</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('check')}
-                className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all ${
+                className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all ${
                   activeTab === 'check'
                     ? 'bg-white text-teal-700 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <Search className="w-4 h-4" />
-                <span>My Appointment</span>
+                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">My Appointment</span>
+                <span className="sm:hidden">Status</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('admin')}
-                className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all ${
+                className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all ${
                   activeTab === 'admin'
                     ? 'bg-teal-700 text-white shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <ShieldCheck className="w-4 h-4" />
-                <span>Doctor Portal</span>
+                <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Doctor Portal</span>
               </button>
             </nav>
           </div>
@@ -925,15 +930,6 @@ export default function Home() {
                     </button>
 
                     <button
-                      onClick={handleClearAllAppointments}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-rose-200 hover:bg-rose-50 text-rose-700 transition-all"
-                      title="Delete all demo / test appointments"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      Clear Demo Data
-                    </button>
-
-                    <button
                       onClick={() => setShowSettingsModal(true)}
                       className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 hover:bg-slate-50 text-slate-700 transition-all"
                     >
@@ -942,7 +938,7 @@ export default function Home() {
                     </button>
 
                     <button
-                      onClick={() => setIsAdminAuthenticated(false)}
+                      onClick={handleLogout}
                       className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-slate-300 hover:bg-rose-50 hover:text-rose-700 text-slate-600 transition-all"
                     >
                       <LogOut className="w-4 h-4" />
@@ -1024,8 +1020,92 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Patient Queue Table */}
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                {/* Patient Queue Cards for Mobile (Screens < md) */}
+                <div className="block md:hidden space-y-3">
+                  {loadingAdminAppts ? (
+                    <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center text-slate-400 text-xs">
+                      Loading appointments...
+                    </div>
+                  ) : adminAppointments.length === 0 ? (
+                    <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center text-slate-400 text-xs">
+                      No appointments found for this date.
+                    </div>
+                  ) : (
+                    adminAppointments.map((appt) => (
+                      <div key={appt.id} className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono font-bold text-xs text-teal-800 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded">
+                              {appt.bookingRef}
+                            </span>
+                            <span className="text-xs font-semibold text-slate-600 flex items-center gap-1">
+                              <Clock className="w-3 h-3 text-slate-400" />
+                              {appt.appointmentTime}
+                            </span>
+                          </div>
+                          {getStatusBadge(appt.status)}
+                        </div>
+
+                        <div>
+                          <div className="font-semibold text-sm text-slate-900">{appt.patientName}</div>
+                          <a href={`tel:${appt.patientPhone}`} className="text-xs text-teal-600 font-medium">
+                            {appt.patientPhone}
+                          </a>
+                        </div>
+
+                        <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl">
+                          <strong className="text-slate-700">Reason: </strong>
+                          {appt.reason}
+                        </div>
+
+                        {appt.doctorNotes && (
+                          <div className="text-xs text-emerald-800 bg-emerald-50 border border-emerald-100 p-2.5 rounded-xl">
+                            <strong>Note: </strong>
+                            {appt.doctorNotes}
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between pt-2 border-t border-slate-100 gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedApptForNotes(appt);
+                              setNotesInput(appt.doctorNotes || '');
+                            }}
+                            className="text-xs text-teal-600 font-medium flex items-center gap-1"
+                          >
+                            <FileText className="w-3.5 h-3.5" />
+                            {appt.doctorNotes ? 'Edit Notes' : '+ Note'}
+                          </button>
+
+                          <div className="flex items-center gap-1.5">
+                            <select
+                              value={appt.status}
+                              onChange={(e) => handleStatusChange(appt.id, e.target.value)}
+                              className="text-xs font-semibold py-1 px-2 border border-slate-300 rounded-lg bg-white text-slate-800"
+                            >
+                              <option value="CONFIRMED">Confirmed</option>
+                              <option value="IN_CONSULTATION">In Consultation</option>
+                              <option value="COMPLETED">Completed</option>
+                              <option value="CANCELLED">Cancelled</option>
+                              <option value="NO_SHOW">No Show</option>
+                            </select>
+
+                            <button
+                              onClick={() => handleDeleteAppointment(appt.id)}
+                              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                              title="Delete appointment"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Patient Queue Table for Desktop (Screens >= md) */}
+                <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
                       <thead className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">

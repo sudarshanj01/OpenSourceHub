@@ -50,15 +50,17 @@ Open `http://localhost:3000`.
 
 ---
 
-## 🔒 7. Security & Clean-Slate Standards
-- **Zero Credential Leaks in UI**: Never show default passwords/PINs in UI placeholders or errors. Passwords must be verified on the backend (`POST /api/auth/verify`) and never returned in public GET responses.
-- **Demo Data Purge**: Provide individual delete buttons on all records and a prominent, confirmation-guarded "Clear Demo Data" action in the admin dashboard so production users can purge seed data in 1 click.
+## 🔒 7. Security, Session & Mobile UX Standards
+- **Mobile-First UX Priority**: All apps must be fully responsive for mobile devices (320px–420px width). Large touch targets (>= 44px), mobile-friendly tab navigation, and responsive card views for tables (`block md:hidden`).
+- **Zero Credential Leaks in UI**: Never show default passwords/PINs in UI placeholders or error messages. Passwords must be verified on the backend (`POST /api/auth/verify`) and never returned in public GET responses.
+- **Session Persistence**: Protect admin sessions across browser refreshes via `sessionStorage`. Session terminates on browser/tab close or explicit logout.
+- **Clean Record Deletion**: Provide individual delete buttons on all records with confirmation modals so users can manage and clean data from the UI.
 
 ---
 
 ## 🤖 8. AI Instructions for Extending This App
 When an AI agent is asked to add features to this project:
 - Preserve PostgreSQL compatibility and update `prisma/schema.prisma` followed by `npx prisma db push` or migrations.
-- Maintain responsive, mobile-first design with Tailwind CSS.
+- Maintain responsive, mobile-first design with Tailwind CSS (always test 320px–420px mobile layout).
 - Do NOT introduce external third-party closed SaaS dependencies.
-- Follow the Zero Credential Leak and Clean-Slate principles for all newly generated forms and views.
+- Follow the Zero Credential Leak and Session Persistence principles for all newly generated forms and views.
