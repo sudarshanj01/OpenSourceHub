@@ -80,7 +80,18 @@ Every micro-application must adhere to these product-ready security and data man
    - The user must not be kicked out when refreshing the page.
    - The session automatically terminates when the browser tab or window closes, or when the user explicitly clicks "Lock / Logout".
 
+4. **Zero Hardcoded Display Data (100% Dynamic & Configurable)**:
+   - **Never hardcode static business or professional entity data** (e.g. clinic/business names, staff names, specialties, contact phones, email addresses, physical street locations, fees, or operating hours).
+   - Any data rendered in public views, customer portals, PDF slips, printouts, or receipts **MUST be backed by the database and completely editable in the Admin / Settings UI**.
+   - Default seed values may be provided on first boot for instant discovery, but the administrator must always have full control to update every single field via the settings form without touching code.
+
 ---
+
+## 📊 5. Master Progress Tracker (`TRACKER.md`)
+
+The root [`TRACKER.md`](TRACKER.md) is the single source of truth for project completion state across all chat sessions.
+- Whenever a project is completed, its status in `TRACKER.md` must be updated to `✅ DONE`.
+- When starting a new session or project, AI agents and contributors must consult `TRACKER.md` to see what is done and pick the next planned item.
 
 ## 📁 5. Project Directory Blueprint
 

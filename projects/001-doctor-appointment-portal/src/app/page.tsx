@@ -1593,6 +1593,47 @@ export default function Home() {
                 />
               </div>
 
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="font-semibold text-slate-700">Contact Phone</label>
+                  <input
+                    type="text"
+                    value={settingsForm.phone || ''}
+                    onChange={(e) => setSettingsForm({ ...settingsForm, phone: e.target.value })}
+                    className="w-full mt-1 px-3 py-2 text-sm border border-slate-300 rounded-xl"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-slate-700">Clinic Email</label>
+                  <input
+                    type="email"
+                    value={settingsForm.email || ''}
+                    onChange={(e) => setSettingsForm({ ...settingsForm, email: e.target.value })}
+                    className="w-full mt-1 px-3 py-2 text-sm border border-slate-300 rounded-xl"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700">Clinic Address (Printed on Prescription Header)</label>
+                <input
+                  type="text"
+                  value={settingsForm.address || ''}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, address: e.target.value })}
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-300 rounded-xl"
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700">Doctor Bio & Credentials</label>
+                <textarea
+                  rows={2}
+                  value={settingsForm.bio || ''}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, bio: e.target.value })}
+                  className="w-full mt-1 px-3 py-2 text-xs border border-slate-300 rounded-xl"
+                />
+              </div>
+
               <div className="grid grid-cols-3 gap-2">
                 <div>
                   <label className="font-semibold text-slate-700">Slot Duration</label>
