@@ -24,6 +24,8 @@ import {
   CalendarDays,
   Lock,
   Trash2,
+  Printer,
+  ExternalLink,
 } from 'lucide-react';
 
 interface DoctorProfile {
@@ -333,12 +335,13 @@ export default function Home() {
     }
   };
 
-  // Save Doctor Notes
-  const handleSaveNotes = async () => {
+  // Save Doctor Prescription / Notes
+  const handleSaveNotes = async (andPrint = false) => {
     if (!selectedApptForNotes) return;
     try {
       setSavingNotes(true);
-      const res = await fetch(`/api/appointments/${selectedApptForNotes.id}`, {
+      const apptId = selectedApptForNotes.id;
+      const res = await fetch(`/api/appointments/${apptId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ doctorNotes: notesInput }),
@@ -346,6 +349,9 @@ export default function Home() {
       if (res.ok) {
         setSelectedApptForNotes(null);
         fetchAdminAppointments();
+        if (andPrint) {
+          window.open(`/prescription/${apptId}`, '_blank');
+        }
       }
     } catch (e) {
       console.error(e);
@@ -852,9 +858,25 @@ export default function Home() {
                       </div>
 
                       {appt.doctorNotes && (
-                        <div className="bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl text-xs text-emerald-900">
-                          <strong>Doctor's Consultation Note: </strong>
-                          {appt.doctorNotes}
+                        <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-xs text-emerald-950 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold flex items-center gap-1.5 text-emerald-800">
+                              <span className="font-serif text-base font-black">℞</span>
+                              Doctor's Medical Prescription:
+                            </span>
+                            <a
+                              href={`/prescription/${appt.id}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-semibold text-[11px] shadow-sm transition-all"
+                            >
+                              <Printer className="w-3 h-3" />
+                              Download / Print PDF
+                            </a>
+                          </div>
+                          <p className="whitespace-pre-line text-slate-800 bg-white p-2.5 rounded-lg border border-emerald-100 font-mono text-[11px] leading-relaxed">
+                            {appt.doctorNotes}
+                          </p>
                         </div>
                       )}
                     </div>
@@ -1066,16 +1088,31 @@ export default function Home() {
                         )}
 
                         <div className="flex items-center justify-between pt-2 border-t border-slate-100 gap-2">
-                          <button
-                            onClick={() => {
-                              setSelectedApptForNotes(appt);
-                              setNotesInput(appt.doctorNotes || '');
-                            }}
-                            className="text-xs text-teal-600 font-medium flex items-center gap-1"
-                          >
-                            <FileText className="w-3.5 h-3.5" />
-                            {appt.doctorNotes ? 'Edit Notes' : '+ Note'}
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => {
+                                setSelectedApptForNotes(appt);
+                                setNotesInput(appt.doctorNotes || '');
+                              }}
+                              className="text-xs text-teal-700 font-semibold flex items-center gap-1 hover:text-teal-900"
+                            >
+                              <FileText className="w-3.5 h-3.5" />
+                              {appt.doctorNotes ? 'Edit Rx' : '+ Write Rx'}
+                            </button>
+
+                            {appt.doctorNotes && (
+                              <a
+                                href={`/prescription/${appt.id}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-xs text-emerald-700 font-semibold flex items-center gap-1 hover:text-emerald-900 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200"
+                                title="Print or Download PDF"
+                              >
+                                <Printer className="w-3 h-3" />
+                                Print Rx
+                              </a>
+                            )}
+                          </div>
 
                           <div className="flex items-center gap-1.5">
                             <select
@@ -1114,7 +1151,7 @@ export default function Home() {
                           <th className="py-3 px-4">Patient</th>
                           <th className="py-3 px-4">Symptoms / Reason</th>
                           <th className="py-3 px-4">Status</th>
-                          <th className="py-3 px-4">Notes</th>
+                          <th className="py-3 px-4">Prescription (Rx)</th>
                           <th className="py-3 px-4 text-right">Quick Action</th>
                         </tr>
                       </thead>
@@ -1158,16 +1195,31 @@ export default function Home() {
                               </td>
 
                               <td className="py-3.5 px-4">
-                                <button
-                                  onClick={() => {
-                                    setSelectedApptForNotes(appt);
-                                    setNotesInput(appt.doctorNotes || '');
-                                  }}
-                                  className="text-xs text-teal-600 hover:text-teal-800 font-medium flex items-center gap-1"
-                                >
-                                  <FileText className="w-3.5 h-3.5" />
-                                  {appt.doctorNotes ? 'Edit Notes' : '+ Add Note'}
-                                </button>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    onClick={() => {
+                                      setSelectedApptForNotes(appt);
+                                      setNotesInput(appt.doctorNotes || '');
+                                    }}
+                                    className="text-xs text-teal-700 hover:text-teal-900 font-semibold flex items-center gap-1"
+                                  >
+                                    <FileText className="w-3.5 h-3.5" />
+                                    {appt.doctorNotes ? 'Edit Rx' : '+ Write Rx'}
+                                  </button>
+
+                                  {appt.doctorNotes && (
+                                    <a
+                                      href={`/prescription/${appt.id}`}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="inline-flex items-center gap-1 text-[11px] text-emerald-800 hover:text-emerald-950 font-bold bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-200 transition-all"
+                                      title="Print or Save as PDF"
+                                    >
+                                      <Printer className="w-3 h-3" />
+                                      Print Rx
+                                    </a>
+                                  )}
+                                </div>
                               </td>
 
                               <td className="py-3.5 px-4 text-right">
@@ -1260,32 +1312,50 @@ export default function Home() {
       )}
 
       {/* ========================================================================= */}
-      {/* MODAL: DOCTOR CONSULTATION NOTES */}
+      {/* MODAL: DOCTOR PRESCRIPTION (Rx) */}
       {/* ========================================================================= */}
       {selectedApptForNotes && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-lg w-full shadow-2xl border border-slate-100">
-            <h3 className="text-lg font-bold text-slate-900">
-              Doctor Consultation Notes
-            </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Patient: <strong>{selectedApptForNotes.patientName}</strong> ({selectedApptForNotes.bookingRef})
-            </p>
+          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl border border-slate-100">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <span className="font-serif text-2xl font-black text-teal-700">℞</span>
+                  Medical Prescription
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Patient: <strong className="text-slate-800">{selectedApptForNotes.patientName}</strong> ({selectedApptForNotes.bookingRef})
+                </p>
+              </div>
 
-            <div className="my-4">
+              {selectedApptForNotes.doctorNotes && (
+                <a
+                  href={`/prescription/${selectedApptForNotes.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition-all"
+                  title="Open Printable Prescription"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  Print Existing
+                </a>
+              )}
+            </div>
+
+            <div className="my-3">
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Clinical Diagnosis & Prescription Notes
+                Clinical Diagnosis, Medications & Patient Advice
               </label>
               <textarea
-                rows={5}
-                placeholder="Enter clinical observations, prescribed medications, follow-up instructions..."
+                rows={7}
+                placeholder="DIAGNOSIS:&#10;Acute viral fever and bronchitis&#10;&#10;PRESCRIPTION (Rx):&#10;1. Tab. Paracetamol 650mg — 1 tab tid after food (3 days)&#10;2. Syp. Ascoril-D — 10ml tid (5 days)&#10;&#10;ADVICE:&#10;- Rest and adequate hydration&#10;- Review if symptoms persist after 3 days"
                 value={notesInput}
                 onChange={(e) => setNotesInput(e.target.value)}
-                className="w-full p-3 text-sm border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800"
+                className="w-full p-3 text-xs sm:text-sm font-mono border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 leading-relaxed"
               />
             </div>
 
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setSelectedApptForNotes(null)}
@@ -1296,10 +1366,19 @@ export default function Home() {
               <button
                 type="button"
                 disabled={savingNotes}
-                onClick={handleSaveNotes}
-                className="px-4 py-2 text-xs font-semibold rounded-xl bg-teal-600 hover:bg-teal-700 text-white shadow-sm"
+                onClick={() => handleSaveNotes(false)}
+                className="px-4 py-2 text-xs font-semibold rounded-xl border border-teal-600 text-teal-700 hover:bg-teal-50"
               >
-                {savingNotes ? 'Saving...' : 'Save Notes'}
+                {savingNotes ? 'Saving...' : 'Save Prescription'}
+              </button>
+              <button
+                type="button"
+                disabled={savingNotes}
+                onClick={() => handleSaveNotes(true)}
+                className="px-4 py-2 text-xs font-semibold rounded-xl bg-teal-600 hover:bg-teal-700 text-white shadow-sm flex items-center justify-center gap-1.5"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>Save & Print PDF</span>
               </button>
             </div>
           </div>

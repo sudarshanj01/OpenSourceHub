@@ -7,13 +7,16 @@
 ## 🌟 Key Features
 
 - **Public Patient Portal**: Direct online appointment booking with real-time 15/30-minute slot availability, instant token generation (`DOC-XXXX`), and no account creation required.
-- **My Appointment Tracker**: Patients can look up their upcoming booking status using their phone number or reference token.
+- **My Appointment Tracker**: Patients can look up their upcoming booking status using their phone number or reference token, and view/print their prescription once completed.
 - **Doctor & Staff Dashboard**: 
   - Real-time patient queue metrics (Confirmed, In Consultation, Completed, Cancelled).
   - 1-click status transitions with live updates.
   - Doctor consultation notes & prescription logger.
+  - **Prescription Slip & PDF Export**: Official clinic letterhead prescription slip (`/prescription/[id]`) with Rx icon, patient details, doctor signature line, and 1-click print or save as PDF via clean `@media print` layout.
   - Quick walk-in registration modal for front-desk receptionists.
+  - Individual appointment deletion for clean queue management.
   - Clinic settings: customize doctor bio, consultation fee, operating hours, lunch break window, slot duration (15m, 20m, 30m, 45m, 60m), and PIN.
+- **Mobile-First & Persistent**: Fully responsive across mobile touchscreens and desktop monitors. Doctor login persists across page refreshes during the browser session via `sessionStorage`.
 - **Complete Data Sovereignty**: All patient records and schedules persist in your private PostgreSQL instance. Zero third-party cloud trackers.
 
 ---

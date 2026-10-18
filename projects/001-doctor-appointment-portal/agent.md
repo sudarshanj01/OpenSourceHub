@@ -72,14 +72,17 @@ This document is the dedicated AI context handbook and developer specification f
 - `GET /api/appointments?date=...&status=...&query=...` - Query appointments with search filters.
 - `POST /api/appointments` - Book a slot and issue a unique `DOC-XXXX` token.
 - `PATCH /api/appointments/[id]` - Update appointment status or doctor clinical notes.
-- `DELETE /api/appointments/[id]` - Remove an individual appointment.
-- `DELETE /api/appointments` - Purge all appointments or filtered by date (used by "Clear Demo Data").
+- `DELETE /api/appointments/[id]` - Remove an individual appointment row manually.
+- `GET /prescription/[id]` - Dedicated clean printable prescription slip (Rx letterhead, medication advice, doctor signature, and `window.print()` PDF download).
 
 ---
 
-## 🔒 5. Security & Demo Data Management
+## 🔒 5. Security & Mobile Standards
 - **Zero Credential Leaks in UI**: The clinic PIN is never printed in UI placeholders, error messages, or demo hints. Initial access is configured in `.env` via `ADMIN_PIN=1234`.
-- **Clean Slate Guarantee**: Users can delete any individual appointment row or click "Clear Demo Data" in the doctor dashboard to wipe all test records with one click before launching live.
+- **Session Persistence**: Doctor session is preserved across page refreshes via `sessionStorage` and automatically expires when the browser tab/window is closed.
+- **Mobile-First Responsive Layout**: All tables gracefully fold into card views on mobile viewports (< 768px) with accessible touch targets.
+- **Clean Queue Management**: Individual appointments can be cancelled or deleted one-by-one by the doctor or receptionist without relying on non-production bulk test wipe buttons.
+- **Prescription & Rx PDF Export**: Doctors can write prescriptions with medicines, dosage, and instructions, and print or download them as PDF directly from both the doctor dashboard and the patient appointment lookup tab.
 
 ---
 
