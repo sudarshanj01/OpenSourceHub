@@ -1,0 +1,49 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DoctorProfile {
+  id                  String   @id @default(uuid())
+  clinicName          String   @default("CarePlus Family Clinic")
+  doctorName          String   @default("Dr. Sarah Jenkins, MD")
+  specialty           String   @default("General Physician & Family Medicine")
+  bio                 String   @default("Board-certified physician with 12+ years of experience providing compassionate, comprehensive care for patients of all ages.")
+  phone               String   @default("+1 (555) 234-5678")
+  email               String   @default("clinic@careplus.example")
+  address             String   @default("452 Health Avenue, Suite 101, Medical District")
+  consultationFee     String   @default("$60")
+  slotDurationMinutes Int      @default(30)
+  workStartHour       String   @default("09:00")
+  workEndHour         String   @default("17:00")
+  breakStartHour      String   @default("13:00")
+  breakEndHour        String   @default("14:00")
+  activeDays          String   @default("Monday,Tuesday,Wednesday,Thursday,Friday,Saturday")
+  adminPin            String   @default("1234")
+  updatedAt           DateTime @updatedAt
+  createdAt           DateTime @default(now())
+}
+
+model Appointment {
+  id              String   @id @default(uuid())
+  bookingRef      String   @unique
+  patientName     String
+  patientPhone    String
+  patientEmail    String?
+  reason          String
+  appointmentDate String   // Format: YYYY-MM-DD
+  appointmentTime String   // Format: HH:mm (e.g. 09:30)
+  status          String   @default("CONFIRMED") // CONFIRMED, IN_CONSULTATION, COMPLETED, CANCELLED, NO_SHOW
+  doctorNotes     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([appointmentDate])
+  @@index([patientPhone])
+  @@index([status])
+}
