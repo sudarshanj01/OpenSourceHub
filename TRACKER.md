@@ -7,8 +7,8 @@
 
 ## 📈 Overall Progress
 
-- **Completed:** 2 / 100
-- **In Progress:** 1 / 100
+- **Completed:** 3 / 100
+- **In Progress:** 0 / 100
 - **Planned:** 97 / 100
 
 | Status Legend | Meaning |
@@ -63,7 +63,7 @@
 | **038** | `038-copywriter-brief-headline-tester`| Copywriting Brief & Headline Variation Board | Copywriters & Content Creators | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/038-copywriter-brief-headline-tester` |
 | **039** | `039-resume-portfolio-static-builder` | 1-Page Markdown Portfolio & Resume Site | Remote Knowledge Workers | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/039-resume-portfolio-static-builder` |
 | **040** | `040-url-shortener-qr-analytics` | Self-Hosted Branded Link Shortener & QR Maker | Digital Marketers & Creators | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/040-url-shortener-qr-analytics` |
-| **041** | `041-minimalist-employee-attendance` | **Employee Attendance & Time-Clock System** | Small Businesses & Retail Stores | Next.js 16, Tailwind, Prisma, PostgreSQL 16 | `🔄 IN_PROGRESS` | [`projects/041-minimalist-employee-attendance`](projects/041-minimalist-employee-attendance/) |
+| **041** | `041-minimalist-employee-attendance` | **Employee Attendance & Time-Clock System** | Small Businesses & Retail Stores | Next.js 16, Tailwind, Prisma, PostgreSQL 16 | `✅ DONE` | [`projects/041-minimalist-employee-attendance`](projects/041-minimalist-employee-attendance/) |
 | **042** | `042-monthly-employee-timesheets` | **Employee Monthly Timesheet & CSV Exporter** | HR Admins & Agency Ops | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/042-monthly-employee-timesheets` |
 | **043** | `043-petty-cash-voucher-logger` | Office Petty Cash Voucher & Expense Log | Office Managers & Accountants | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/043-petty-cash-voucher-logger` |
 | **044** | `044-leave-vacation-request-board` | Simple Leave Request & Approval Board | Small Team Managers | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/044-leave-vacation-request-board` |
