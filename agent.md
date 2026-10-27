@@ -53,11 +53,47 @@ Whenever an AI agent or human contributor builds, scaffolds, or upgrades any pro
 - **Pinned Version**: Always pin to `postgres:16-alpine` or `postgres:17-alpine`. Never use unpinned `:latest`.
 - **Persistence**: All database data must be mounted to a local volume (`./data/postgres` or a named volume) so data is never lost across container restarts.
 
-### C. Frontend Standard (Mobile-First is Priority #1)
-- **Mobile-First UX**: All target users (small business owners, staff, patients, customers) primarily access software on mobile phones (320px–420px screen widths) or wall-mounted tablets. 
-  - Interfaces must be mobile-first: large touch targets (minimum 44x44px for buttons), responsive modals, and clean spacing.
-  - Wide data tables MUST provide a dedicated mobile card view (`block md:hidden`) alongside desktop tables (`hidden md:block`) so mobile users never suffer awkward horizontal scrolling.
-  - Navigation bars must be compact and responsive with collapsible or icon-friendly tabs.
+### C. Frontend Standard & Aceternity-Inspired Design Intelligence (Zero AI-Slop)
+
+Every frontend built across OpenSourceHub must deliver an **original, high-craft user experience** that feels like a premium modern product—never a generic, cookie-cutter "AI-generated" dashboard. Developers and AI agents must follow this design intelligence:
+
+#### 1. Aceternity UI Aesthetics & Visual Hierarchy
+- **Deep Slate/Zinc Palette**: Use a rich dark canvas (`#09090b` / `bg-zinc-950`) with layered card elevations (`bg-zinc-900/70` to `bg-zinc-900/90`), avoiding flat washed-out pure black or generic muddy grays.
+- **Radial Dot Background Patterns**: Apply a subtle, elegant ambient grid:
+  ```css
+  .bg-dot-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  ```
+- **Aceternity Shimmer & Glowing Accents**:
+  - Add delicate top-border gradient accent lines on primary hero cards:
+    ```tsx
+    <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-80" />
+    ```
+  - Use tailored ambient glow shadows on primary action buttons and metric badges:  
+    `shadow-[0_0_20px_-3px_rgba(99,102,241,0.4)]` or `shadow-[0_0_12px_rgba(16,185,129,0.3)]`.
+- **Glassmorphic Depth**: Use `backdrop-blur-md` with semi-translucent borders (`border-zinc-800/80` transitioning to `hover:border-zinc-700/80`) to give containers depth and tactile response.
+
+#### 2. Bento-Grid Layouts & Metric Density
+- Organize high-level metrics into a 4-card or asymmetrical **Bento Grid** (e.g. Today's volume, weekly progress, ratio bars, and scope indicators).
+- Pair large bold monospace numerals with quiet, disciplined labels and inline visual progress bars.
+- Use customized color tokens (e.g. project-specific hex colors, status pills) rather than monotonous monochrome.
+
+#### 3. Zero AI-Slop & Design Discipline (Frontend Skill Standards)
+- **Avoid Generic AI Tells**:
+  - Do NOT use warm-cream/terracotta boilerplate (`#F4F1EA` with terracotta/warm-clay) or broadsheet hairlines.
+  - Do NOT use tracked-out ALL-CAPS eyebrow labels above every single heading.
+  - Do NOT decorate headers by coloring a single isolated word with a bright gradient.
+  - Do NOT generate identical rounded SaaS card kits with uniform soft grey shadows.
+- **Intentional Motion & Micro-Interactions**: Use motion only when it responds to human input (opening modals, toggling modes, hovering over rows, live ticking stopwatches). Avoid gratuitous auto-sliding entrances on every section.
+- **Restraint**: Let one element be the memorable visual anchor; keep everything surrounding it quiet, functional, and disciplined.
+
+#### 4. Mobile-First UX is Priority #1
+- All target users (small business owners, staff, patients, customers) primarily access software on mobile phones (320px–420px screen widths) or wall-mounted tablets.
+- **Minimum 44x44px touch targets** for all interactive buttons, icon triggers, and selects.
+- **Dual Table / Card Architecture**: Wide data matrices or tables MUST provide a dedicated mobile card view (`block lg:hidden`) alongside desktop matrix tables (`hidden lg:block`) so mobile users never suffer awkward horizontal scrolling.
+- Navigation headers must include responsive collapsible drawers and compact icon tabs.
 
 ---
 
