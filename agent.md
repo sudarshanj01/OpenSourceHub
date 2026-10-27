@@ -84,25 +84,26 @@ Every project subfolder MUST include:
 
 ---
 
-## 🔒 5. Universal Security & Demo-Data Lifecycle Standards
+## 🔒 5. Universal Security & Product Standard (Real Products, Not Toy Demos)
 
-Every micro-application must adhere to these product-ready security and data management rules:
+Every application must adhere to these product-ready security and quality standards:
 
-1. **Zero Credential Leaks in UI (Never Print Secrets)**:
-   - **Never display default passwords, PINs, or credentials in the frontend UI** (no placeholders like `"Default PIN: 1234"`, no explanatory notes revealing defaults).
-   - Initial credentials must be configurable via `.env` (documented only in `.env.example`).
+1. **Real Products, Never Demos or "Coded Apps"**:
+   - Treat every project as an authentic, standalone production product—never as a template, prototype, or white-labeled demo.
+   - **Never display default credentials, demo buttons, or login switchers in the UI** (no `"Quick Demo Accounts"`, no `"Default PIN: 1234"`).
+   - Avoid tacky marketing badges, white-label tags, or tech-stack badges in public user interfaces (e.g. do not print `"7-day persistent session • Zero re-login fatigue"` or `"Built with Next.js & Go"` in footers/headers). Keep the design clean, dignified, and professional.
+   - Initial credentials must be configured securely via `.env` and documented in `.env.example`.
    - Public API endpoints (e.g. `GET /api/profile`, `GET /api/settings`) MUST explicitly strip out secret fields (`adminPin`, password hashes, tokens) before responding.
    - Authentication must use dedicated verification endpoints (e.g. `POST /api/auth/verify`) rather than comparing values in client-side code.
 
 2. **Production-Grade Data Management**:
-   - Seeding realistic sample data is helpful for immediate out-of-the-box exploration upon `docker compose up -d`.
+   - Seeding realistic initial data is allowed solely for instant local discovery upon `docker compose up -d`.
    - When deploying to production, users must be able to delete records cleanly one-by-one from the UI with single-click delete buttons (and confirmation modals).
    - Avoid tacky demo buttons in primary navigation (e.g., do not add large "Clear Demo Data" buttons in the header toolbar; keep dashboards clean and production-styled).
 
-3. **Session Persistence (`sessionStorage`)**:
-   - Once an administrator or operator enters their access PIN/password, the session MUST persist across browser page refreshes using `sessionStorage`.
-   - The user must not be kicked out when refreshing the page.
-   - The session automatically terminates when the browser tab or window closes, or when the user explicitly clicks "Lock / Logout".
+3. **Session Persistence**:
+   - Once an administrator or employee logs in or enters their access credentials, the session MUST persist across browser page refreshes using secure session tokens (`localStorage` or `sessionStorage` / HTTP-only cookies).
+   - The user must never be kicked out when refreshing the page.
 
 4. **Zero Hardcoded Display Data (100% Dynamic & Configurable)**:
    - **Never hardcode static business or professional entity data** (e.g. clinic/business names, staff names, specialties, contact phones, email addresses, physical street locations, fees, or operating hours).
@@ -114,6 +115,12 @@ Every micro-application must adhere to these product-ready security and data man
 ## 📊 6. Master Progress Tracker & Human Verification Protocol (MANDATORY)
 
 The root [`TRACKER.md`](TRACKER.md) is the single source of truth for project completion state across all chat sessions.
+
+### 🔄 Multi-File Synchronization Rule (MANDATORY):
+Whenever the human owner explicitly verifies and marks a project `✅ DONE`:
+1. Update [`TRACKER.md`](TRACKER.md) with `✅ DONE`.
+2. Add/update the project in the **Active Projects Showcase** table of root [`README.md`](README.md).
+3. Update the corresponding entry in [`PROJECTS_100.md`](PROJECTS_100.md) to reflect the completed state.
 
 ### 🚫 The "Never Mark DONE Autonomously" Rule:
 1. **AI Agents MUST NOT Mark a Project `✅ DONE` Without Explicit Human Verification**:

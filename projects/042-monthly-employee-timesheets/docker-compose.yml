@@ -1,0 +1,68 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-opensheets}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-opensheets}?sslmode=disable
+      - PORT=8080
+      - JWT_SECRET=${JWT_SECRET:-opensheets-jwt-super-secret-production-2026}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@opensheets.internal}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-Admin@123456}
+      - COMPANY_NAME=${COMPANY_NAME:-Apex Studio Inc.}
+      - ALLOWED_DOMAIN=${ALLOWED_DOMAIN:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "${PORT:-3042}:3042"
+    environment:
+      - PORT=3042
+      - BACKEND_URL=http://backend:8080
+      - NODE_ENV=production
+    depends_on:
+      - backend
+
+# Production Caddy Reverse Proxy (Uncomment to enable automatic HTTPS via Let's Encrypt in production)
+# Step 1: Set DOMAIN and ACME_EMAIL in your .env
+# Step 2: Comment out 'ports:' in the frontend service above and replace with:
+#           expose:
+#             - "3042"
+# Step 3: Uncomment the caddy block below:
+#  caddy:
+#    image: caddy:2.9-alpine
+#    restart: always
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./Caddyfile:/etc/caddy/Caddyfile
+#      - ./data/caddy_data:/data
+#      - ./data/caddy_config:/config
+#    environment:
+#      - DOMAIN=${DOMAIN:-localhost}
+#      - ACME_EMAIL=${ACME_EMAIL:-admin@example.com}
+#    depends_on:
+#      - frontend

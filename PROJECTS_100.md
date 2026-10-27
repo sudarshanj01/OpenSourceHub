@@ -334,12 +334,12 @@ projects/<project-id>/
 - **Stack:** Node.js + SQLite + Tailwind CSS.
 - **Docker Services:** `app` (`node:20-alpine`).
 
-#### 042. `042-monthly-employee-timesheets`
-- **Target Persona:** Agencies, Consultancies, Freelance Teams, Law Firms.
-- **Problem Solved:** Tracking daily billable hours per project/client and generating clean monthly payroll/billing summaries.
-- **Core Features:** Weekly/monthly grid view where employees log hours worked per client/project, manager approval workflow, monthly summary breakdown by employee and project, one-click PDF/CSV payroll export.
-- **Stack:** Python (FastAPI) + SQLite + Tailwind + ReportLab.
-- **Docker Services:** `app` (`python:3.11-slim`).
+#### 042. `042-monthly-employee-timesheets` (OpenSheets)
+- **Target Persona:** Agencies, Consultancies, Freelance Teams, Remote Companies.
+- **Problem Solved:** Tracking daily billable and internal hours per project and generating clean payroll/billing summaries.
+- **Core Features:** Daily timesheet tracker, weekly project-by-day matrix grid, live timer stopwatch, employee project assignment, domain restrictions, and instant CSV payroll export.
+- **Stack:** Go 1.24 (Chi) + Next.js 16 + PostgreSQL 16 + Tailwind CSS.
+- **Docker Services:** `frontend` (`node:22-alpine`), `backend` (`golang:1.24-alpine`), `db` (`postgres:16-alpine`).
 
 #### 043. `043-shift-roster-generator`
 - **Target Persona:** Retail Stores, Hospital Nursing Staff, Security Guard Agencies.

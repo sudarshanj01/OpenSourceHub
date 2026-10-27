@@ -1,73 +1,43 @@
 # 🌐 OpenSourceHub
 
 > **Software for All.**  
-> A curated ecosystem of 100 self-contained, self-deployable open-source utility applications built for every occupation on Earth.  
+> A curated ecosystem of self-contained, self-deployable open-source utility applications built for real-world occupations and businesses.  
 > Single `git pull`. Single `docker compose up`. Zero SaaS vendor lock-in.
 
 ---
 
 ## 💡 The Philosophy
 
-### 1. Code is Not a MOAT
-In the age of modern engineering and AI, software code itself is no longer an insurmountable barrier to entry. Yet, millions of small businesses, solo doctors, teachers, mechanics, cafe owners, and freelancers are charged exorbitant monthly subscriptions for basic software utilities they could easily host themselves.
+### 1. Code is Not the Moat — Execution, Polish & Scaling Are
+In modern software engineering, raw source code is no longer an insurmountable moat. **The true moat is execution, user experience, reliability, and scaling.** Exorbitant monthly SaaS fees gatekeep basic utility tools that businesses, professionals, and teams need every single day. OpenSourceHub exists to bridge that gap with production-grade, self-sovereign applications that just work.
 
-### 2. Software for Everyone
-Whether you are a solo doctor needing appointment slots, a local canteen needing a dynamic QR menu card, a small team tracking attendance and timesheets, or an individual wanting private cloud storage without big-tech surveillance—**OpenSourceHub provides an immediate, free, production-ready starting point.**
+### 2. Software Built for Real Occupations
+Every project solves a concrete, high-utility operational challenge without enterprise bloat—from medical clinics and restaurants to agency timesheets, attendance tracking, and internal tooling.
 
-### 3. Deployable Without Headaches
-Every project in this repository is designed with:
-- **Pinned Image Versions**: No brittle `:latest` tags that break over time.
-- **Self-Contained Subfolders**: Each project lives in its own folder with its own `docker-compose.yml`, `.env.example`, and concise `README.md`.
-- **Zero-Friction Dev Defaults**: Spin up locally in 30 seconds without creating accounts or setting up external cloud dependencies.
-- **One-Step Production Ready**: Every `docker-compose.yml` includes a ready-to-uncomment section at the bottom for automatic HTTPS/SSL domain configuration using modern reverse proxies (Caddy/Nginx).
-
----
-
-## 📂 Repository Structure
-
-```text
-OpenSourceHub/
-├── README.md                          # Hub overview, guidelines, and navigation
-├── PROJECTS_100.md                    # Detailed roadmap of all 100 projects
-├── templates/
-│   └── project-template/              # Standard archetype for new projects
-│       ├── docker-compose.yml         # Pinned dev stack + commented prod SSL block
-│       ├── .env.example               # Pinned environment variables
-│       ├── README.md                  # Quickstart & production guide
-│       └── src/                       # Application code
-└── projects/
-    ├── 001-doctor-appointment-portal/
-    ├── 011-digital-qr-menu-board/
-    ├── 021-tuition-student-fee-register/
-    ├── 041-minimalist-employee-attendance/
-    ├── 042-monthly-employee-timesheets/
-    ├── 089-private-cloud-storage-vault/
-    └── ...
-```
+### 3. Frictionless, Reliable Self-Hosting
+- **Pinned Container Versions**: Pinned, audited base images that remain stable over time.
+- **Self-Contained Architecture**: Each project is an independent directory with its own container orchestration and environment definitions.
+- **Zero-Friction Dev Defaults**: Immediate local spin-up without requiring proprietary cloud registrations.
+- **Production SSL Ready**: Production reverse-proxy configurations ready to provision automated Let's Encrypt certificates when attached to a custom domain.
 
 ---
 
-## 🗺️ The 100 Projects at a Glance
+## 📦 Active Projects Showcase
 
-Full specifications and architecture details are documented in [**PROJECTS_100.md**](PROJECTS_100.md).
+A growing collection of production-ready applications built to professional engineering standards:
 
-| Sector / Category | Projects Range | Target Occupations |
-| :--- | :--- | :--- |
-| 🩺 **Healthcare & Medicine** | `001` – `010` | Doctors, Dentists, Physiotherapists, Chemists, Vets, Counselors |
-| ☕ **Food, Hospitality & Dining** | `011` – `020` | Cafes, Canteens, Bakeries, Food Trucks, Restaurants, Pubs |
-| 🎓 **Education, Tuition & Coaching** | `021` – `030` | Tuition Teachers, Private Tutors, Driving Schools, Music Instructors |
-| ⚖️ **Professional & Legal Services** | `031` – `040` | Lawyers, CAs/CPAs, Architects, Notaries, Consultants |
-| 👥 **HR, Attendance & Operations** | `041` – `050` | Small Companies, Office Admins, Shift Workers, Remote Teams |
-| 🔧 **Trades, Field Services & Repair**| `051` – `060` | Auto Mechanics, Plumbers, Electricians, HVAC, Tailors, Cleaners |
-| 🛍️ **Retail, Inventory & Rental** | `061` – `070` | Boutiques, Hardware Stores, Tool Rentals, Bookshops, Florists |
-| ✂️ **Personal Services & Beauty** | `071` – `080` | Salons, Barbers, Gyms, Yoga Studios, Tattoo Artists, Pet Groomers |
-| 🏢 **Real Estate & Property** | `081` – `088` | PG/Hostel Owners, Landlords, Realtors, Co-working Spaces |
-| 🛡️ **Data Sovereignty & Personal** | `089` – `095` | Private Cloud Storage, Notes, Bookmark Archiver, Net Worth Tracker |
-| 🎨 **Creative, Media & Community** | `096` – `100` | Freelancers, Photographers, Invoicing, Event Organizers, Non-Profits |
+| ID | Application | Focus Area | Directory |
+|:---|:---|:---|:---|
+| **001** | **Doctor Appointment Portal** | Medical clinic scheduling, patient bookings, and slot management | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
+| **011** | **Digital QR Menu Board** | Restaurant menu display, category browsing, and diner order workflow | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
+| **041** | **Minimalist Employee Attendance** | PIN-based time-clock, shift verification, and staff attendance logs | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
+| **042** | **OpenSheets** | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
 
 ---
 
 ## ⚡ How to Run Any Project
+
+Each project in OpenSourceHub is completely self-contained. To run any application:
 
 1. **Clone the repository:**
    ```bash
@@ -75,47 +45,65 @@ Full specifications and architecture details are documented in [**PROJECTS_100.m
    cd OpenSourceHub
    ```
 
-2. **Navigate to the desired project:**
+2. **Navigate into the desired project directory:**
    ```bash
-   cd projects/001-doctor-appointment-portal
+   cd projects/<project-folder-name>
    ```
 
-3. **Copy environment variables and spin up:**
+3. **Initialize environment variables and start:**
    ```bash
    cp .env.example .env
    docker compose up -d
    ```
 
-4. **Access the web app** at the local port specified in that project's `README.md` (e.g. `http://localhost:3000`).
+4. **Access the application:**  
+   Open your browser at `http://localhost:<PORT>` (refer to the project's individual `.env.example` or documentation for the exact port assignment).
 
 ---
 
-## 🚀 Moving to Production (With Your Own Domain & SSL)
+## 🚀 Moving to Production (Custom Domain & SSL)
 
-Every `docker-compose.yml` in this repository includes a production section at the bottom. To expose your service securely with automated HTTPS:
+Every project contains a production-ready reverse proxy configuration block. To deploy publicly with automated HTTPS:
 
-1. Open `docker-compose.yml` in the project folder.
-2. Uncomment the reverse proxy block (Caddy or Nginx).
-3. Set your domain name in `.env` (e.g. `DOMAIN=clinic.example.com`).
-4. Ensure your DNS `A` record points to your server's IP address.
-5. Run:
-   ```bash
-   docker compose up -d --build
+1. In the project's `.env`, configure your domain:
+   ```env
+   DOMAIN=app.yourdomain.com
+   ACME_EMAIL=admin@yourdomain.com
    ```
-   Caddy will automatically provision and renew a free Let's Encrypt TLS certificate.
+2. In `docker-compose.yml`, uncomment the reverse-proxy service block (Caddy) and map ports `80` and `443`.
+3. Point your DNS `A` record to your server's public IP address.
+4. Run:
+   ```bash
+   docker compose up -d
+   ```
 
 ---
 
-## 🤝 Contributing
+## 🤝 Open-Source Community & Contributing
 
-We welcome contributions! To build or contribute a project from the catalog:
-1. Review [**PROJECTS_100.md**](PROJECTS_100.md) to pick an unassigned project ID.
-2. Copy the template from `templates/project-template/` into `projects/<project-id>/`.
-3. Follow the universal rules: **pinned image versions**, **zero external cloud lock-in**, and a clean, responsive UI.
+OpenSourceHub is built by and for the open-source community. We welcome contributions from developers, designers, indie hackers, and students worldwide!
+
+### Why Contribute?
+- **Build Real Products, Not Toy Demos**: Contribute to standalone, fully functional tools that solve real operational problems.
+- **Learn Modern Engineering**: Practice Git collaboration, branching workflows, pull requests, Docker multi-stage builds, database migrations, and clean architectural patterns.
+- **Diverse Stacks & Scalability**: Bring new frameworks, language ecosystems (Go, Rust, Python, Node, React/Next.js), and architectural paradigms suited to specific occupational domains.
+
+### How to Get Involved:
+1. **Explore the Roadmap**: Review planned concepts or propose a new application for an unserved profession.
+2. **Fork & Branch**: Create a feature branch for your project or improvement:
+   ```bash
+   git checkout -b feature/your-project-name
+   ```
+3. **Adhere to Production Standards**:
+   - Build complete, independent projects inside `projects/<project-name>`.
+   - Never hardcode or display default credentials/secrets in the UI.
+   - Design mobile-first with clean, high-contrast aesthetics.
+   - Include automated migrations and clean Docker compose configurations.
+4. **Submit a Pull Request**: Open a PR with clear documentation and verification steps.
 
 ---
 
 ## 📜 License
 
-All projects in OpenSourceHub are released under the permissive [MIT License](LICENSE).
-Free to use, fork, commercialize, or modify.
+All projects in OpenSourceHub are released under the permissive [MIT License](LICENSE).  
+Free for personal, commercial, educational, and community use.
