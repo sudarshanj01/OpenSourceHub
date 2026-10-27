@@ -10,13 +10,29 @@ export async function GET() {
     if (!profile) {
       profile = await prisma.restaurantProfile.create({
         data: {
-          name: "The Rustic Skillet Bistro",
-          tagline: "Artisanal Comfort Food & Craft Sips",
+          name: "Spice Route Kitchen",
+          tagline: "Authentic Flavours, Modern Dining",
+          currencySymbol: "₹",
+          currencyCode: "INR",
+          cgstPercentage: 2.5,
+          sgstPercentage: 2.5,
+          serviceChargePercentage: 0.0,
+          fssaiLicense: "10019011006543",
+          gstNumber: "07AAAAA1234A1Z5",
+          address: "Shop 14-16, Inner Circle, Connaught Place, New Delhi",
+          phone: "+91 98765 43210",
+          email: "order@spiceroutekitchen.in",
+          wifiSsid: "SpiceRoute_Guest",
+          wifiPassword: "Namaste2026",
+          openingHours: "Mon - Sun: 11:30 AM – 11:30 PM",
+          tableCount: 20,
+          adminPin: "1234",
+          upiId: "spiceroute@upi",
         },
       });
     }
 
-    // Never return the adminPin to the client in plain GET
+    // Never return the adminPin in plain GET
     const { adminPin, ...safeProfile } = profile;
     return NextResponse.json(safeProfile);
   } catch (error) {
@@ -48,8 +64,11 @@ export async function PUT(request: Request) {
         description: body.description ?? profile.description,
         currencySymbol: body.currencySymbol ?? profile.currencySymbol,
         currencyCode: body.currencyCode ?? profile.currencyCode,
-        taxPercentage: typeof body.taxPercentage === 'number' ? body.taxPercentage : profile.taxPercentage,
+        cgstPercentage: typeof body.cgstPercentage === 'number' ? body.cgstPercentage : profile.cgstPercentage,
+        sgstPercentage: typeof body.sgstPercentage === 'number' ? body.sgstPercentage : profile.sgstPercentage,
         serviceChargePercentage: typeof body.serviceChargePercentage === 'number' ? body.serviceChargePercentage : profile.serviceChargePercentage,
+        fssaiLicense: body.fssaiLicense ?? profile.fssaiLicense,
+        gstNumber: body.gstNumber ?? profile.gstNumber,
         address: body.address ?? profile.address,
         phone: body.phone ?? profile.phone,
         email: body.email ?? profile.email,
@@ -57,6 +76,7 @@ export async function PUT(request: Request) {
         wifiPassword: body.wifiPassword ?? profile.wifiPassword,
         openingHours: body.openingHours ?? profile.openingHours,
         tableCount: typeof body.tableCount === 'number' ? body.tableCount : profile.tableCount,
+        upiId: body.upiId ?? profile.upiId,
         adminPin: body.newAdminPin && body.newAdminPin.trim().length >= 4 ? body.newAdminPin.trim() : profile.adminPin,
         bannerUrl: body.bannerUrl ?? profile.bannerUrl,
         logoUrl: body.logoUrl ?? profile.logoUrl,

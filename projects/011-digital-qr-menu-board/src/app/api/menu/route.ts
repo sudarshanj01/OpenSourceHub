@@ -25,15 +25,19 @@ export async function GET() {
 
     return NextResponse.json({
       profile: profile || {
-        name: "The Rustic Skillet Bistro",
-        tagline: "Artisanal Comfort Food & Craft Sips",
-        currencySymbol: "$",
-        currencyCode: "USD",
-        taxPercentage: 8.5,
+        name: "Spice Route Kitchen",
+        tagline: "Authentic Flavours, Modern Dining",
+        currencySymbol: "₹",
+        currencyCode: "INR",
+        cgstPercentage: 2.5,
+        sgstPercentage: 2.5,
         serviceChargePercentage: 0.0,
-        wifiSsid: "RusticSkillet_Guest",
-        wifiPassword: "FreshFood2026",
-        tableCount: 16,
+        fssaiLicense: "10019011006543",
+        gstNumber: "07AAAAA1234A1Z5",
+        wifiSsid: "SpiceRoute_Guest",
+        wifiPassword: "Namaste2026",
+        tableCount: 20,
+        upiId: "spiceroute@upi",
       },
       categories,
     });

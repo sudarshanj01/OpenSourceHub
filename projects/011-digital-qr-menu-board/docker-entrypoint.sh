@@ -10,7 +10,7 @@ done
 echo "✅ Database connection verified!"
 
 echo "📦 Pushing Prisma database schema to PostgreSQL..."
-npx prisma db push --skip-generate
+npx prisma db push --skip-generate --accept-data-loss
 
 echo "🌱 Ensuring database has default restaurant profile & seed menu..."
 npx tsx prisma/seed.ts || true

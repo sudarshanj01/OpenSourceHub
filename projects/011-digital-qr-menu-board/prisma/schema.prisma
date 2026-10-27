@@ -10,22 +10,25 @@ datasource db {
 
 model RestaurantProfile {
   id                      String   @id @default(uuid())
-  name                    String   @default("The Rustic Skillet Bistro")
-  tagline                 String   @default("Artisanal Comfort Food & Craft Sips")
-  description             String   @default("Locally sourced ingredients, hand-crafted wood-fired recipes, and refreshing beverages made fresh every day.")
-  currencySymbol          String   @default("$")
-  currencyCode            String   @default("USD")
-  taxPercentage           Float    @default(8.5)
+  name                    String   @default("Spice Route Kitchen")
+  tagline                 String   @default("Authentic Flavours, Modern Dining")
+  description             String   @default("From fragrant biryanis to buttery naans and sizzler platters — crafted with freshly ground spices and age-old culinary tradition.")
+  currencySymbol          String   @default("₹")
+  currencyCode            String   @default("INR")
+  cgstPercentage          Float    @default(2.5)
+  sgstPercentage          Float    @default(2.5)
   serviceChargePercentage Float    @default(0.0)
-  address                 String   @default("124 Market Square, Culinary District")
-  phone                   String   @default("+1 (555) 789-4321")
-  email                   String   @default("hello@rusticskillet.example")
-  wifiSsid                String   @default("RusticSkillet_Guest")
-  wifiPassword            String   @default("FreshFood2026")
-  openingHours            String   @default("Tue - Sun: 11:00 AM – 10:00 PM (Closed Mon)")
-  tableCount              Int      @default(16)
+  fssaiLicense            String   @default("10019011006543")
+  gstNumber               String   @default("07AAAAA1234A1Z5")
+  address                 String   @default("Shop 14-16, Inner Circle, Connaught Place, New Delhi")
+  phone                   String   @default("+91 98765 43210")
+  email                   String   @default("order@spiceroutekitchen.in")
+  wifiSsid                String   @default("SpiceRoute_Guest")
+  wifiPassword            String   @default("Namaste2026")
+  openingHours            String   @default("Mon - Sun: 11:30 AM – 11:30 PM")
+  tableCount              Int      @default(20)
   adminPin                String   @default("1234")
-  themeColor              String   @default("amber")
+  upiId                   String   @default("spiceroute@upi")
   bannerUrl               String?
   logoUrl                 String?
   createdAt               DateTime @default(now())
@@ -35,6 +38,7 @@ model RestaurantProfile {
 model Category {
   id          String     @id @default(uuid())
   name        String
+  nameHindi   String?
   description String?
   icon        String?
   sortOrder   Int        @default(0)
@@ -51,16 +55,22 @@ model MenuItem {
   categoryId      String
   category        Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   name            String
+  nameHindi       String?
   description     String
   price           Float
+  halfPrice       Float?
   isAvailable     Boolean  @default(true)
-  isVegetarian    Boolean  @default(false)
-  isVegan         Boolean  @default(false)
-  isGlutenFree    Boolean  @default(false)
-  isSpicy         Boolean  @default(false)
+  foodType        String   @default("veg") // "veg" | "nonveg" | "egg"
+  isJainAvailable Boolean  @default(false)
+  spiceLevel      Int      @default(1) // 0=mild, 1=medium-mild, 2=medium, 3=spicy, 4=extra-hot
+  cuisineType     String   @default("north-indian")
   isChefSpecial   Boolean  @default(false)
+  isBestseller    Boolean  @default(false)
+  isTodaySpecial  Boolean  @default(false)
+  isNewItem       Boolean  @default(false)
   calories        Int?
   prepTimeMinutes Int?
+  servesCount     String?  // "Serves 1-2"
   badge           String?
   imageUrl        String?
   sortOrder       Int      @default(0)
@@ -70,4 +80,5 @@ model MenuItem {
   @@index([categoryId])
   @@index([isAvailable])
   @@index([sortOrder])
+  @@index([foodType])
 }

@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { name, description, icon } = body;
+    const { name, nameHindi, description, icon } = body;
 
     if (!name || !name.trim()) {
       return NextResponse.json({ error: 'Category name is required' }, { status: 400 });
@@ -25,6 +25,7 @@ export async function POST(request: Request) {
     const category = await prisma.category.create({
       data: {
         name: name.trim(),
+        nameHindi: nameHindi ? nameHindi.trim() : null,
         description: description ? description.trim() : null,
         icon: icon ? icon.trim() : null,
         sortOrder,

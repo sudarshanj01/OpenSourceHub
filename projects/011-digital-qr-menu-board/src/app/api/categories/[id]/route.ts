@@ -4,7 +4,7 @@ import { verifyAdminPin } from '@/lib/auth';
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const pin = request.headers.get('x-admin-pin');
@@ -13,11 +13,12 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
 
     const updateData: any = {};
     if (body.name !== undefined) updateData.name = body.name.trim();
+    if (body.nameHindi !== undefined) updateData.nameHindi = body.nameHindi ? body.nameHindi.trim() : null;
     if (body.description !== undefined) updateData.description = body.description ? body.description.trim() : null;
     if (body.icon !== undefined) updateData.icon = body.icon ? body.icon.trim() : null;
     if (body.sortOrder !== undefined) updateData.sortOrder = parseInt(body.sortOrder, 10);
@@ -37,7 +38,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const pin = request.headers.get('x-admin-pin');
@@ -46,7 +47,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
     await prisma.category.delete({
       where: { id },
     });
