@@ -17,11 +17,11 @@ This document is the dedicated AI context handbook and developer specification f
 
 ## 🛠️ 2. Tech Stack & Architecture
 
-- **Frontend & Fullstack Engine:** Next.js 14 (App Router, React 18, TypeScript, Tailwind CSS, Lucide icons).
+- **Frontend & Fullstack Engine:** Next.js 16 (App Router, React 19, TypeScript, Tailwind CSS, Lucide icons, Turbopack).
 - **QR Engine:** `qrcode` high-density SVG/Canvas vector generator.
 - **Database:** PostgreSQL (`postgres:16-alpine` pinned) with Prisma ORM.
 - **Container Strategy:**
-  - Multi-stage Dockerfile (`node:20-alpine` base, builder, and standalone runner using non-root `nextjs` user).
+  - Multi-stage Dockerfile (`node:22-alpine` base, builder, and standalone runner using non-root `nextjs` user).
   - Automated database wait, schema push, and idempotent seeding via `docker-entrypoint.sh` on container boot.
   - Pinned `postgres:16-alpine` with healthcheck and local volume persistence (`./data/postgres`).
 - **Production Reverse Proxy:** `caddy:2.8.4-alpine` with automatic Let's Encrypt SSL/HTTPS.

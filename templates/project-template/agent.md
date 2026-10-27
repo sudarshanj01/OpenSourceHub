@@ -12,10 +12,11 @@ This file is the dedicated context guide for AI coding assistants (Claude, Curso
 ---
 
 ## 🛠️ 2. Tech Stack & Architecture
-- **Frontend:** Next.js (TypeScript, App Router, Tailwind CSS, Lucide icons)
-- **Backend:** Next.js Server Actions / Route Handlers (or Go/Java/Python if specified)
-- **Database:** PostgreSQL (`postgres:16-alpine` pinned) via Prisma ORM
-- **Containerization:** Multi-stage Dockerfile + Docker Compose
+- **Mandatory Version Policy:** Always use the latest stable version of all runtimes, frameworks, and packages. Run a web search before scaffolding to identify the latest stable release.
+- **Frontend & Fullstack:** Next.js (App Router, TypeScript, Tailwind CSS, Lucide icons, Turbopack) using the latest stable release.
+- **Runtime:** Node.js (pinned `node:22-alpine` or latest LTS/stable).
+- **Database:** PostgreSQL (`postgres:16-alpine` or `postgres:17-alpine` pinned) via Prisma ORM.
+- **Containerization:** Multi-stage Dockerfile + Docker Compose with healthchecks.
 
 ---
 

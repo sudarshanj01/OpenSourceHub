@@ -18,7 +18,7 @@ projects/<project-id>/
 ```
 
 ### Universal Rules:
-1. **Pinned Image Versions**: Never use `:latest`. Always pin (e.g., `postgres:16-alpine`, `redis:7.2-alpine`, `minio/minio:RELEASE.2024-05-10T01-41-38Z`, `node:20-alpine`, `python:3.11-slim`, `caddy:2.8-alpine`).
+1. **Pinned Image Versions (Always Verified Latest Stable)**: Never use unpinned `:latest`. Always perform a web search before scaffolding to identify and pin the current utmost latest stable release (e.g., `node:22-alpine`, `postgres:16-alpine` / `postgres:17-alpine`, `python:3.12-slim`, `golang:1.24-alpine`, `caddy:2.9-alpine`, `redis:7.4-alpine`).
 2. **Zero-Config Dev Defaults**: Running `docker compose up -d` immediately gives a functional UI without manual database migrations or API keys.
 3. **Storage Strategy**: If the app stores files/media (images, PDFs, documents), use embedded SQLite/local volume or lightweight MinIO S3-compatible service.
 4. **Production Ready**: Every `docker-compose.yml` includes a ready-to-uncomment Caddy or Nginx reverse proxy section with Let's Encrypt SSL and domain binding.

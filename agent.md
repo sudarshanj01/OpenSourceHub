@@ -14,13 +14,36 @@ This document (`agent.md`) is the master operational manual, AI context definiti
 
 ---
 
-## 🛠️ 2. Official Tech Stack Standards
+## ⚡ 2. Mandatory Latest-Stable Version Protocol (Web Search First)
+
+Whenever an AI agent or human contributor builds, scaffolds, or upgrades any project or micro-service in OpenSourceHub:
+
+1. **Always Use the Very Latest Stable Version**:
+   - Regardless of the programming language, framework, runtime, ORM, database, or library (Node.js, Next.js, React, TypeScript, Python, Golang, Java, Rust, PostgreSQL, Prisma, Tailwind CSS, etc.), you MUST ALWAYS select the **utmost latest stable version**.
+   - Never settle for older boilerplate defaults or legacy versions. If a template contains an older version, immediately upgrade it to the newest stable release.
+2. **Mandatory Web Search Discovery Before Scaffolding**:
+   - Before initializing any project or defining `package.json` / `go.mod` / `requirements.txt` / `pom.xml`, the agent MUST perform a **web search** (e.g. `"latest stable release <framework/language> <year>"`) to discover the exact latest stable release, its active peer requirements, and any breaking changes.
+3. **Pin Container Images to Verified Latest Stable Releases**:
+   - Base images in `Dockerfile` and `docker-compose.yml` must be pinned to the verified latest stable/LTS tags (never use floating `:latest`, but ensure the pinned tag is the latest stable release):
+     - Node.js: `node:22-alpine` (or current active LTS/stable)
+     - Next.js: Latest major/minor stable (e.g., Next.js `16.x` + React `19.x`)
+     - Python: `python:3.12-slim` / `python:3.13-slim`
+     - Golang: `golang:1.24-alpine` / `golang:1.23-alpine`
+     - Java: `eclipse-temurin:21-jre-alpine` / `eclipse-temurin:23-jre-alpine`
+     - PostgreSQL: `postgres:16-alpine` / `postgres:17-alpine`
+     - Reverse Proxy: `caddy:2.9-alpine` / `caddy:2.8-alpine`
+4. **Zero Vulnerability Standard**:
+   - Always run vulnerability checks (`npm audit fix`, security scanners) right after dependency installation to ensure 0 vulnerabilities before verifying in Docker.
+
+---
+
+## 🛠️ 3. Official Tech Stack Standards
 
 To guarantee maintainability, reliability, and ease of deployment, all projects adhere to the following stack rules:
 
 ### A. Database Standard
 - **Always use PostgreSQL**: Every project uses PostgreSQL as its primary database.
-- **Pinned Version**: Always pin to `postgres:16-alpine`. Never use `:latest`.
+- **Pinned Version**: Always pin to `postgres:16-alpine` or `postgres:17-alpine`. Never use unpinned `:latest`.
 - **Persistence**: All database data must be mounted to a local volume (`./data/postgres` or a named volume) so data is never lost across container restarts.
 
 ### B. Frontend Standard (Mobile-First is Priority #1)
@@ -28,7 +51,7 @@ To guarantee maintainability, reliability, and ease of deployment, all projects 
   - Interfaces must be mobile-first: large touch targets (minimum 44x44px for buttons), responsive modals, and clean spacing.
   - Wide data tables MUST provide a dedicated mobile card view (`block md:hidden`) alongside desktop tables (`hidden md:block`) so mobile users never suffer awkward horizontal scrolling.
   - Navigation bars must be compact and responsive with collapsible or icon-friendly tabs.
-- **Tech**: Next.js (App Router, TypeScript, Tailwind CSS, Lucide React icons).
+- **Tech**: Next.js (App Router, TypeScript, Tailwind CSS, Lucide React icons) on the latest stable version.
 
 ### C. Backend Strategy
 - **Compact & Utility Apps**: For streamlined micro-utilities, use the built-in Next.js backend (App Router Route Handlers & Server Actions with Prisma ORM or Drizzle). This delivers a single lightweight app container alongside PostgreSQL.
@@ -37,17 +60,17 @@ To guarantee maintainability, reliability, and ease of deployment, all projects 
 
 ---
 
-## 🐳 3. Container & Docker Standards
+## 🐳 4. Container & Docker Standards
 
 Every project subfolder MUST include:
 
-1. **Pinned Image Versions**:
-   - Node: `node:20-alpine`
-   - Python: `python:3.11-slim`
-   - Golang: `golang:1.22-alpine`
+1. **Pinned Image Versions (Always Latest Stable)**:
+   - Node: `node:22-alpine`
+   - Python: `python:3.12-slim` (or `3.13-slim`)
+   - Golang: `golang:1.24-alpine` (or `1.23-alpine`)
    - Java: `eclipse-temurin:21-jre-alpine`
-   - Database: `postgres:16-alpine`
-   - Reverse Proxy: `caddy:2.8.4-alpine`
+   - Database: `postgres:16-alpine` / `postgres:17-alpine`
+   - Reverse Proxy: `caddy:2.9-alpine` / `caddy:2.8.4-alpine`
    - Storage (when needed): `minio/minio:RELEASE.2024-05-10T01-41-38Z`
 
 2. **Zero-Friction Dev Defaults**:
@@ -60,7 +83,7 @@ Every project subfolder MUST include:
 
 ---
 
-## 🔒 4. Universal Security & Demo-Data Lifecycle Standards
+## 🔒 5. Universal Security & Demo-Data Lifecycle Standards
 
 Every micro-application must adhere to these product-ready security and data management rules:
 
@@ -87,7 +110,7 @@ Every micro-application must adhere to these product-ready security and data man
 
 ---
 
-## 📊 5. Master Progress Tracker & Human Verification Protocol (MANDATORY)
+## 📊 6. Master Progress Tracker & Human Verification Protocol (MANDATORY)
 
 The root [`TRACKER.md`](TRACKER.md) is the single source of truth for project completion state across all chat sessions.
 
@@ -104,7 +127,7 @@ The root [`TRACKER.md`](TRACKER.md) is the single source of truth for project co
 
 ---
 
-## 🛑 6. Strict Git Push Protocol (MANDATORY RULE)
+## 🛑 7. Strict Git Push Protocol (MANDATORY RULE)
 
 Every AI coding assistant (Antigravity, Cursor, Claude, Copilot, ChatGPT) working in this repository MUST strictly follow this mandatory rule:
 1. **Never Run `git push` Autonomously**:
@@ -118,7 +141,7 @@ Every AI coding assistant (Antigravity, Cursor, Claude, Copilot, ChatGPT) workin
 
 ---
 
-## 📁 7. Project Directory Blueprint
+## 📁 8. Project Directory Blueprint
 
 Each project inside `projects/<project-id>/` must follow this layout:
 
@@ -134,7 +157,7 @@ projects/<project-id>/
 
 ---
 
-## 📋 5. Required Contents of Project-Level `agent.md`
+## 📋 9. Required Contents of Project-Level `agent.md`
 
 Every project must maintain its own `agent.md` containing:
 1. **Project Name & Occupational Persona**: Who uses it and what real-world pain it solves.
@@ -148,7 +171,7 @@ Every project must maintain its own `agent.md` containing:
 
 ---
 
-## 🚀 6. Next Steps & Execution Order
+## 🚀 10. Next Steps & Execution Order
 
 We build these applications systematically one by one:
 - **Project #1 Selected**: `001-doctor-appointment-portal` (Healthcare & Clinics)

@@ -49,7 +49,7 @@ docker compose up -d
 
 ## 🛠️ Tech Stack & Requirements
 
-- **Framework**: Next.js 14 (App Router, React 18, TypeScript)
+- **Framework**: Next.js 16 (App Router, React 19, TypeScript, Turbopack)
 - **Styling**: Tailwind CSS & Lucide Icons
 - **Database**: PostgreSQL 16 (`postgres:16-alpine` pinned)
 - **ORM**: Prisma ORM with automated migrations & seeding on boot
