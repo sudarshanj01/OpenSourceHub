@@ -1,0 +1,105 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CompanySettings {
+  id                 String   @id @default("default")
+  companyName        String   @default("Metro Craftworks & Studio")
+  tagline            String   @default("Central Workshop & Retail Store")
+  adminPin           String   @default("1234")
+  timezone           String   @default("America/New_York")
+  currency           String   @default("$")
+  kioskResetSeconds  Int      @default(4)
+  allowBreakPunches  Boolean  @default(true)
+  requirePin         Boolean  @default(true)
+  soundEffects       Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ShiftPolicy {
+  id           String     @id @default(cuid())
+  name         String     @default("Standard Day Shift")
+  startTime    String     @default("09:00") // 24-hour format HH:mm
+  endTime      String     @default("17:00")
+  graceMinutes Int        @default(15)      // e.g. 15 mins grace before marked Late
+  halfDayHours Float      @default(4.0)     // minimum hours for half day
+  fullDayHours Float      @default(8.0)     // standard workday
+  isDefault    Boolean    @default(true)
+  employees    Employee[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Department {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  color     String     @default("emerald") // emerald, blue, indigo, amber, purple, rose
+  employees Employee[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Employee {
+  id            String        @id @default(cuid())
+  employeeCode  String        @unique // e.g. EMP-101
+  name          String
+  role          String        // e.g. Store Supervisor, Barista, Lead Technician
+  departmentId  String?
+  department    Department?   @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  pin           String        // 4-digit PIN for Kiosk punch
+  hourlyWage    Float?        @default(20.0)
+  email         String?
+  phone         String?
+  avatarColor   String        @default("bg-emerald-600")
+  isActive      Boolean       @default(true)
+  shiftPolicyId String?
+  shiftPolicy   ShiftPolicy?  @relation(fields: [shiftPolicyId], references: [id], onDelete: SetNull)
+  attendances   Attendance[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Attendance {
+  id                String    @id @default(cuid())
+  employeeId        String
+  employee          Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  date              DateTime  // Truncated to YYYY-MM-DD
+  status            String    @default("PRESENT") // PRESENT, LATE, HALF_DAY, ABSENT, ON_LEAVE
+  clockIn           DateTime?
+  clockOut          DateTime?
+  totalWorkMinutes  Int       @default(0)
+  totalBreakMinutes Int       @default(0)
+  isLate            Boolean   @default(false)
+  lateMinutes       Int       @default(0)
+  isOvertime        Boolean   @default(false)
+  overtimeMinutes   Int       @default(0)
+  notes             String?
+  punches           Punch[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([employeeId, date])
+}
+
+model Punch {
+  id           String     @id @default(cuid())
+  attendanceId String
+  attendance   Attendance @relation(fields: [attendanceId], references: [id], onDelete: Cascade)
+  type         String     // CLOCK_IN, BREAK_START, BREAK_END, CLOCK_OUT
+  timestamp    DateTime   @default(now())
+  notes        String?
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String   // e.g. MANUAL_PUNCH_EDIT, EMPLOYEE_CREATED, SETTINGS_UPDATED
+  details   String
+  timestamp DateTime @default(now())
+}

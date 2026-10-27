@@ -37,26 +37,27 @@ Whenever an AI agent or human contributor builds, scaffolds, or upgrades any pro
 
 ---
 
-## 🛠️ 3. Official Tech Stack Standards
+## 🛠️ 3. Best-Fit Tech Stack Selection & Official Standards
 
-To guarantee maintainability, reliability, and ease of deployment, all projects adhere to the following stack rules:
+### A. Core Architectural Philosophy: Best-Fit Over Defaulting
+- **Never Blindly Default to Next.js or Template Boilers**: Do not pick a stack simply because it is trendy, fancy, or what was used in the previous project.
+- **Project-Specific Stack Discovery**: For every new project, evaluate the fundamental requirements, operational environment, concurrency, data structures, and device constraints to choose the **absolute best-fit stack**:
+  - **Golang (Gin / Chi / Fiber + HTMX or lightweight frontend)**: Ideal for high-efficiency, lightweight, low-memory footprint single-binary services, hardware-constrained appliances, IoT devices, or lightning-fast microservices with zero Node runtime bloat.
+  - **Java / Kotlin (Spring Boot 3 / Quarkus + Thymeleaf or React)**: Ideal for enterprise-grade data validation, strict transaction consistency, deep domain modeling, corporate compliance, or batch processing.
+  - **Python (FastAPI / Django + Tailwind/HTMX)**: Ideal for data-heavy analytics, PDF/document parsing, AI/ML integrations, or scientific computations.
+  - **Node.js / Next.js / Vite / React**: Ideal for rich, interactive, real-time client-heavy SPAs, touch-screen kiosks, dynamic drag-and-drop interfaces, or web-first reactive boards.
+- Pick what is **technically and architecturally best for the domain**, not what is easiest or familiar.
 
-### A. Database Standard
+### B. Database Standard
 - **Always use PostgreSQL**: Every project uses PostgreSQL as its primary database.
 - **Pinned Version**: Always pin to `postgres:16-alpine` or `postgres:17-alpine`. Never use unpinned `:latest`.
 - **Persistence**: All database data must be mounted to a local volume (`./data/postgres` or a named volume) so data is never lost across container restarts.
 
-### B. Frontend Standard (Mobile-First is Priority #1)
-- **Mobile-First UX**: All target users (small business owners, staff, patients, customers) primarily access software on mobile phones (320px–420px screen widths). 
+### C. Frontend Standard (Mobile-First is Priority #1)
+- **Mobile-First UX**: All target users (small business owners, staff, patients, customers) primarily access software on mobile phones (320px–420px screen widths) or wall-mounted tablets. 
   - Interfaces must be mobile-first: large touch targets (minimum 44x44px for buttons), responsive modals, and clean spacing.
   - Wide data tables MUST provide a dedicated mobile card view (`block md:hidden`) alongside desktop tables (`hidden md:block`) so mobile users never suffer awkward horizontal scrolling.
   - Navigation bars must be compact and responsive with collapsible or icon-friendly tabs.
-- **Tech**: Next.js (App Router, TypeScript, Tailwind CSS, Lucide React icons) on the latest stable version.
-
-### C. Backend Strategy
-- **Compact & Utility Apps**: For streamlined micro-utilities, use the built-in Next.js backend (App Router Route Handlers & Server Actions with Prisma ORM or Drizzle). This delivers a single lightweight app container alongside PostgreSQL.
-- **High-Concurrency & Performance Apps**: Use **Golang** (Gin / Chi) or **Java** (Spring Boot / Quarkus) when heavy concurrent worker pipelines or long-term high-throughput processing is required.
-- **Specialized Library Apps**: Use **Python** (FastAPI) when the application requires specialized scientific, image manipulation, AI, or data calculation libraries.
 
 ---
 
