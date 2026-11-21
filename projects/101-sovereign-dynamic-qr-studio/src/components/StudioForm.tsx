@@ -1,12 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Tabs, TabsList, TabsTab, TabsPanel } from "@ui-sdk/react/tabs";
-import { Switch, SwitchThumb } from "@ui-sdk/react/switch";
-import { Button } from "@ui-sdk/react/button";
-import { Input } from "@ui-sdk/react/input";
-import { Textarea } from "@ui-sdk/react/textarea";
-import { Field, FieldLabel, FieldDescription } from "@ui-sdk/react/field";
 import {
   Link as LinkIcon,
   Wifi,
@@ -19,6 +13,10 @@ import {
   Check,
   Sparkles,
   Lock,
+  Zap,
+  Globe,
+  Sliders,
+  ChevronRight,
 } from "lucide-react";
 import { QRPreview, QRStyleOptions } from "./QRPreview";
 
@@ -27,6 +25,9 @@ interface StudioFormProps {
 }
 
 export function StudioForm({ onCampaignCreated }: StudioFormProps) {
+  // Mode Selector: Dynamic vs Static
+  const [isDynamic, setIsDynamic] = useState<boolean>(true);
+
   // Content Mode
   const [contentType, setContentType] = useState<"url" | "wifi" | "vcard" | "text">("url");
 
@@ -41,13 +42,12 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
   const [vcardPhone, setVcardPhone] = useState("+1 (555) 349-2041");
   const [vcardEmail, setVcardEmail] = useState("alex@riveradesign.io");
   const [vcardWeb, setVcardWeb] = useState("https://riveradesign.io");
-  const [plainText, setPlainText] = useState("Welcome to our flagship space! Ask your server for today's secret chef tasting.");
+  const [plainText, setPlainText] = useState("Welcome! Ask your server for today's seasonal tasting menu.");
 
-  // Sovereign Dynamic Settings
-  const [isDynamic, setIsDynamic] = useState(true);
+  // Dynamic Settings
   const [campaignTitle, setCampaignTitle] = useState("Patio Table QR — Summer 2026");
   const [campaignSlug, setCampaignSlug] = useState("patio-summer-2026");
-  const [campaignDesc, setCampaignDesc] = useState("Printed on table acrylic stands. Editable anytime.");
+  const [campaignDesc, setCampaignDesc] = useState("Printed on acrylic stands. Editable anytime.");
   const [enablePassword, setEnablePassword] = useState(false);
   const [passcode, setPasscode] = useState("");
 
@@ -65,13 +65,14 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
     bgColor: "#ffffff",
     logoUrl: "",
     logoSize: 0.35,
+    frameEnabled: true,
     frameText: "SCAN ME",
     frameColor: "#0284c7",
   });
 
+  const [activeTab, setActiveTab] = useState<"content" | "design" | "frame">("content");
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
-  const [activeTab, setActiveTab] = useState<"content" | "design" | "frame">("content");
 
   // Compute final QR payload
   const qrPayload = useMemo(() => {
@@ -111,7 +112,7 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
     plainText,
   ]);
 
-  // Handle Save Sovereign Campaign
+  // Handle Save Campaign
   const handleSaveCampaign = async () => {
     setSaving(true);
     setSavedSuccess(false);
@@ -159,68 +160,115 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      {/* Left Column: Builder Controls */}
+      {/* Left Column: Studio Builder */}
       <div className="lg:col-span-7 space-y-6">
-        {/* Dynamic vs Static Sovereign Toggle Bar */}
-        <div className="p-5 rounded-2xl bg-[#0f172a] border border-slate-800 shadow-xl flex items-center justify-between gap-4">
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-white">Sovereign Dynamic Mode</span>
-              <span className="text-[10px] font-mono bg-sky-500/10 text-sky-400 border border-sky-500/30 px-2 py-0.5 rounded-full font-bold">
-                Anti-Ransom
-              </span>
-            </div>
-            <p className="text-xs text-slate-400">
-              Generates a short link on your server. Change target URL anytime without reprinting.
-            </p>
+        {/* Tactile Mode Switcher: Dynamic vs Static */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0e1422] border border-slate-800 shadow-xl space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              QR Code Mode
+            </span>
+            <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-semibold">
+              Self-Hosted
+            </span>
           </div>
 
-          <label className="flex items-center gap-2 cursor-pointer select-none">
-            <Switch
-              checked={isDynamic}
-              onCheckedChange={(checked: boolean) => setIsDynamic(checked)}
-              className="w-12 h-6 bg-slate-800 data-[checked]:bg-sky-500 rounded-full transition-colors relative flex items-center p-0.5"
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
+            {/* Dynamic Option */}
+            <button
+              type="button"
+              onClick={() => setIsDynamic(true)}
+              className={`p-3 rounded-xl text-left transition-all cursor-pointer flex items-start gap-3 ${
+                isDynamic
+                  ? "bg-gradient-to-r from-sky-500/20 to-indigo-500/10 border border-sky-500/50 shadow-md text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent"
+              }`}
             >
-              <SwitchThumb className="w-5 h-5 bg-white rounded-full transition-transform data-[checked]:translate-x-6" />
-            </Switch>
-          </label>
+              <div
+                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
+                  isDynamic ? "bg-sky-500 text-white" : "bg-slate-800 text-slate-400"
+                }`}
+              >
+                <Zap className="w-4 h-4" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="text-xs font-bold flex items-center gap-1.5">
+                  <span>Dynamic Short Link</span>
+                  {isDynamic && <span className="text-[10px] text-sky-400 font-mono">ACTIVE</span>}
+                </div>
+                <p className="text-[11px] text-slate-400 leading-snug">
+                  Edit destination anytime without reprinting flyers or menus.
+                </p>
+              </div>
+            </button>
+
+            {/* Static Option */}
+            <button
+              type="button"
+              onClick={() => setIsDynamic(false)}
+              className={`p-3 rounded-xl text-left transition-all cursor-pointer flex items-start gap-3 ${
+                !isDynamic
+                  ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/10 border border-emerald-500/50 shadow-md text-white"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent"
+              }`}
+            >
+              <div
+                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
+                  !isDynamic ? "bg-emerald-500 text-white" : "bg-slate-800 text-slate-400"
+                }`}
+              >
+                <Shield className="w-4 h-4" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="text-xs font-bold flex items-center gap-1.5">
+                  <span>Direct Static QR</span>
+                  {!isDynamic && <span className="text-[10px] text-emerald-400 font-mono">ACTIVE</span>}
+                </div>
+                <p className="text-[11px] text-slate-400 leading-snug">
+                  Data encoded directly into matrix. Works offline forever.
+                </p>
+              </div>
+            </button>
+          </div>
         </div>
 
-        {/* Main Tabs for Customization: Content, Design, Frame */}
-        <div className="rounded-3xl bg-[#0f172a] border border-slate-800 p-6 shadow-xl space-y-6">
-          <Tabs defaultValue="content" onValueChange={(val: any) => setActiveTab(val)}>
-            <TabsList className="flex items-center gap-2 border-b border-slate-800 pb-3 mb-5">
-              <TabsTab
-                value="content"
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 data-[selected]:bg-slate-800 data-[selected]:text-sky-400"
-              >
-                <LinkIcon className="w-3.5 h-3.5" />
-                1. QR Content
-              </TabsTab>
-              <TabsTab
-                value="design"
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 data-[selected]:bg-slate-800 data-[selected]:text-sky-400"
-              >
-                <Palette className="w-3.5 h-3.5" />
-                2. Colors & Shapes
-              </TabsTab>
-              <TabsTab
-                value="frame"
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 data-[selected]:bg-slate-800 data-[selected]:text-sky-400"
-              >
-                <Layers className="w-3.5 h-3.5" />
-                3. Frame & Badge
-              </TabsTab>
-            </TabsList>
+        {/* Studio Tabs: Content, Design, Frame */}
+        <div className="rounded-3xl bg-[#0e1422] border border-slate-800 p-6 shadow-xl space-y-6">
+          <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+            {[
+              { id: "content", label: "1. Content & Destination", icon: LinkIcon },
+              { id: "design", label: "2. Colors & Shapes", icon: Palette },
+              { id: "frame", label: "3. Stand Frame & Badge", icon: Layers },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    active
+                      ? "bg-slate-800 text-sky-400 shadow-sm border border-slate-700"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
-            {/* PANEL 1: CONTENT */}
-            <TabsPanel value="content" className="space-y-6">
+          {/* TAB 1: CONTENT */}
+          {activeTab === "content" && (
+            <div className="space-y-6 animate-in fade-in duration-200">
               {/* Content Type Selector */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {[
-                  { id: "url", label: "Website URL", icon: LinkIcon },
+                  { id: "url", label: "Website URL", icon: Globe },
                   { id: "wifi", label: "Wi-Fi Connect", icon: Wifi },
-                  { id: "vcard", label: "Digital vCard", icon: UserCheck },
+                  { id: "vcard", label: "Contact Card", icon: UserCheck },
                   { id: "text", label: "Plain Text", icon: FileText },
                 ].map((item) => {
                   const Icon = item.icon;
@@ -233,7 +281,7 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
                       className={`p-3 rounded-xl border flex flex-col items-center justify-center gap-1.5 text-xs font-semibold transition-all cursor-pointer ${
                         selected
                           ? "bg-sky-500/10 border-sky-500/50 text-sky-400 shadow-md shadow-sky-500/10"
-                          : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                          : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
                       }`}
                     >
                       <Icon className="w-4 h-4" />
@@ -245,124 +293,135 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
 
               {/* Dynamic Campaign Meta Fields */}
               {isDynamic && (
-                <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
                   <div className="text-xs font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
-                    <Shield className="w-3.5 h-3.5" /> Sovereign Link Setup
+                    <Zap className="w-3.5 h-3.5" /> Short Link Redirect Setup
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Campaign Title</FieldLabel>
-                      <Input
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Campaign Title</label>
+                      <input
+                        type="text"
                         value={campaignTitle}
-                        onChange={(e: any) => setCampaignTitle(e.target.value)}
+                        onChange={(e) => setCampaignTitle(e.target.value)}
                         placeholder="e.g. Table QR — Summer 2026"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-sky-500"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
-                    </Field>
+                    </div>
 
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Custom Slug (Short URL)</FieldLabel>
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Custom Short Slug</label>
                       <div className="flex items-center">
                         <span className="text-xs text-slate-500 bg-slate-900 px-2.5 py-2 rounded-l-xl border-y border-l border-slate-700 font-mono">
                           /r/
                         </span>
-                        <Input
+                        <input
+                          type="text"
                           value={campaignSlug}
-                          onChange={(e: any) => setCampaignSlug(e.target.value)}
+                          onChange={(e) => setCampaignSlug(e.target.value)}
                           placeholder="summer-specials"
-                          className="w-full px-3 py-2 rounded-r-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:ring-1 focus:ring-sky-500"
+                          className="w-full px-3 py-2 rounded-r-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:ring-1 focus:ring-sky-500"
                         />
                       </div>
-                    </Field>
+                    </div>
                   </div>
 
-                  {/* Password Protection */}
-                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                  {/* Password Protection Toggle */}
+                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Lock className="w-3.5 h-3.5 text-amber-400" />
                       <span className="text-xs text-slate-300 font-medium">Require Passcode to Unlock</span>
                     </div>
-                    <Switch
-                      checked={enablePassword}
-                      onCheckedChange={(checked: boolean) => setEnablePassword(checked)}
-                      className="w-10 h-5 bg-slate-800 data-[checked]:bg-amber-500 rounded-full transition-colors relative flex items-center p-0.5"
+                    <button
+                      type="button"
+                      onClick={() => setEnablePassword(!enablePassword)}
+                      className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer p-0.5 ${
+                        enablePassword ? "bg-amber-500" : "bg-slate-800"
+                      }`}
                     >
-                      <SwitchThumb className="w-4 h-4 bg-white rounded-full transition-transform data-[checked]:translate-x-5" />
-                    </Switch>
+                      <div
+                        className={`w-4 h-4 bg-white rounded-full transition-transform ${
+                          enablePassword ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
                   </div>
 
                   {enablePassword && (
-                    <Field className="space-y-1 animate-in fade-in">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Unlock PIN / Passcode</FieldLabel>
-                      <Input
+                    <div className="space-y-1 animate-in fade-in">
+                      <label className="text-xs font-semibold text-slate-300">Unlock PIN / Passcode</label>
+                      <input
                         type="password"
                         value={passcode}
-                        onChange={(e: any) => setPasscode(e.target.value)}
+                        onChange={(e) => setPasscode(e.target.value)}
                         placeholder="e.g. 7890 or secretpass"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-amber-500"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-amber-500"
                       />
-                    </Field>
+                    </div>
                   )}
                 </div>
               )}
 
               {/* Sub-Forms depending on Content Type */}
               {contentType === "url" && (
-                <Field className="space-y-1.5">
-                  <FieldLabel className="text-xs font-semibold text-slate-300">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300">
                     Destination Website URL
-                  </FieldLabel>
-                  <Input
+                  </label>
+                  <input
                     type="url"
                     value={url}
-                    onChange={(e: any) => setUrl(e.target.value)}
+                    onChange={(e) => setUrl(e.target.value)}
                     placeholder="https://yourdomain.com/menu"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:ring-2 focus:ring-sky-500 font-mono"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
                   />
-                  <FieldDescription className="text-[11px] text-slate-400">
-                    The destination visitors reach upon scanning the QR code with their camera.
-                  </FieldDescription>
-                </Field>
+                  <p className="text-[11px] text-slate-400">
+                    {isDynamic
+                      ? "When scanned, visitors will instantly be redirected to this target destination."
+                      : "Directly embedded into the QR matrix. Works offline without touching any server."}
+                  </p>
+                </div>
               )}
 
               {contentType === "wifi" && (
                 <div className="space-y-4">
-                  <Field className="space-y-1">
-                    <FieldLabel className="text-xs font-semibold text-slate-300">Wi-Fi Network Name (SSID)</FieldLabel>
-                    <Input
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-300">Wi-Fi Network Name (SSID)</label>
+                    <input
+                      type="text"
                       value={wifiSsid}
-                      onChange={(e: any) => setWifiSsid(e.target.value)}
+                      onChange={(e) => setWifiSsid(e.target.value)}
                       placeholder="MyLounge_5G"
-                      className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs"
+                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-sky-500"
                     />
-                  </Field>
+                  </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Security Type</FieldLabel>
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Security Type</label>
                       <select
                         value={wifiEncryption}
                         onChange={(e: any) => setWifiEncryption(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:ring-1 focus:ring-sky-500"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-sky-500"
                       >
                         <option value="WPA">WPA/WPA2/WPA3 (Standard)</option>
                         <option value="WEP">WEP (Legacy)</option>
                         <option value="nopass">None (Open Network)</option>
                       </select>
-                    </Field>
+                    </div>
 
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Password</FieldLabel>
-                      <Input
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Password</label>
+                      <input
                         type="password"
                         value={wifiPassword}
-                        onChange={(e: any) => setWifiPassword(e.target.value)}
+                        onChange={(e) => setWifiPassword(e.target.value)}
                         placeholder="Network password"
                         disabled={wifiEncryption === "nopass"}
-                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-sky-500 disabled:opacity-40"
                       />
-                    </Field>
+                    </div>
                   </div>
                 </div>
               )}
@@ -370,91 +429,97 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
               {contentType === "vcard" && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Full Name</FieldLabel>
-                      <Input
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Full Name</label>
+                      <input
+                        type="text"
                         value={vcardName}
-                        onChange={(e: any) => setVcardName(e.target.value)}
+                        onChange={(e) => setVcardName(e.target.value)}
                         placeholder="Alex Rivera"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
-                    </Field>
+                    </div>
 
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Phone Number</FieldLabel>
-                      <Input
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Phone Number</label>
+                      <input
+                        type="tel"
                         value={vcardPhone}
-                        onChange={(e: any) => setVcardPhone(e.target.value)}
+                        onChange={(e) => setVcardPhone(e.target.value)}
                         placeholder="+1 (555) 000-0000"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
-                    </Field>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Company / Organization</FieldLabel>
-                      <Input
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Company / Brand</label>
+                      <input
+                        type="text"
                         value={vcardOrg}
-                        onChange={(e: any) => setVcardOrg(e.target.value)}
+                        onChange={(e) => setVcardOrg(e.target.value)}
                         placeholder="Studio"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
-                    </Field>
+                    </div>
 
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Job Title</FieldLabel>
-                      <Input
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Job Title</label>
+                      <input
+                        type="text"
                         value={vcardTitle}
-                        onChange={(e: any) => setVcardTitle(e.target.value)}
+                        onChange={(e) => setVcardTitle(e.target.value)}
                         placeholder="Managing Partner"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
-                    </Field>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Email Address</FieldLabel>
-                      <Input
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Email Address</label>
+                      <input
                         type="email"
                         value={vcardEmail}
-                        onChange={(e: any) => setVcardEmail(e.target.value)}
+                        onChange={(e) => setVcardEmail(e.target.value)}
                         placeholder="alex@domain.com"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
-                    </Field>
+                    </div>
 
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-xs font-semibold text-slate-300">Website</FieldLabel>
-                      <Input
+                    <div className="space-y-1">
+                      <label className="text-xs font-semibold text-slate-300">Website</label>
+                      <input
                         type="url"
                         value={vcardWeb}
-                        onChange={(e: any) => setVcardWeb(e.target.value)}
+                        onChange={(e) => setVcardWeb(e.target.value)}
                         placeholder="https://portfolio.io"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
-                    </Field>
+                    </div>
                   </div>
                 </div>
               )}
 
               {contentType === "text" && (
-                <Field className="space-y-1.5">
-                  <FieldLabel className="text-xs font-semibold text-slate-300">Plain Text / Note</FieldLabel>
-                  <Textarea
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300">Plain Text / Note</label>
+                  <textarea
                     rows={4}
                     value={plainText}
-                    onChange={(e: any) => setPlainText(e.target.value)}
-                    placeholder="Enter plain text, promo codes, or secret instructions..."
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:ring-2 focus:ring-sky-500"
+                    onChange={(e) => setPlainText(e.target.value)}
+                    placeholder="Enter instructions, notes, or promo codes..."
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:ring-2 focus:ring-sky-500"
                   />
-                </Field>
+                </div>
               )}
-            </TabsPanel>
+            </div>
+          )}
 
-            {/* PANEL 2: DESIGN & SHAPES */}
-            <TabsPanel value="design" className="space-y-6">
+          {/* TAB 2: DESIGN & SHAPES */}
+          {activeTab === "design" && (
+            <div className="space-y-6 animate-in fade-in duration-200">
               {/* Dot Shape Selector */}
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-slate-300">QR Matrix Dot Pattern</label>
@@ -473,8 +538,8 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
                       onClick={() => setStyling((prev) => ({ ...prev, dotType: d.id as any }))}
                       className={`py-2 px-1 text-center rounded-xl text-xs font-medium border transition-all cursor-pointer ${
                         styling.dotType === d.id
-                          ? "bg-sky-500/20 border-sky-400 text-sky-300"
-                          : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                          ? "bg-sky-500/20 border-sky-400 text-sky-300 font-bold shadow-sm"
+                          : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
                       }`}
                     >
                       {d.label}
@@ -499,8 +564,8 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
                         onClick={() => setStyling((prev) => ({ ...prev, cornerSquareType: c.id as any }))}
                         className={`py-2 px-1 text-center rounded-xl text-xs font-medium border transition-all cursor-pointer ${
                           styling.cornerSquareType === c.id
-                            ? "bg-sky-500/20 border-sky-400 text-sky-300"
-                            : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                            ? "bg-sky-500/20 border-sky-400 text-sky-300 font-bold"
+                            : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
                         }`}
                       >
                         {c.label}
@@ -522,8 +587,8 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
                         onClick={() => setStyling((prev) => ({ ...prev, cornerDotType: cd.id as any }))}
                         className={`py-2 px-1 text-center rounded-xl text-xs font-medium border transition-all cursor-pointer ${
                           styling.cornerDotType === cd.id
-                            ? "bg-sky-500/20 border-sky-400 text-sky-300"
-                            : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                            ? "bg-sky-500/20 border-sky-400 text-sky-300 font-bold"
+                            : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
                         }`}
                       >
                         {cd.label}
@@ -534,76 +599,111 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
               </div>
 
               {/* Gradient Color Engine */}
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
+              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
                     Linear Gradient Engine
                   </span>
-                  <Switch
-                    checked={styling.gradientEnabled}
-                    onCheckedChange={(checked: boolean) =>
-                      setStyling((prev) => ({ ...prev, gradientEnabled: checked }))
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setStyling((prev) => ({ ...prev, gradientEnabled: !prev.gradientEnabled }))
                     }
-                    className="w-10 h-5 bg-slate-800 data-[checked]:bg-sky-500 rounded-full transition-colors relative flex items-center p-0.5"
+                    className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer p-0.5 ${
+                      styling.gradientEnabled ? "bg-sky-500" : "bg-slate-800"
+                    }`}
                   >
-                    <SwitchThumb className="w-4 h-4 bg-white rounded-full transition-transform data-[checked]:translate-x-5" />
-                  </Switch>
+                    <div
+                      className={`w-4 h-4 bg-white rounded-full transition-transform ${
+                        styling.gradientEnabled ? "translate-x-5" : "translate-x-0"
+                      }`}
+                    />
+                  </button>
                 </div>
 
                 {styling.gradientEnabled ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-[11px] text-slate-400">Start Color</FieldLabel>
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="color"
-                          value={styling.gradientStart}
-                          onChange={(e) =>
-                            setStyling((prev) => ({ ...prev, gradientStart: e.target.value }))
-                          }
-                          className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
-                        />
-                        <span className="text-xs font-mono text-slate-300">{styling.gradientStart}</span>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                      <div className="space-y-1">
+                        <label className="text-[11px] text-slate-400">Start Color</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={styling.gradientStart}
+                            onChange={(e) =>
+                              setStyling((prev) => ({ ...prev, gradientStart: e.target.value }))
+                            }
+                            className="w-9 h-9 rounded-lg cursor-pointer bg-transparent border-0"
+                          />
+                          <span className="text-xs font-mono text-slate-300">{styling.gradientStart}</span>
+                        </div>
                       </div>
-                    </Field>
 
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-[11px] text-slate-400">End Color</FieldLabel>
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="color"
-                          value={styling.gradientEnd}
-                          onChange={(e) =>
-                            setStyling((prev) => ({ ...prev, gradientEnd: e.target.value }))
-                          }
-                          className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
-                        />
-                        <span className="text-xs font-mono text-slate-300">{styling.gradientEnd}</span>
+                      <div className="space-y-1">
+                        <label className="text-[11px] text-slate-400">End Color</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={styling.gradientEnd}
+                            onChange={(e) =>
+                              setStyling((prev) => ({ ...prev, gradientEnd: e.target.value }))
+                            }
+                            className="w-9 h-9 rounded-lg cursor-pointer bg-transparent border-0"
+                          />
+                          <span className="text-xs font-mono text-slate-300">{styling.gradientEnd}</span>
+                        </div>
                       </div>
-                    </Field>
 
-                    <Field className="space-y-1">
-                      <FieldLabel className="text-[11px] text-slate-400">Rotation Angle</FieldLabel>
-                      <select
-                        value={styling.gradientRotation}
-                        onChange={(e) =>
-                          setStyling((prev) => ({
-                            ...prev,
-                            gradientRotation: parseInt(e.target.value),
-                          }))
-                        }
-                        className="w-full px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white"
-                      >
-                        <option value="0">0° (Horizontal)</option>
-                        <option value="45">45° (Diagonal)</option>
-                        <option value="90">90° (Vertical)</option>
-                        <option value="135">135° (Reverse Diagonal)</option>
-                      </select>
-                    </Field>
+                      <div className="space-y-1">
+                        <label className="text-[11px] text-slate-400">Rotation Angle</label>
+                        <select
+                          value={styling.gradientRotation}
+                          onChange={(e) =>
+                            setStyling((prev) => ({
+                              ...prev,
+                              gradientRotation: parseInt(e.target.value),
+                            }))
+                          }
+                          className="w-full px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
+                        >
+                          <option value="0">0° (Horizontal)</option>
+                          <option value="45">45° (Diagonal)</option>
+                          <option value="90">90° (Vertical)</option>
+                          <option value="135">135° (Reverse Diagonal)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Preset Gradients */}
+                    <div className="pt-2 border-t border-slate-900 flex items-center gap-2 flex-wrap">
+                      <span className="text-[11px] text-slate-500">Presets:</span>
+                      {[
+                        { label: "Cyan Sky", start: "#0284c7", end: "#06b6d4" },
+                        { label: "Violet Iris", start: "#6366f1", end: "#a855f7" },
+                        { label: "Emerald Mint", start: "#059669", end: "#10b981" },
+                        { label: "Sunset Rose", start: "#ea580c", end: "#f43f5e" },
+                        { label: "Obsidian", start: "#0f172a", end: "#334155" },
+                      ].map((preset) => (
+                        <button
+                          key={preset.label}
+                          type="button"
+                          onClick={() =>
+                            setStyling((prev) => ({
+                              ...prev,
+                              gradientStart: preset.start,
+                              gradientEnd: preset.end,
+                            }))
+                          }
+                          className="px-2 py-1 rounded-md text-[10px] bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 font-medium"
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 ) : (
-                  <Field className="space-y-1">
-                    <FieldLabel className="text-[11px] text-slate-400">Solid Fill Color</FieldLabel>
+                  <div className="space-y-1">
+                    <label className="text-[11px] text-slate-400">Solid Color</label>
                     <div className="flex items-center gap-2">
                       <input
                         type="color"
@@ -611,121 +711,152 @@ export function StudioForm({ onCampaignCreated }: StudioFormProps) {
                         onChange={(e) =>
                           setStyling((prev) => ({ ...prev, dotsColor: e.target.value }))
                         }
-                        className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                        className="w-9 h-9 rounded-lg cursor-pointer bg-transparent border-0"
                       />
                       <span className="text-xs font-mono text-slate-300">{styling.dotsColor}</span>
                     </div>
-                  </Field>
+                  </div>
                 )}
               </div>
 
-              {/* Center Logo Upload / URL */}
+              {/* Center Logo Option */}
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-300">Center Logo URL (Optional)</label>
-                <Input
+                <label className="text-xs font-semibold text-slate-300">Center Brand Logo URL (Optional)</label>
+                <input
+                  type="url"
                   value={styling.logoUrl || ""}
-                  onChange={(e: any) => setStyling((prev) => ({ ...prev, logoUrl: e.target.value }))}
-                  placeholder="https://example.com/brand-logo.png"
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono"
+                  onChange={(e) => setStyling((prev) => ({ ...prev, logoUrl: e.target.value }))}
+                  placeholder="https://example.com/logo.png"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:ring-1 focus:ring-sky-500"
                 />
                 <p className="text-[11px] text-slate-500">
-                  Tip: A high error correction level ("Q") is automatically enabled so the code scans effortlessly with a center logo.
+                  Tip: Clean transparent PNG or SVG logos work best. High error correction is enabled automatically.
                 </p>
               </div>
-            </TabsPanel>
+            </div>
+          )}
 
-            {/* PANEL 3: FRAME & CALLOUT BADGE */}
-            <TabsPanel value="frame" className="space-y-6">
-              <div className="space-y-4">
-                <Field className="space-y-1.5">
-                  <FieldLabel className="text-xs font-semibold text-slate-300">
-                    Callout Header Text (Top Badge)
-                  </FieldLabel>
-                  <Input
-                    value={styling.frameText || ""}
-                    onChange={(e: any) =>
-                      setStyling((prev) => ({ ...prev, frameText: e.target.value }))
+          {/* TAB 3: FRAME & CALLOUT BADGE */}
+          {activeTab === "frame" && (
+            <div className="space-y-6 animate-in fade-in duration-200">
+              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
+                      Physical Card Frame Badge
+                    </span>
+                    <p className="text-[11px] text-slate-400">
+                      Renders a callout border and top header badge for table stands or flyers.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setStyling((prev) => ({ ...prev, frameEnabled: !prev.frameEnabled }))
                     }
-                    placeholder="SCAN ME • VISIT MENU • CONNECT WI-FI"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm uppercase tracking-wider font-bold"
-                  />
-                  <FieldDescription className="text-[11px] text-slate-400">
-                    Clear the text to render a minimal borderless QR code card.
-                  </FieldDescription>
-                </Field>
+                    className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer p-0.5 ${
+                      styling.frameEnabled ? "bg-sky-500" : "bg-slate-800"
+                    }`}
+                  >
+                    <div
+                      className={`w-4 h-4 bg-white rounded-full transition-transform ${
+                        styling.frameEnabled ? "translate-x-5" : "translate-x-0"
+                      }`}
+                    />
+                  </button>
+                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Field className="space-y-1">
-                    <FieldLabel className="text-xs font-semibold text-slate-300">Frame Border Color</FieldLabel>
-                    <div className="flex items-center gap-2">
+                {styling.frameEnabled && (
+                  <div className="space-y-4 pt-2 border-t border-slate-900">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-slate-300">
+                        Top Badge Header Text
+                      </label>
                       <input
-                        type="color"
-                        value={styling.frameColor || "#0284c7"}
+                        type="text"
+                        value={styling.frameText || ""}
                         onChange={(e) =>
-                          setStyling((prev) => ({ ...prev, frameColor: e.target.value }))
+                          setStyling((prev) => ({ ...prev, frameText: e.target.value }))
                         }
-                        className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                        placeholder="SCAN ME"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm uppercase tracking-wider font-bold focus:outline-none focus:ring-1 focus:ring-sky-500"
                       />
-                      <span className="text-xs font-mono text-slate-300">
-                        {styling.frameColor || "#0284c7"}
-                      </span>
                     </div>
-                  </Field>
 
-                  {/* Preset Badges */}
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-300">Quick Badge Presets</label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {["SCAN ME", "VISIT MENU", "CONNECT WI-FI", "SAVE CONTACT", "ORDER ONLINE"].map((preset) => (
-                        <button
-                          key={preset}
-                          type="button"
-                          onClick={() => setStyling((prev) => ({ ...prev, frameText: preset }))}
-                          className="px-2 py-1 rounded bg-slate-900 border border-slate-700 hover:border-slate-600 text-[10px] text-slate-300 font-bold"
-                        >
-                          {preset}
-                        </button>
-                      ))}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-slate-300">Frame Color</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={styling.frameColor || "#0284c7"}
+                            onChange={(e) =>
+                              setStyling((prev) => ({ ...prev, frameColor: e.target.value }))
+                            }
+                            className="w-9 h-9 rounded-lg cursor-pointer bg-transparent border-0"
+                          />
+                          <span className="text-xs font-mono text-slate-300">
+                            {styling.frameColor || "#0284c7"}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-slate-300">Badge Presets</label>
+                        <div className="flex flex-wrap gap-1.5">
+                          {["SCAN ME", "VISIT MENU", "CONNECT WI-FI", "SAVE CONTACT"].map((preset) => (
+                            <button
+                              key={preset}
+                              type="button"
+                              onClick={() => setStyling((prev) => ({ ...prev, frameText: preset }))}
+                              className="px-2 py-1 rounded bg-slate-900 border border-slate-700 hover:border-slate-600 text-[10px] text-slate-300 font-bold"
+                            >
+                              {preset}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
-            </TabsPanel>
-          </Tabs>
+            </div>
+          )}
 
           {/* Action Row: Save Campaign */}
           <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
             <span className="text-xs text-slate-400 flex items-center gap-1.5">
               <Sparkles className="w-4 h-4 text-sky-400" />
-              Ready for production deployment
+              Ready to print or deploy
             </span>
 
-            <Button
+            <button
+              type="button"
               onClick={handleSaveCampaign}
               disabled={saving}
-              className="py-2.5 px-6 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-medium text-xs shadow-lg shadow-sky-500/20 flex items-center gap-2 transition-all cursor-pointer"
+              className="py-2.5 px-6 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-medium text-xs shadow-lg shadow-sky-500/20 flex items-center gap-2 transition-all cursor-pointer active:scale-98 disabled:opacity-50"
             >
               {savedSuccess ? (
                 <>
                   <Check className="w-4 h-4 text-emerald-300" />
-                  Saved Successfully!
+                  <span>Saved to Campaigns!</span>
                 </>
               ) : saving ? (
-                "Saving Campaign..."
+                "Saving..."
               ) : (
                 <>
                   <Save className="w-4 h-4" />
-                  Save Sovereign Campaign
+                  <span>Save Campaign</span>
                 </>
               )}
-            </Button>
+            </button>
           </div>
         </div>
       </div>
 
       {/* Right Column: Live Interactive QR Preview */}
       <div className="lg:col-span-5 sticky top-6">
-        <div className="rounded-3xl bg-[#0f172a] border border-slate-800 p-6 shadow-xl flex flex-col items-center">
+        <div className="rounded-3xl bg-[#0e1422] border border-slate-800 p-6 shadow-xl flex flex-col items-center">
           <div className="w-full flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
             <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
               <Sparkles className="w-4 h-4 text-sky-400" />

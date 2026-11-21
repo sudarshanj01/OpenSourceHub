@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Button } from "@ui-sdk/react/button";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@ui-sdk/react/tooltip";
 import { Download, Sparkles, Check, Copy, ExternalLink, ShieldCheck } from "lucide-react";
 
 export interface QRStyleOptions {
@@ -18,6 +16,7 @@ export interface QRStyleOptions {
   bgColor: string;
   logoUrl?: string;
   logoSize?: number;
+  frameEnabled?: boolean;
   frameText?: string;
   frameColor?: string;
 }
@@ -34,6 +33,7 @@ export function QRPreview({ data, options, title, slug, isDynamic }: QRPreviewPr
   const containerRef = useRef<HTMLDivElement>(null);
   const qrCodeInstanceRef = useRef<any>(null);
   const [downloading, setDownloading] = useState(false);
+  const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -44,7 +44,6 @@ export function QRPreview({ data, options, title, slug, isDynamic }: QRPreviewPr
 
       const QRCodeStyling = (await import("qr-code-styling")).default;
 
-      // Construct gradient or solid options
       const dotsOptions: any = {
         type: options.dotType || "rounded",
       };
@@ -63,19 +62,19 @@ export function QRPreview({ data, options, title, slug, isDynamic }: QRPreviewPr
       }
 
       const qrConfig: any = {
-        width: 320,
-        height: 320,
+        width: 300,
+        height: 300,
         type: "svg",
-        data: data || "https://opensourcesoftware.org",
-        margin: 10,
+        data: data || "https://example.com",
+        margin: 8,
         qrOptions: {
           typeNumber: 0,
           mode: "Byte",
-          errorCorrectionLevel: "Q", // High error correction to allow center logos
+          errorCorrectionLevel: "Q",
         },
         imageOptions: {
           hideBackgroundDots: true,
-          imageSize: options.logoSize || 0.35,
+          imageSize: options.logoSize || 0.32,
           margin: 4,
           crossOrigin: "anonymous",
         },
@@ -119,11 +118,13 @@ export function QRPreview({ data, options, title, slug, isDynamic }: QRPreviewPr
     if (!qrCodeInstanceRef.current) return;
     setDownloading(true);
     try {
-      const fileName = slug ? `qrshield-${slug}` : "qrshield-code";
+      const fileName = slug ? `qr-${slug}` : "qr-code";
       await qrCodeInstanceRef.current.download({
         name: fileName,
         extension,
       });
+      setDownloadSuccess(extension);
+      setTimeout(() => setDownloadSuccess(null), 2500);
     } catch (err) {
       console.error("Download failed:", err);
     } finally {
@@ -138,96 +139,116 @@ export function QRPreview({ data, options, title, slug, isDynamic }: QRPreviewPr
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const showFrame = options.frameEnabled && options.frameText && options.frameText.trim().length > 0;
+  const frameColor = options.frameColor || "#0284c7";
+
   return (
-    <div className="flex flex-col items-center">
-      {/* Outer Card with Frame Support */}
+    <div className="flex flex-col items-center w-full max-w-sm mx-auto">
+      {/* Physical Stand / Card Mockup */}
       <div
-        className="p-6 rounded-3xl bg-white shadow-2xl transition-all border-4 flex flex-col items-center relative overflow-hidden"
+        className="w-full p-6 rounded-3xl bg-white shadow-2xl transition-all duration-300 flex flex-col items-center relative overflow-hidden"
         style={{
-          borderColor: options.frameColor || "#0284c7",
-          maxWidth: "370px",
+          border: showFrame ? `4px solid ${frameColor}` : "1px solid rgba(255,255,255,0.2)",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px -5px rgba(2, 132, 199, 0.15)",
         }}
       >
         {/* Frame Top Header */}
-        {options.frameText && options.frameText.trim().length > 0 && (
+        {showFrame && (
           <div
-            className="w-full text-center py-2 px-4 rounded-xl text-white font-black text-sm tracking-widest uppercase mb-4 shadow-sm"
+            className="w-full text-center py-2 px-3 rounded-xl text-white font-extrabold text-xs tracking-widest uppercase mb-4 shadow-sm"
             style={{
-              backgroundColor: options.frameColor || "#0284c7",
+              backgroundColor: frameColor,
             }}
           >
             {options.frameText}
           </div>
         )}
 
-        {/* QR Canvas Render */}
+        {/* QR Code Canvas */}
         <div
           ref={containerRef}
-          className="rounded-2xl overflow-hidden flex items-center justify-center p-2 bg-white"
+          className="rounded-2xl overflow-hidden flex items-center justify-center p-2 bg-white min-h-[300px] min-w-[300px]"
         />
 
         {/* Frame Bottom Tag */}
         <div className="mt-4 pt-3 border-t border-slate-100 w-full flex items-center justify-between text-xs text-slate-500 font-mono">
-          <span className="flex items-center gap-1 text-slate-600 font-semibold truncate max-w-[200px]">
-            {isDynamic ? "⚡ Sovereign Dynamic" : "🔒 Serverless Static"}
+          <span className="flex items-center gap-1.5 text-slate-700 font-semibold text-[11px] truncate max-w-[190px]">
+            <span
+              className={`w-2 h-2 rounded-full ${
+                isDynamic ? "bg-sky-500 animate-pulse" : "bg-emerald-500"
+              }`}
+            />
+            {isDynamic ? "Dynamic Redirect" : "Offline Static"}
           </span>
-          <span className="text-[11px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">
-            100% Free
+          <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+            Never Expires
           </span>
         </div>
       </div>
 
-      {/* Action Buttons using @ui-sdk/react Button and Tooltip */}
-      <div className="mt-6 flex flex-wrap gap-3 justify-center w-full max-w-sm">
-        <Tooltip>
-          <TooltipTrigger
-            onClick={() => handleDownload("png")}
-            disabled={downloading}
-            className="flex-1 min-w-[130px] py-2.5 px-4 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-medium text-xs shadow-lg shadow-sky-500/20 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-          >
-            <Download className="w-3.5 h-3.5" />
-            Download PNG
-          </TooltipTrigger>
-          <TooltipContent className="bg-slate-900 border border-slate-700 text-slate-200 text-xs px-3 py-1.5 rounded-lg shadow-xl">
-            High-Resolution 300 DPI for screens, menus & cards
-          </TooltipContent>
-        </Tooltip>
+      {/* Export Action Buttons */}
+      <div className="mt-6 grid grid-cols-2 gap-3 w-full">
+        <button
+          type="button"
+          onClick={() => handleDownload("png")}
+          disabled={downloading}
+          className="py-3 px-4 rounded-xl bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 text-white font-semibold text-xs shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-98 disabled:opacity-50"
+        >
+          {downloadSuccess === "png" ? (
+            <>
+              <Check className="w-4 h-4 text-emerald-300" />
+              <span>Downloaded!</span>
+            </>
+          ) : (
+            <>
+              <Download className="w-4 h-4" />
+              <span>Download PNG</span>
+            </>
+          )}
+        </button>
 
-        <Tooltip>
-          <TooltipTrigger
-            onClick={() => handleDownload("svg")}
-            disabled={downloading}
-            className="flex-1 min-w-[130px] py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 font-medium text-xs border border-slate-700 shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-            Vector SVG
-          </TooltipTrigger>
-          <TooltipContent className="bg-slate-900 border border-slate-700 text-slate-200 text-xs px-3 py-1.5 rounded-lg shadow-xl">
-            Infinitely scalable vector file for commercial vinyl & print shops
-          </TooltipContent>
-        </Tooltip>
+        <button
+          type="button"
+          onClick={() => handleDownload("svg")}
+          disabled={downloading}
+          className="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-xs border border-slate-700 shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-98 disabled:opacity-50"
+        >
+          {downloadSuccess === "svg" ? (
+            <>
+              <Check className="w-4 h-4 text-emerald-400" />
+              <span>Vector Saved!</span>
+            </>
+          ) : (
+            <>
+              <Sparkles className="w-4 h-4 text-sky-400" />
+              <span>Vector SVG</span>
+            </>
+          )}
+        </button>
       </div>
 
       {/* Target Link & Copy Bar */}
-      <div className="mt-4 w-full max-w-sm bg-slate-900/90 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2">
-        <span className="text-xs text-slate-400 font-mono truncate px-1" title={data}>
+      <div className="mt-4 w-full bg-slate-900/90 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2 shadow-inner">
+        <span className="text-xs text-slate-400 font-mono truncate px-1 flex-1" title={data}>
           {data}
         </span>
         <div className="flex items-center gap-1 shrink-0">
-          <Button
+          <button
+            type="button"
             onClick={handleCopyLink}
-            aria-label="Copy Target Link"
+            aria-label="Copy Link"
             className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
+            title="Copy link"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-          </Button>
+          </button>
           {isDynamic && (
             <a
               href={data}
               target="_blank"
               rel="noopener noreferrer"
               className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors inline-flex items-center justify-center"
-              title="Test Redirect"
+              title="Test redirect in new tab"
             >
               <ExternalLink className="w-3.5 h-3.5" />
             </a>

@@ -1,18 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@ui-sdk/react/button";
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@ui-sdk/react/dialog";
-import { Field, FieldLabel } from "@ui-sdk/react/field";
-import { Input } from "@ui-sdk/react/input";
 import {
   ExternalLink,
   Edit2,
@@ -24,6 +12,8 @@ import {
   Check,
   TrendingUp,
   Lock,
+  RefreshCw,
+  X,
 } from "lucide-react";
 import { QRPreview, QRStyleOptions } from "./QRPreview";
 
@@ -45,7 +35,6 @@ interface CampaignItem {
 interface CampaignsListProps {
   campaigns: CampaignItem[];
   onRefresh: () => void;
-  onSelectForEdit?: (campaign: CampaignItem) => void;
 }
 
 export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
@@ -103,7 +92,7 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this sovereign campaign? This cannot be undone.")) {
+    if (!confirm("Are you sure you want to delete this campaign? This cannot be undone.")) {
       return;
     }
     try {
@@ -126,31 +115,31 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-white tracking-tight">Active Sovereign Campaigns</h2>
+          <h2 className="text-xl font-bold text-white tracking-tight">Active Campaigns</h2>
           <p className="text-xs text-slate-400 mt-1">
-            Update where your printed QR codes lead anytime without reprinting your flyers or menus.
+            Change target destinations anytime. Your printed codes will update instantly.
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={onRefresh}
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-medium transition-colors border border-slate-700 cursor-pointer"
-          >
-            Refresh List
-          </Button>
-        </div>
+        <button
+          type="button"
+          onClick={onRefresh}
+          className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs text-slate-300 font-medium transition-colors border border-slate-700 flex items-center gap-1.5 cursor-pointer"
+        >
+          <RefreshCw className="w-3.5 h-3.5" />
+          <span>Refresh</span>
+        </button>
       </div>
 
       {campaigns.length === 0 ? (
-        <div className="text-center py-12 px-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+        <div className="text-center py-16 px-4 rounded-3xl bg-[#0e1422] border border-slate-800">
           <QrCode className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-          <h3 className="text-base font-semibold text-slate-300">No Sovereign Campaigns Yet</h3>
+          <h3 className="text-base font-semibold text-slate-300">No Campaigns Yet</h3>
           <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1">
-            Use the Studio tab above to design and save your first permanent QR code campaign.
+            Create your first QR code using the Studio builder tab above.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {campaigns.map((camp) => {
             let styling: QRStyleOptions = {
               dotType: "rounded",
@@ -163,6 +152,9 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
               gradientEnd: "#06b6d4",
               gradientRotation: 45,
               bgColor: "#ffffff",
+              frameEnabled: true,
+              frameText: "SCAN ME",
+              frameColor: "#0284c7",
             };
             try {
               if (camp.stylingConfig) {
@@ -170,14 +162,10 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
               }
             } catch (e) {}
 
-            const origin = typeof window !== "undefined" ? window.location.origin : "";
-            const shortUrl = `${origin}/r/${camp.slug}`;
-            const displayUrl = camp.type === "DYNAMIC" ? shortUrl : camp.destinationUrl;
-
             return (
               <div
                 key={camp.id}
-                className="rounded-2xl bg-[#0f172a] border border-slate-800 hover:border-slate-700 transition-all p-5 flex flex-col justify-between shadow-xl relative overflow-hidden group"
+                className="rounded-2xl bg-[#0e1422] border border-slate-800 hover:border-slate-700 transition-all p-5 flex flex-col justify-between shadow-xl relative overflow-hidden group"
               >
                 <div
                   className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r"
@@ -208,6 +196,7 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
                     </div>
 
                     <button
+                      type="button"
                       onClick={() => handleToggleStatus(camp)}
                       className="cursor-pointer text-xs flex items-center gap-1 font-medium text-slate-400 hover:text-white"
                       title={camp.isActive ? "Click to Pause" : "Click to Activate"}
@@ -229,18 +218,19 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
                     <p className="text-xs text-slate-400 line-clamp-2 mt-1">{camp.description}</p>
                   )}
 
-                  <div className="mt-4 p-2.5 rounded-xl bg-slate-900 border border-slate-800/80 space-y-1">
-                    <div className="flex items-center justify-between text-[11px] text-slate-400">
-                      <span className="font-mono text-slate-300">/r/{camp.slug}</span>
+                  <div className="mt-4 p-3 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+                    <div className="flex items-center justify-between text-xs text-slate-400">
+                      <span className="font-mono text-slate-300 font-semibold">/r/{camp.slug}</span>
                       <button
+                        type="button"
                         onClick={() => handleCopyLink(camp.slug)}
-                        className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition-colors"
+                        className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition-colors cursor-pointer"
                         title="Copy short link"
                       >
                         {copiedSlug === camp.slug ? (
-                          <Check className="w-3 h-3 text-emerald-400" />
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
                         ) : (
-                          <Copy className="w-3 h-3" />
+                          <Copy className="w-3.5 h-3.5" />
                         )}
                       </button>
                     </div>
@@ -251,38 +241,41 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
                 </div>
 
                 <div className="mt-5 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1 text-slate-400">
-                    <TrendingUp className="w-3.5 h-3.5 text-sky-400" />
-                    <span className="font-bold text-slate-200">{camp.totalScans}</span>
+                  <div className="flex items-center gap-1.5 text-slate-400">
+                    <TrendingUp className="w-4 h-4 text-sky-400" />
+                    <span className="font-bold text-white text-sm font-mono">{camp.totalScans}</span>
                     <span className="text-[11px] text-slate-500">scans</span>
                   </div>
 
                   <div className="flex items-center gap-1.5">
-                    <Button
+                    <button
+                      type="button"
                       onClick={() => setPreviewingCampaign(camp)}
-                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                      className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-800"
                       title="View & Download QR"
                     >
                       <QrCode className="w-4 h-4" />
-                    </Button>
+                    </button>
 
                     {camp.type === "DYNAMIC" && (
-                      <Button
+                      <button
+                        type="button"
                         onClick={() => handleOpenEdit(camp)}
-                        className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                        className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer border border-slate-800"
                         title="Edit Target URL"
                       >
                         <Edit2 className="w-4 h-4" />
-                      </Button>
+                      </button>
                     )}
 
-                    <Button
+                    <button
+                      type="button"
                       onClick={() => handleDelete(camp.id)}
-                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/40 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
+                      className="p-2 rounded-lg bg-slate-900 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer border border-slate-800"
                       title="Delete Campaign"
                     >
                       <Trash2 className="w-4 h-4" />
-                    </Button>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -291,87 +284,99 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
         </div>
       )}
 
-      {/* Edit Campaign Destination Dialog (Using @ui-sdk/react Dialog) */}
+      {/* Edit Target URL Modal */}
       {editingCampaign && (
-        <Dialog defaultOpen onOpenChange={(open) => !open && setEditingCampaign(null)}>
-          <DialogBackdrop className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 animate-in fade-in" />
-          <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-[#0f172a] border border-slate-800 rounded-3xl p-6 shadow-2xl z-50 space-y-5">
-            <div className="space-y-1">
-              <DialogTitle className="text-xl font-bold text-white tracking-tight">
-                Update Destination URL
-              </DialogTitle>
-              <DialogDescription className="text-xs text-slate-400">
-                Change where <span className="font-mono text-sky-400">/r/{editingCampaign.slug}</span> redirects
-                without ever reprinting physical cards or menus.
-              </DialogDescription>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-[#0e1422] border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-white tracking-tight">
+                  Update Destination URL
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Change where <span className="font-mono text-sky-400">/r/{editingCampaign.slug}</span> leads.
+                  Printed materials remain unchanged!
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingCampaign(null)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             <div className="space-y-4">
-              <Field className="space-y-1.5">
-                <FieldLabel className="text-xs font-semibold text-slate-300">Campaign Title</FieldLabel>
-                <Input
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-300">Campaign Title</label>
+                <input
+                  type="text"
                   value={newTitle}
-                  onChange={(e: any) => setNewTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
-              </Field>
+              </div>
 
-              <Field className="space-y-1.5">
-                <FieldLabel className="text-xs font-semibold text-slate-300">New Target Destination URL</FieldLabel>
-                <Input
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-300">Target Destination URL</label>
+                <input
+                  type="url"
                   value={newDestinationUrl}
-                  onChange={(e: any) => setNewDestinationUrl(e.target.value)}
+                  onChange={(e) => setNewDestinationUrl(e.target.value)}
                   placeholder="https://example.com/new-page"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono"
                 />
-              </Field>
+              </div>
 
-              <Field className="space-y-1.5">
-                <FieldLabel className="text-xs font-semibold text-slate-300">Passcode Protection (Optional)</FieldLabel>
-                <Input
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-300">Passcode Protection (Optional)</label>
+                <input
                   type="password"
                   value={newPasscode}
-                  onChange={(e: any) => setNewPasscode(e.target.value)}
-                  placeholder="Leave blank to disable PIN gate"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  onChange={(e) => setNewPasscode(e.target.value)}
+                  placeholder="Leave empty for public redirect"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
-              </Field>
+              </div>
             </div>
 
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
-              <Button
+              <button
+                type="button"
                 onClick={() => setEditingCampaign(null)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-medium text-slate-300 cursor-pointer"
               >
                 Cancel
-              </Button>
-              <Button
+              </button>
+              <button
+                type="button"
                 onClick={handleSaveEdit}
                 disabled={isUpdating}
-                className="px-5 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-xs font-medium text-white shadow-lg shadow-sky-500/20 cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-xs font-semibold text-white shadow-lg shadow-sky-500/20 cursor-pointer active:scale-98 disabled:opacity-50"
               >
                 {isUpdating ? "Saving..." : "Save Instant Redirect"}
-              </Button>
+              </button>
             </div>
-          </DialogContent>
-        </Dialog>
+          </div>
+        </div>
       )}
 
-      {/* QR Preview Dialog (Using @ui-sdk/react Dialog) */}
+      {/* QR Code Preview Modal */}
       {previewingCampaign && (
-        <Dialog defaultOpen onOpenChange={(open) => !open && setPreviewingCampaign(null)}>
-          <DialogBackdrop className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 animate-in fade-in" />
-          <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-[#0f172a] border border-slate-800 rounded-3xl p-6 shadow-2xl z-50 flex flex-col items-center">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#0e1422] border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col items-center animate-in fade-in zoom-in-95 duration-150 relative">
             <div className="w-full flex items-center justify-between mb-4">
-              <DialogTitle className="text-lg font-bold text-white truncate max-w-[280px]">
+              <h3 className="text-base font-bold text-white truncate max-w-[280px]">
                 {previewingCampaign.title}
-              </DialogTitle>
-              <DialogClose
+              </h3>
+              <button
+                type="button"
                 onClick={() => setPreviewingCampaign(null)}
-                className="text-slate-400 hover:text-white text-xs px-2 py-1 rounded bg-slate-800 cursor-pointer"
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 cursor-pointer"
               >
-                ✕ Close
-              </DialogClose>
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             {(() => {
@@ -386,6 +391,9 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
                 gradientEnd: "#06b6d4",
                 gradientRotation: 45,
                 bgColor: "#ffffff",
+                frameEnabled: true,
+                frameText: "SCAN ME",
+                frameColor: "#0284c7",
               };
               try {
                 if (previewingCampaign.stylingConfig) {
@@ -409,8 +417,8 @@ export function CampaignsList({ campaigns, onRefresh }: CampaignsListProps) {
                 />
               );
             })()}
-          </DialogContent>
-        </Dialog>
+          </div>
+        </div>
       )}
     </div>
   );
