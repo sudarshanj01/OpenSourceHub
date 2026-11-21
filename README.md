@@ -30,7 +30,7 @@ Production-grade applications deployed live on the web and ready for immediate p
 
 | Product | Live Production URL | Primary Use Case & Capabilities | Technology Stack | Source Code |
 | :--- | :--- | :--- | :--- | :--- |
-| **VaultEngine** | [https://vaultengine-pitr.vercel.app](https://vaultengine-pitr.vercel.app) | **AWS RDS Alternative**: Sovereign continuous database transaction archiving & second-precision Point-in-Time Recovery (PITR) to Amazon S3 for PostgreSQL and MySQL on raw EC2. Features zero-secret AWS IMDSv2 IAM auto-discovery, in-memory AES-256 encryption, and a 1-line shell installer. | Rust (CLI/Daemon), Next.js 16, Three.js, Tailwind CSS | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
+| **VaultEngine** | [https://vaultengine-pitr.vercel.app](https://vaultengine-pitr.vercel.app) | Sovereign continuous database transaction archiving & second-precision Point-in-Time Recovery (PITR) to Amazon S3 for PostgreSQL and MySQL on raw EC2. Features zero-secret AWS IMDSv2 IAM auto-discovery, in-memory AES-256 encryption, and a 1-line shell installer. | Rust (CLI/Daemon), Next.js 16, Three.js, Tailwind CSS | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
 
 </div>
 
@@ -38,19 +38,19 @@ Production-grade applications deployed live on the web and ready for immediate p
 
 ## 📦 Active Projects Showcase
 
-A growing collection of production-ready applications built to professional engineering standards, serving as drop-in open-source alternatives to commercial SaaS:
+A growing collection of production-ready applications built to professional engineering standards:
 
 <div style="overflow-x: auto; max-height: 520px; overflow-y: auto;">
 
-| ID | Application | Replaces Commercial SaaS | Focus Area & Capabilities | Directory |
-|:---|:---|:---|:---|:---|
-| **001** | **Doctor Appointment Portal** | Zocdoc, Calendly | Medical clinic scheduling, EHR/EMR patient bookings, and slot management | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
-| **011** | **Digital QR Menu Board** | Toast, Mr Yum, Beaconstac | Restaurant contactless menu display, category browsing, and diner order workflow | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
-| **041** | **Minimalist Employee Attendance** | When I Work, Deputy, Homebase | PIN-based time-clock, shift verification, staff biometric/attendance logs | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
-| **042** | **OpenSheets** | Harvest, Toggl Track, QuickBooks | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
-| **101** | **QRShield** | Bitly, QR Code Generator Pro ($35/mo) | Sovereign dynamic QR codes, UTM campaign tracking, editable redirects & SVG exports | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
-| **102** | **CapFlow** | Loom, Vidyard, CloudApp | Browser screen & camera bubble recording, real-time compositor & video trimming | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
-| **103** | **VaultEngine** | AWS RDS ($200–$800+/mo markup) | PostgreSQL WAL & MySQL binlog continuous S3 streaming, second-precision restore | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
+| ID | Application | Focus Area & Capabilities | Directory |
+|:---|:---|:---|:---|
+| **001** | **Doctor Appointment Portal** | Medical clinic scheduling, EHR/EMR patient bookings, and slot management | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
+| **011** | **Digital QR Menu Board** | Restaurant contactless menu display, category browsing, and diner order workflow | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
+| **041** | **Minimalist Employee Attendance** | PIN-based time-clock, shift verification, staff biometric/attendance logs | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
+| **042** | **OpenSheets** | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
+| **101** | **QRShield** | Sovereign dynamic QR codes, UTM campaign tracking, editable redirects & SVG exports | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
+| **102** | **CapFlow** | Browser screen & camera bubble recording, real-time compositor & video trimming | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
+| **103** | **VaultEngine** | Sovereign database continuous archiving & second-precision Point-in-Time Recovery to Amazon S3 | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
 
 </div>
 
