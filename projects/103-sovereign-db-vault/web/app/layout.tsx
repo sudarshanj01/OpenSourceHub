@@ -1,5 +1,16 @@
 import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+});
+
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
 
 export const metadata: Metadata = {
   title: 'VaultEngine — Sovereign Database Point-in-Time Recovery (PITR) to S3',
@@ -18,14 +29,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'OpenSourceHub Sovereign Team' }],
   creator: 'OpenSourceHub',
-  metadataBase: new URL('https://vaultengine.io'),
+  metadataBase: new URL('https://vaultengine-pitr.vercel.app'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'VaultEngine — Continuous Point-in-Time Recovery to S3 on Raw EC2',
     description: 'Save 60%–120% on cloud database fees. Single static memory-safe daemon providing sub-second continuous WAL/binlog streaming and instant second-precision recovery.',
-    url: 'https://vaultengine.io',
+    url: 'https://vaultengine-pitr.vercel.app',
     siteName: 'VaultEngine',
     type: 'website',
     locale: 'en_US',
@@ -117,14 +128,14 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className={`dark scroll-smooth ${geistSans.variable} ${geistMono.variable}`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen bg-zinc-950 text-zinc-100 antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
+      <body className="min-h-screen bg-[#07080a] text-zinc-100 font-sans antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
         {children}
       </body>
     </html>

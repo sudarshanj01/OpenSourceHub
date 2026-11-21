@@ -12,12 +12,15 @@ import {
   ArrowRight,
   Database,
   Lock,
-  RefreshCw,
   Server,
   Layers,
   Cpu,
-  Github,
+  Activity,
+  ChevronRight,
 } from 'lucide-react';
+import ThreeDatabaseScene from '@/components/ThreeDatabaseScene';
+import TerminalSandbox from '@/components/TerminalSandbox';
+import ArchitectureDiagram from '@/components/ArchitectureDiagram';
 import CostCalculator from '@/components/CostCalculator';
 import PitrSimulator from '@/components/PitrSimulator';
 import QuickstartTabs from '@/components/QuickstartTabs';
@@ -35,82 +38,119 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 bg-dot-pattern selection:bg-indigo-500/30 selection:text-indigo-200">
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-zinc-950/80 border-b border-zinc-800/80">
+    <div className="min-h-screen bg-[#07080a] text-zinc-100 bg-grid-mesh">
+      {/* Precision Top Bar */}
+      <div className="border-b border-white/[0.04] bg-[#090b0f] text-[11px] font-mono text-zinc-400 py-1.5 px-4 text-center">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-zinc-300">AWS IMDSv2 Active</span>
+            <span className="text-zinc-600">|</span>
+            <span>Zero Static Credentials</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-3 text-zinc-500">
+            <span>PostgreSQL 14–17</span>
+            <span>•</span>
+            <span>MySQL 8.0–8.4</span>
+            <span>•</span>
+            <span className="text-indigo-400">Rust 1.97</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Navigation Bar */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#07080a]/85 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-400 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.4)] border border-indigo-400/30">
               <Database className="w-5 h-5 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className="font-extrabold tracking-tight text-white text-lg">VaultEngine</span>
-              <span className="text-[10px] font-mono text-zinc-400 uppercase -mt-1 tracking-wider">
-                Sovereign Database PITR
+              <span className="font-extrabold tracking-tight text-white text-base">VaultEngine</span>
+              <span className="text-[10px] font-mono text-indigo-400 uppercase -mt-1 tracking-wider">
+                Sovereign PITR
               </span>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-zinc-400">
-            <a href="#features" className="hover:text-white transition-colors">
-              Features
-            </a>
-            <a href="#calculator" className="hover:text-white transition-colors">
-              Savings Calculator
-            </a>
-            <a href="#simulator" className="hover:text-white transition-colors">
-              PITR Simulator
-            </a>
-            <a href="#quickstart" className="hover:text-white transition-colors">
-              Quickstart
-            </a>
-            <a href="#docs" className="hover:text-white transition-colors">
-              CLI Reference
-            </a>
-            <a href="#faq" className="hover:text-white transition-colors">
+          <nav className="hidden md:flex items-center gap-1 text-xs font-medium text-zinc-400 bg-white/[0.03] p-1 rounded-full border border-white/[0.05]">
+            <button
+              onClick={() => scrollTo('features')}
+              className="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/[0.05] transition-colors"
+            >
+              Capabilities
+            </button>
+            <button
+              onClick={() => scrollTo('calculator')}
+              className="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/[0.05] transition-colors"
+            >
+              Cost Model
+            </button>
+            <button
+              onClick={() => scrollTo('simulator')}
+              className="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/[0.05] transition-colors"
+            >
+              Recovery Lab
+            </button>
+            <button
+              onClick={() => scrollTo('quickstart')}
+              className="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/[0.05] transition-colors"
+            >
+              Deployment
+            </button>
+            <button
+              onClick={() => scrollTo('docs')}
+              className="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/[0.05] transition-colors"
+            >
+              Manual
+            </button>
+            <button
+              onClick={() => scrollTo('faq')}
+              className="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/[0.05] transition-colors"
+            >
               FAQ
-            </a>
+            </button>
           </nav>
 
           <div className="flex items-center gap-3">
-            <a
-              href="#quickstart"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-[0_0_20px_-3px_rgba(99,102,241,0.4)]"
+            <button
+              onClick={() => scrollTo('quickstart')}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-[0_0_20px_-3px_rgba(99,102,241,0.5)] border border-indigo-400/30"
             >
               <Terminal className="w-3.5 h-3.5" />
-              <span>Install CLI</span>
-            </a>
+              <span>Get Binary</span>
+            </button>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-20 pb-16 px-4 max-w-5xl mx-auto text-center">
-        {/* Glow backdrop */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-6">
-          <ShieldCheck className="w-4 h-4 text-indigo-400" />
-          <span>Zero-SaaS • Sovereign Database Architecture</span>
+      <section className="relative pt-16 pb-12 px-4 max-w-5xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-medium bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 mb-6">
+          <Activity className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Sovereign Database Infrastructure • Zero SaaS Premium</span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-          Ditch the 120% AWS RDS Tax.{' '}
-          <span className="bg-gradient-to-r from-indigo-400 via-indigo-200 to-indigo-400 bg-clip-text text-transparent">
-            Continuous Point-in-Time Recovery
-          </span>{' '}
-          to S3 on Raw EC2.
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight max-w-4xl mx-auto">
+          Continuous Point-in-Time Recovery to Amazon S3 on Raw Linux EC2
         </h1>
 
-        <p className="max-w-2xl mx-auto text-zinc-400 text-base sm:text-lg mb-8 leading-relaxed">
-          Self-host PostgreSQL and MySQL on standard Linux instances without fear. Single memory-safe daemon providing
-          continuous transaction log streaming, zero static AWS secrets, and second-precision disaster recovery.
+        <p className="max-w-2xl mx-auto text-zinc-400 text-sm sm:text-base mb-8 leading-relaxed">
+          Break free from extortionate RDS compute and storage surcharges. A single static Rust daemon delivering
+          sub-second WAL & binlog streaming, zero static AWS secrets, and second-precision rollback.
         </p>
 
         {/* 1-Line Quickstart Box */}
         <div className="max-w-xl mx-auto mb-10">
-          <div className="flex items-center justify-between bg-zinc-900/90 border border-zinc-800 p-2 sm:p-2.5 rounded-2xl shadow-2xl font-mono text-xs sm:text-sm">
+          <div className="flex items-center justify-between bg-[#0b0d12] border border-white/[0.08] p-2.5 rounded-2xl shadow-2xl font-mono text-xs sm:text-sm">
             <div className="flex items-center gap-2 pl-3 text-indigo-300 overflow-x-auto select-all">
               <span className="text-zinc-600">$</span>
               <span>{installCmd}</span>
@@ -118,7 +158,7 @@ export default function Home() {
             <button
               type="button"
               onClick={handleCopy}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors flex-shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium bg-white/[0.07] hover:bg-white/[0.12] text-zinc-200 transition-colors flex-shrink-0 border border-white/[0.06]"
             >
               {copied ? (
                 <>
@@ -134,131 +174,155 @@ export default function Home() {
             </button>
           </div>
           <div className="flex items-center justify-center gap-4 text-xs text-zinc-500 mt-3 font-mono">
-            <span>✓ Single Static Binary</span>
-            <span>•</span>
-            <span>✓ IMDSv2 IAM Auto-Discovery</span>
-            <span>•</span>
-            <span>✓ &lt; 15MB RAM</span>
+            <span>• Single Static Binary (&lt; 15MB RAM)</span>
+            <span>• AWS IMDSv2 Discovery</span>
+            <span>• Zero Dependencies</span>
           </div>
+        </div>
+
+        {/* 3D Interactive WebGL Database Stream Canvas */}
+        <div className="surface-card p-2 sm:p-4 my-8 relative overflow-hidden">
+          <div className="bevel-top" />
+          <ThreeDatabaseScene />
         </div>
       </section>
 
       {/* Bento Grid: Core Value Pillars */}
-      <section id="features" className="max-w-5xl mx-auto px-4 my-12">
+      <section id="features" className="max-w-5xl mx-auto px-4 my-16">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <span className="text-xs font-mono uppercase tracking-wider text-indigo-400 font-semibold">
+            Engine Architecture
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
+            Built for Extreme Reliability
+          </h2>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="shimmer-card p-6 flex flex-col justify-between">
+          <div className="surface-card p-6 flex flex-col justify-between">
+            <div className="bevel-top" />
             <div>
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 text-indigo-400">
-                <Lock className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 text-indigo-400">
+                <Lock className="w-4 h-4" />
               </div>
-              <h3 className="font-bold text-white text-base mb-1">Zero-Secret IAM Security</h3>
+              <h3 className="font-bold text-white text-sm mb-1">Zero-Secret IAM Security</h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Queries AWS EC2 IMDSv2 for temporary STS tokens. No AWS Access Keys in .env files or on disk.
+                Queries AWS EC2 IMDSv2 for temporary STS credentials. Never writes static AWS access keys to disk.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-zinc-800/80 font-mono text-[11px] text-indigo-400">
+            <div className="mt-4 pt-3 border-t border-white/[0.06] font-mono text-[10px] text-indigo-400">
               IMDSv2 Enforced
             </div>
           </div>
 
-          <div className="shimmer-card p-6 flex flex-col justify-between">
+          <div className="surface-card p-6 flex flex-col justify-between">
+            <div className="bevel-top" />
             <div>
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4 text-emerald-400">
-                <Zap className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4 text-emerald-400">
+                <Zap className="w-4 h-4" />
               </div>
-              <h3 className="font-bold text-white text-base mb-1">Sub-Second RPO Streaming</h3>
+              <h3 className="font-bold text-white text-sm mb-1">Sub-Second RPO Streaming</h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Postgres WAL & MySQL binlog streaming compressed with Zstandard directly into S3 multipart uploads.
+                Postgres WAL & MySQL binlogs compressed with Zstandard and streamed directly into S3 multipart uploads.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-zinc-800/80 font-mono text-[11px] text-emerald-400">
+            <div className="mt-4 pt-3 border-t border-white/[0.06] font-mono text-[10px] text-emerald-400">
               RPO &lt; 3 Seconds
             </div>
           </div>
 
-          <div className="shimmer-card p-6 flex flex-col justify-between">
+          <div className="surface-card p-6 flex flex-col justify-between">
+            <div className="bevel-top" />
             <div>
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4 text-amber-400">
-                <Clock className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4 text-amber-400">
+                <Clock className="w-4 h-4" />
               </div>
-              <h3 className="font-bold text-white text-base mb-1">Second-Precision PITR</h3>
+              <h3 className="font-bold text-white text-sm mb-1">Second-Precision PITR</h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Restore database state to any exact historical second. Recovers instantly from accidental DROP or DELETE
+                Restore database state to any historical second. Recovers instantly from accidental DROP or DELETE
                 statements.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-zinc-800/80 font-mono text-[11px] text-amber-400">
-              1-Command Rollback
+            <div className="mt-4 pt-3 border-t border-white/[0.06] font-mono text-[10px] text-amber-400">
+              Microsecond Timeline Pinning
             </div>
           </div>
 
-          <div className="shimmer-card p-6 flex flex-col justify-between">
+          <div className="surface-card p-6 flex flex-col justify-between">
+            <div className="bevel-top" />
             <div>
-              <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4 text-rose-400">
-                <Cpu className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4 text-rose-400">
+                <Cpu className="w-4 h-4" />
               </div>
-              <h3 className="font-bold text-white text-base mb-1">Ultra-Low Overhead</h3>
+              <h3 className="font-bold text-white text-sm mb-1">Low-Overhead Daemon</h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Written in memory-safe Rust with zero GC stalls. Consumes less than 15MB RAM on your database host.
+                Engineered in memory-safe Rust with zero GC pauses. Consumes less than 15MB RAM on the database host.
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-zinc-800/80 font-mono text-[11px] text-rose-400">
+            <div className="mt-4 pt-3 border-t border-white/[0.06] font-mono text-[10px] text-rose-400">
               &lt; 15 MB RAM Footprint
             </div>
           </div>
         </div>
       </section>
 
-      {/* Interactive Savings Calculator */}
+      {/* Interactive Terminal Sandbox */}
+      <TerminalSandbox />
+
+      {/* Interactive System Topology */}
+      <ArchitectureDiagram />
+
+      {/* Interactive Cost Savings Calculator */}
       <CostCalculator />
 
-      {/* Interactive PITR Simulator */}
+      {/* Interactive Disaster Simulation Lab */}
       <PitrSimulator />
 
-      {/* Quickstart & IAM Setup */}
+      {/* Quickstart Tabs & IAM Setup */}
       <QuickstartTabs />
 
-      {/* 1-Page CLI Reference */}
+      {/* Complete CLI Reference */}
       <CliReference />
 
-      {/* Comparison Matrix */}
+      {/* Comparison Table */}
       <ComparisonTable />
 
-      {/* FAQ Section */}
+      {/* Technical FAQ */}
       <FaqSection />
 
-      {/* Final Call to Action Banner */}
+      {/* Final Call to Action */}
       <section className="max-w-5xl mx-auto px-4 my-20">
-        <div className="shimmer-card p-8 sm:p-12 text-center relative overflow-hidden bg-gradient-to-b from-indigo-950/40 via-zinc-900 to-zinc-900">
-          <div className="accent-border-top" />
+        <div className="surface-card p-8 sm:p-12 text-center relative overflow-hidden bg-gradient-to-b from-indigo-950/30 to-[#07080a]">
+          <div className="bevel-top" />
+          <div className="accent-glow-top" />
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-            Take Control of Your Database Infrastructure Today
+            Own Your Database Infrastructure
           </h2>
           <p className="text-zinc-400 max-w-xl mx-auto text-sm sm:text-base mb-8">
-            Deploy VaultEngine on your EC2 host in 60 seconds. Start streaming transactions to S3 and eliminate the RDS
-            markup permanently.
+            Install VaultEngine on your EC2 host in 60 seconds. Start streaming transactions directly to Amazon S3 with zero
+            cloud markups.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="#quickstart"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-[0_0_20px_-3px_rgba(99,102,241,0.5)]"
+            <button
+              onClick={() => scrollTo('quickstart')}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-[0_0_20px_-3px_rgba(99,102,241,0.5)] border border-indigo-400/30"
             >
               <Terminal className="w-4 h-4" />
-              <span>Get Started Now</span>
-            </a>
-            <a
-              href="#docs"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors"
+              <span>Install VaultEngine</span>
+            </button>
+            <button
+              onClick={() => scrollTo('docs')}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-white/[0.05] hover:bg-white/[0.1] text-zinc-200 transition-colors border border-white/[0.08]"
             >
-              <span>Read Documentation</span>
+              <span>Explore Commands</span>
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-800/80 bg-zinc-950 py-12 px-4 text-center text-xs text-zinc-500 font-mono">
+      {/* Production Footer */}
+      <footer className="border-t border-white/[0.06] bg-[#050608] py-12 px-4 text-center text-xs text-zinc-500 font-mono">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 rounded-md bg-indigo-600 flex items-center justify-center text-white">

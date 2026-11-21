@@ -9,12 +9,14 @@
     "start": "next start -p 3103"
   },
   "dependencies": {
+    "@types/three": "^0.187.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.453.0",
     "next": "^16.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^2.5.4"
+    "tailwind-merge": "^2.5.4",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
