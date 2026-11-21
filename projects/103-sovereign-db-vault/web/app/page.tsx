@@ -27,7 +27,7 @@ import FaqSection from '@/components/FaqSection';
 
 export default function Home() {
   const [copied, setCopied] = useState<boolean>(false);
-  const installCmd = 'curl -sSL https://get.vaultengine.io | sudo bash';
+  const installCmd = 'curl -sSL https://vaultengine-pitr.vercel.app/install.sh | sudo bash';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(installCmd);

@@ -13,7 +13,7 @@ export default function QuickstartTabs() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const installCmd = "curl -sSL https://get.vaultengine.io | sudo bash";
+  const installCmd = "curl -sSL https://vaultengine-pitr.vercel.app/install.sh | sudo bash";
 
   const postgresConfig = `# Add to /etc/postgresql/<version>/main/postgresql.conf:
 wal_level = replica

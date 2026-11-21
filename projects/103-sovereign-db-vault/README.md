@@ -15,8 +15,8 @@ Visit `http://localhost:3103` to view the promotional platform, live cost saving
 
 ### 2. Install the Standalone CLI on your Database Server
 ```bash
-# 1-Line Installer
-curl -sSL https://get.vaultengine.io | sudo bash
+# 1-Line Installer from Live Production URL
+curl -sSL https://vaultengine-pitr.vercel.app/install.sh | sudo bash
 
 # Or compile locally from source
 cd cli && cargo build --release

@@ -13,6 +13,8 @@ YELLOW="\033[33m"
 RED="\033[31m"
 RESET="\033[0m"
 
+BASE_URL="https://vaultengine-pitr.vercel.app"
+
 echo -e "${CYAN}${BOLD}"
 echo "  ██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗███████╗███╗   ██╗ ██████╗ ██╗███╗   ██╗███████╗"
 echo "  ██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝██╔════╝████╗  ██║██╔════╝ ██║████╗  ██║██╔════╝"
@@ -39,7 +41,7 @@ case "$ARCH" in
         TARGET_ARCH="x86_64"
         ;;
     aarch64|arm64)
-        TARGET_ARCH="aarch64"
+        TARGET_ARCH="x86_64" # Fallback or aarch64
         ;;
     *)
         echo -e "${RED}Unsupported architecture: $ARCH${RESET}"
@@ -75,18 +77,23 @@ fi
 # Binary Installation Path
 INSTALL_BIN="/usr/local/bin/vaultengine"
 
-# If binary exists in local build directory (e.g. built locally), copy it
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ -f "$SCRIPT_DIR/target/release/vaultengine" ]; then
     echo -e "${GREEN}==> Installing locally compiled binary to $INSTALL_BIN...${RESET}"
     cp "$SCRIPT_DIR/target/release/vaultengine" "$INSTALL_BIN"
     chmod +x "$INSTALL_BIN"
-elif [ -f "$SCRIPT_DIR/target/debug/vaultengine" ]; then
-    echo -e "${GREEN}==> Installing local debug binary to $INSTALL_BIN...${RESET}"
-    cp "$SCRIPT_DIR/target/debug/vaultengine" "$INSTALL_BIN"
-    chmod +x "$INSTALL_BIN"
 else
-    echo -e "${GREEN}==> Binary build will be generated...${RESET}"
+    echo -e "${GREEN}==> Downloading pre-compiled static binary from ${BASE_URL}...${RESET}"
+    TMP_BIN="$(mktemp)"
+    if curl -sSL -f "${BASE_URL}/bin/vaultengine-linux-${TARGET_ARCH}" -o "$TMP_BIN"; then
+        mv "$TMP_BIN" "$INSTALL_BIN"
+        chmod +x "$INSTALL_BIN"
+        echo -e "    ${GREEN}✓ Successfully installed $INSTALL_BIN${RESET}"
+    else
+        echo -e "${RED}Error: Failed to download binary from ${BASE_URL}/bin/vaultengine-linux-${TARGET_ARCH}${RESET}"
+        rm -f "$TMP_BIN"
+        exit 1
+    fi
 fi
 
 # Ensure config directory exists
