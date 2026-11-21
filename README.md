@@ -1,55 +1,8 @@
 # 🌐 OpenSourceHub — 100 Sovereign Open-Source SaaS Alternatives
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Docker Support](https://img.shields.io/badge/Docker-Single%20Command%20Up-2496ED?logo=docker&logoColor=white)](https://docker.com)
-[![Status: Active Development](https://img.shields.io/badge/Status-Active%20Development-emerald.svg)](TRACKER.md)
-[![Live Deployments](https://img.shields.io/badge/Live%20Deployments-Production%20Ready-6366f1.svg)](#-featured-live-products)
-
 > **Software for All.**  
 > A curated ecosystem of self-contained, self-deployable open-source utility applications built for real-world occupations and businesses.  
 > Single `git pull`. Single `docker compose up`. Zero SaaS vendor lock-in.
-
----
-
-## 🌟 Featured Live Products
-
-Production-grade applications deployed live on the web and ready for immediate public use:
-
-| Product | Live Production URL | Primary Use Case & Capabilities | Technology Stack | Source Code |
-| :--- | :--- | :--- | :--- | :--- |
-| **VaultEngine** | [https://vaultengine-pitr.vercel.app](https://vaultengine-pitr.vercel.app) | **AWS RDS Alternative**: Sovereign continuous database transaction archiving & second-precision Point-in-Time Recovery (PITR) to Amazon S3 for PostgreSQL and MySQL on raw EC2. Features zero-secret AWS IMDSv2 IAM auto-discovery, in-memory AES-256 encryption, and a 1-line shell installer. | Rust (CLI/Daemon), Next.js 16, Three.js, Tailwind CSS | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
-
----
-
-## 🔍 Open-Source SaaS Replacement Index
-
-Looking for a self-hosted, sovereign replacement for expensive monthly SaaS tools? OpenSourceHub provides drop-in open-source utilities:
-
-| Commercial SaaS Gated Behind Paywalls | OpenSourceHub Sovereign Alternative | Occupational Domain | Status & Source |
-| :--- | :--- | :--- | :--- |
-| **AWS RDS** ($200–$800+/mo compute & storage tax) | **VaultEngine** (Continuous S3 PITR on Raw EC2) | DevOps, DBAs, Cloud Engineers | [Live](https://vaultengine-pitr.vercel.app) • [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
-| **Loom / Vidyard** (Watermark-locked 1080p, seat fees) | **CapFlow** (Screen & Camera Bubble Studio) | Developers, Creators, Async Teams | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
-| **Bitly / QR Code Pro** ($35/mo dynamic redirect lock) | **QRShield** (Anti-Ransom Dynamic QR Studio) | Marketing, Hospitality, Campaigns | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
-| **Harvest / Toggl Track** ($12/user/mo timesheets) | **OpenSheets** (Timesheets & Project Time Tracker) | Agencies, Freelancers, HR Admins | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
-| **When I Work / Deputy** (Per-employee attendance fees) | **Minimalist Employee Attendance** (PIN Time-Clock) | Retail Stores, Small Businesses | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
-| **Toast / Mr Yum** ($50–$150/mo digital menu fees) | **Digital QR Menu Board** (Live Contactless Menu) | Cafes, Diners, Food Trucks | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
-| **Zocdoc / Calendly** ($30–$300/mo booking fees) | **Doctor Appointment Portal** (Clinic Slot Booker) | Clinics, Doctors, Private Practices | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
-
----
-
-## 📦 Active Projects Showcase
-
-A growing collection of production-ready applications built to professional engineering standards:
-
-| ID | Application | Focus Area & SEO Keywords | Directory |
-|:---|:---|:---|:---|
-| **001** | **Doctor Appointment Portal** | Medical clinic scheduling, EHR/EMR patient bookings, and slot management | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
-| **011** | **Digital QR Menu Board** | Restaurant menu display, contactless dining, cafe food ordering workflow | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
-| **041** | **Minimalist Employee Attendance** | PIN-based time-clock, shift verification, staff biometric/attendance logs | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
-| **042** | **OpenSheets** | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
-| **101** | **QRShield (Anti-Ransom Dynamic QR Studio)** | Sovereign dynamic QR codes, UTM campaign tracking, editable redirects & SVG exports | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
-| **102** | **CapFlow (Sovereign Screen & Cam Studio)** | Browser screen & camera bubble recording, real-time compositor & video trimming | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
-| **103** | **VaultEngine (Sovereign Database PITR Engine)** | PostgreSQL WAL & MySQL binlog continuous S3 streaming, second-precision restore | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
 
 ---
 
@@ -66,6 +19,60 @@ Every project solves a concrete, high-utility operational challenge without ente
 - **Self-Contained Architecture**: Each project is an independent directory with its own container orchestration and environment definitions.
 - **Zero-Friction Dev Defaults**: Immediate local spin-up without requiring proprietary cloud registrations.
 - **Production SSL Ready**: Production reverse-proxy configurations ready to provision automated Let's Encrypt certificates when attached to a custom domain.
+
+---
+
+## 🌟 Featured Live Products
+
+Production-grade applications deployed live on the web and ready for immediate public use:
+
+<div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
+
+| Product | Live Production URL | Primary Use Case & Capabilities | Technology Stack | Source Code |
+| :--- | :--- | :--- | :--- | :--- |
+| **VaultEngine** | [https://vaultengine-pitr.vercel.app](https://vaultengine-pitr.vercel.app) | **AWS RDS Alternative**: Sovereign continuous database transaction archiving & second-precision Point-in-Time Recovery (PITR) to Amazon S3 for PostgreSQL and MySQL on raw EC2. Features zero-secret AWS IMDSv2 IAM auto-discovery, in-memory AES-256 encryption, and a 1-line shell installer. | Rust (CLI/Daemon), Next.js 16, Three.js, Tailwind CSS | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
+
+</div>
+
+---
+
+## 🔍 Open-Source SaaS Replacement Index
+
+Looking for a self-hosted, sovereign replacement for expensive monthly SaaS tools? OpenSourceHub provides drop-in open-source utilities:
+
+<div style="overflow-x: auto; max-height: 480px; overflow-y: auto;">
+
+| Commercial SaaS Gated Behind Paywalls | OpenSourceHub Sovereign Alternative | Occupational Domain | Status & Source |
+| :--- | :--- | :--- | :--- |
+| **AWS RDS** ($200–$800+/mo compute & storage tax) | **VaultEngine** (Continuous S3 PITR on Raw EC2) | DevOps, DBAs, Cloud Engineers | [Live](https://vaultengine-pitr.vercel.app) • [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
+| **Loom / Vidyard** (Watermark-locked 1080p, seat fees) | **CapFlow** (Screen & Camera Bubble Studio) | Developers, Creators, Async Teams | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
+| **Bitly / QR Code Pro** ($35/mo dynamic redirect lock) | **QRShield** (Anti-Ransom Dynamic QR Studio) | Marketing, Hospitality, Campaigns | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
+| **Harvest / Toggl Track** ($12/user/mo timesheets) | **OpenSheets** (Timesheets & Project Time Tracker) | Agencies, Freelancers, HR Admins | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
+| **When I Work / Deputy** (Per-employee attendance fees) | **Minimalist Employee Attendance** (PIN Time-Clock) | Retail Stores, Small Businesses | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
+| **Toast / Mr Yum** ($50–$150/mo digital menu fees) | **Digital QR Menu Board** (Live Contactless Menu) | Cafes, Diners, Food Trucks | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
+| **Zocdoc / Calendly** ($30–$300/mo booking fees) | **Doctor Appointment Portal** (Clinic Slot Booker) | Clinics, Doctors, Private Practices | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
+
+</div>
+
+---
+
+## 📦 Active Projects Showcase
+
+A growing collection of production-ready applications built to professional engineering standards:
+
+<div style="overflow-x: auto; max-height: 480px; overflow-y: auto;">
+
+| ID | Application | Focus Area & SEO Keywords | Directory |
+|:---|:---|:---|:---|
+| **001** | **Doctor Appointment Portal** | Medical clinic scheduling, EHR/EMR patient bookings, and slot management | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
+| **011** | **Digital QR Menu Board** | Restaurant menu display, contactless dining, cafe food ordering workflow | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
+| **041** | **Minimalist Employee Attendance** | PIN-based time-clock, shift verification, staff biometric/attendance logs | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
+| **042** | **OpenSheets** | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
+| **101** | **QRShield (Anti-Ransom Dynamic QR Studio)** | Sovereign dynamic QR codes, UTM campaign tracking, editable redirects & SVG exports | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
+| **102** | **CapFlow (Sovereign Screen & Cam Studio)** | Browser screen & camera bubble recording, real-time compositor & video trimming | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
+| **103** | **VaultEngine (Sovereign Database PITR Engine)** | PostgreSQL WAL & MySQL binlog continuous S3 streaming, second-precision restore | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
+
+</div>
 
 ---
 
