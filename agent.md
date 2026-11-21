@@ -14,7 +14,48 @@ This document (`agent.md`) is the master operational manual, AI context definiti
 
 ---
 
-## ⚡ 2. Mandatory Latest-Stable Version Protocol (Web Search First)
+## 🧠 2. Mandatory Pre-Scaffolding Protocol: Web Search, Problem Discovery & Architectural Brainstorming
+
+Before choosing, initializing, or scaffolding any project directory in OpenSourceHub, every AI coding assistant and human developer MUST conduct a mandatory **Web Search & Architectural Brainstorming Session**. Scaffolding without completing this discovery step is strictly prohibited.
+
+### A. Phase 1: Real-World Problem Discovery & Competitor Analysis (Web Search)
+1. **Identify the Core Problem**:
+   - What exact friction, operational bottleneck, or workflow breakdown does this application eliminate for its target user/profession?
+2. **Expose Predatory SaaS Patterns**:
+   - Perform a targeted web search on existing commercial tools in this niche.
+   - What features do commercial SaaS providers gate behind extortionate paywalls? (e.g. limiting dynamic QR code edits to $30/month, watermark-locking 1080p screen recordings, locking PDF exports, charging per-seat for basic time tracking).
+3. **Define the Sovereign Value Proposition**:
+   - How does our self-hosted, open-source tool give complete data sovereignty, zero artificial limits, and offline/self-contained reliability?
+
+### B. Phase 2: Architectural Brainstorming & Ecosystem Utility Evaluation
+Never default to a tech stack because it is familiar, trendy, or what was used in the previous project. The choice of language, framework, and database must be justified by **concrete ecosystem utilities, libraries, and performance characteristics** that make building the application simpler, more reliable, and faster to deliver.
+
+#### Language & Framework Advantage Evaluation Matrix:
+- **Rust (`axum` + `tokio` + `rusqlite` / embedded SQLite)**:
+  - *Best for*: Compute-heavy workloads, real-time media streaming, video recording chunks, binary slicing, cryptography, or high-throughput low-latency microservices.
+  - *Ecosystem Utility Superpower*: Zero-cost abstractions, zero runtime memory bloat, native single-binary execution, sub-25MB Docker container footprint, and thread-safe asynchronous concurrency.
+- **Next.js / React / Vue (`Tailwind CSS` + reactive state hooks)**:
+  - *Best for*: Rich reactive SPAs, interactive visual editors, drag-and-drop workflow canvases, dynamic bento dashboards, and instant client-side feedback.
+  - *Ecosystem Utility Superpower*: Unmatched ecosystem of modern reactive UI utilities, Tailwind CSS styling agility, SVG/Canvas manipulation libraries, and responsive mobile-first layouts.
+- **Python (`FastAPI` + `PyMuPDF` / `pdfplumber` / `Pillow` / `OpenCV`)**:
+  - *Best for*: Document parsing, PDF generation/manipulation, OCR, data extraction, scientific calculations, and machine learning integration.
+  - *Ecosystem Utility Superpower*: World-class document and image manipulation libraries, concise Pydantic request validation, and rapid prototyping for complex file workflows.
+- **Golang (`chi` / `gin` / `fiber` + `pgx` / `sqlx`)**:
+  - *Best for*: High-concurrency lightweight microservices, real-time event streaming, appliance-ready time-clocks, and low-memory internal tooling.
+  - *Ecosystem Utility Superpower*: Instant compilation, native static binary deployment, zero Node.js/JVM memory overhead, and straightforward standard library concurrency primitives (`goroutines`, `channels`).
+- **Java / Kotlin (`Spring Boot 3` / `Quarkus` + PostgreSQL)**:
+  - *Best for*: Enterprise transactions, strict regulatory compliance, complex financial or medical audit trails, and multi-tenant domain models.
+  - *Ecosystem Utility Superpower*: Industrial-strength type safety, mature ORM transaction management (Hibernate/JPA), and rock-solid validation frameworks.
+
+### C. Phase 3: Project Persona & Clean Standalone Identity (Zero AI-Slop)
+- Every project must be given a memorable, dignified, standalone product identity (e.g. **QRShield**, **CapFlow**, **OpenSheets**).
+- **Zero AI-Slop & Zero Stack Badges**:
+  - Never display tech stack watermarks or tags on public user interfaces (do NOT put "Built with Rust & Axum" or "Project 102" in navigation or footers).
+  - Treat each application as an authentic, production-grade independent product that any business or team can use with pride.
+
+---
+
+## ⚡ 3. Mandatory Latest-Stable Version Protocol (Web Search First)
 
 Whenever an AI agent or human contributor builds, scaffolds, or upgrades any project or micro-service in OpenSourceHub:
 
@@ -37,7 +78,7 @@ Whenever an AI agent or human contributor builds, scaffolds, or upgrades any pro
 
 ---
 
-## 🛠️ 3. Best-Fit Tech Stack Selection & Official Standards
+## 🛠️ 4. Best-Fit Tech Stack Selection & Official Standards
 
 ### A. Core Architectural Philosophy: Best-Fit Over Defaulting
 - **Never Blindly Default to Next.js or Template Boilers**: Do not pick a stack simply because it is trendy, fancy, or what was used in the previous project.
@@ -97,7 +138,7 @@ Every frontend built across OpenSourceHub must deliver an **original, high-craft
 
 ---
 
-## 🐳 4. Container & Docker Standards
+## 🐳 5. Container & Docker Standards
 
 Every project subfolder MUST include:
 
@@ -120,7 +161,7 @@ Every project subfolder MUST include:
 
 ---
 
-## 🔒 5. Universal Security & Product Standard (Real Products, Not Toy Demos)
+## 🔒 6. Universal Security & Product Standard (Real Products, Not Toy Demos)
 
 Every application must adhere to these product-ready security and quality standards:
 
@@ -148,7 +189,7 @@ Every application must adhere to these product-ready security and quality standa
 
 ---
 
-## 📊 6. Master Progress Tracker & Human Verification Protocol (MANDATORY)
+## 📊 7. Master Progress Tracker & Human Verification Protocol (MANDATORY)
 
 The root [`TRACKER.md`](TRACKER.md) is the single source of truth for project completion state across all chat sessions.
 
@@ -171,7 +212,7 @@ Whenever the human owner explicitly verifies and marks a project `✅ DONE`:
 
 ---
 
-## 🛑 7. Strict Git Push Protocol (MANDATORY RULE)
+## 🛑 8. Strict Git Push Protocol (MANDATORY RULE)
 
 Every AI coding assistant (Antigravity, Cursor, Claude, Copilot, ChatGPT) working in this repository MUST strictly follow this mandatory rule:
 1. **Never Run `git push` Autonomously**:
@@ -185,7 +226,7 @@ Every AI coding assistant (Antigravity, Cursor, Claude, Copilot, ChatGPT) workin
 
 ---
 
-## 📁 8. Project Directory Blueprint
+## 📁 9. Project Directory Blueprint
 
 Each project inside `projects/<project-id>/` must follow this layout:
 
@@ -201,7 +242,7 @@ projects/<project-id>/
 
 ---
 
-## 📋 9. Required Contents of Project-Level `agent.md`
+## 📋 10. Required Contents of Project-Level `agent.md`
 
 Every project must maintain its own `agent.md` containing:
 1. **Project Name & Occupational Persona**: Who uses it and what real-world pain it solves.
@@ -215,7 +256,7 @@ Every project must maintain its own `agent.md` containing:
 
 ---
 
-## 🚀 10. Next Steps & Execution Order
+## 🚀 11. Next Steps & Execution Order
 
 We build these applications systematically one by one:
 - **Project #1 Selected**: `001-doctor-appointment-portal` (Healthcare & Clinics)

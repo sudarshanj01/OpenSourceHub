@@ -97,6 +97,7 @@ OpenSourceHub is built by and for the open-source community. We welcome contribu
    git checkout -b feature/your-project-name
    ```
 3. **Adhere to Production Standards**:
+   - Perform web search discovery & architectural brainstorming before scaffolding: evaluate the real-world problem, competitor pitfalls, and choose the best-fit language/framework based on concrete ecosystem utilities.
    - Build complete, independent projects inside `projects/<project-name>`.
    - Never hardcode or display default credentials/secrets in the UI.
    - Design mobile-first with clean, high-contrast aesthetics.
