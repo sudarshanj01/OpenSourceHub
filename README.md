@@ -1,4 +1,4 @@
-# 🌐 OpenSourceHub — 100 Sovereign Open-Source SaaS Alternatives
+# 🌐 OpenSourceHub
 
 > **Software for All.**  
 > A curated ecosystem of self-contained, self-deployable open-source utility applications built for real-world occupations and businesses.  
@@ -36,41 +36,21 @@ Production-grade applications deployed live on the web and ready for immediate p
 
 ---
 
-## 🔍 Open-Source SaaS Replacement Index
-
-Looking for a self-hosted, sovereign replacement for expensive monthly SaaS tools? OpenSourceHub provides drop-in open-source utilities:
-
-<div style="overflow-x: auto; max-height: 480px; overflow-y: auto;">
-
-| Commercial SaaS Gated Behind Paywalls | OpenSourceHub Sovereign Alternative | Occupational Domain | Status & Source |
-| :--- | :--- | :--- | :--- |
-| **AWS RDS** ($200–$800+/mo compute & storage tax) | **VaultEngine** (Continuous S3 PITR on Raw EC2) | DevOps, DBAs, Cloud Engineers | [Live](https://vaultengine-pitr.vercel.app) • [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
-| **Loom / Vidyard** (Watermark-locked 1080p, seat fees) | **CapFlow** (Screen & Camera Bubble Studio) | Developers, Creators, Async Teams | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
-| **Bitly / QR Code Pro** ($35/mo dynamic redirect lock) | **QRShield** (Anti-Ransom Dynamic QR Studio) | Marketing, Hospitality, Campaigns | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
-| **Harvest / Toggl Track** ($12/user/mo timesheets) | **OpenSheets** (Timesheets & Project Time Tracker) | Agencies, Freelancers, HR Admins | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
-| **When I Work / Deputy** (Per-employee attendance fees) | **Minimalist Employee Attendance** (PIN Time-Clock) | Retail Stores, Small Businesses | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
-| **Toast / Mr Yum** ($50–$150/mo digital menu fees) | **Digital QR Menu Board** (Live Contactless Menu) | Cafes, Diners, Food Trucks | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
-| **Zocdoc / Calendly** ($30–$300/mo booking fees) | **Doctor Appointment Portal** (Clinic Slot Booker) | Clinics, Doctors, Private Practices | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
-
-</div>
-
----
-
 ## 📦 Active Projects Showcase
 
-A growing collection of production-ready applications built to professional engineering standards:
+A growing collection of production-ready applications built to professional engineering standards, serving as drop-in open-source alternatives to commercial SaaS:
 
-<div style="overflow-x: auto; max-height: 480px; overflow-y: auto;">
+<div style="overflow-x: auto; max-height: 520px; overflow-y: auto;">
 
-| ID | Application | Focus Area & SEO Keywords | Directory |
-|:---|:---|:---|:---|
-| **001** | **Doctor Appointment Portal** | Medical clinic scheduling, EHR/EMR patient bookings, and slot management | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
-| **011** | **Digital QR Menu Board** | Restaurant menu display, contactless dining, cafe food ordering workflow | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
-| **041** | **Minimalist Employee Attendance** | PIN-based time-clock, shift verification, staff biometric/attendance logs | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
-| **042** | **OpenSheets** | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
-| **101** | **QRShield (Anti-Ransom Dynamic QR Studio)** | Sovereign dynamic QR codes, UTM campaign tracking, editable redirects & SVG exports | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
-| **102** | **CapFlow (Sovereign Screen & Cam Studio)** | Browser screen & camera bubble recording, real-time compositor & video trimming | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
-| **103** | **VaultEngine (Sovereign Database PITR Engine)** | PostgreSQL WAL & MySQL binlog continuous S3 streaming, second-precision restore | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
+| ID | Application | Replaces Commercial SaaS | Focus Area & Capabilities | Directory |
+|:---|:---|:---|:---|:---|
+| **001** | **Doctor Appointment Portal** | Zocdoc, Calendly | Medical clinic scheduling, EHR/EMR patient bookings, and slot management | [`projects/001-doctor-appointment-portal/`](projects/001-doctor-appointment-portal/) |
+| **011** | **Digital QR Menu Board** | Toast, Mr Yum, Beaconstac | Restaurant contactless menu display, category browsing, and diner order workflow | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
+| **041** | **Minimalist Employee Attendance** | When I Work, Deputy, Homebase | PIN-based time-clock, shift verification, staff biometric/attendance logs | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
+| **042** | **OpenSheets** | Harvest, Toggl Track, QuickBooks | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
+| **101** | **QRShield** | Bitly, QR Code Generator Pro ($35/mo) | Sovereign dynamic QR codes, UTM campaign tracking, editable redirects & SVG exports | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
+| **102** | **CapFlow** | Loom, Vidyard, CloudApp | Browser screen & camera bubble recording, real-time compositor & video trimming | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
+| **103** | **VaultEngine** | AWS RDS ($200–$800+/mo markup) | PostgreSQL WAL & MySQL binlog continuous S3 streaming, second-precision restore | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
 
 </div>
 
