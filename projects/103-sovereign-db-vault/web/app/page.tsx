@@ -47,25 +47,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#07080a] text-zinc-100 bg-grid-mesh">
-      {/* Precision Top Bar */}
-      <div className="border-b border-white/[0.04] bg-[#090b0f] text-[11px] font-mono text-zinc-400 py-1.5 px-4 text-center">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-zinc-300">AWS IMDSv2 Active</span>
-            <span className="text-zinc-600">|</span>
-            <span>Zero Static Credentials</span>
-          </div>
-          <div className="hidden sm:flex items-center gap-3 text-zinc-500">
-            <span>PostgreSQL 14–17</span>
-            <span>•</span>
-            <span>MySQL 8.0–8.4</span>
-            <span>•</span>
-            <span className="text-indigo-400">Rust 1.97</span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Navigation Bar */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#07080a]/85 border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
