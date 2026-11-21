@@ -1,0 +1,46 @@
+services:
+  vaultengine-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vaultengine-web
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3103}:3103"
+    environment:
+      - NODE_ENV=production
+      - PORT=3103
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3103/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+# ------------------------------------------------------------------------------
+# Production Domain & Automated SSL (Let's Encrypt via Caddy)
+# ------------------------------------------------------------------------------
+# To activate in production:
+# 1. Set DOMAIN (e.g. vaultengine.yourdomain.com) and ACME_EMAIL in .env
+# 2. Uncomment the caddy service block below:
+#
+#   caddy:
+#     image: caddy:2.9-alpine
+#     container_name: vaultengine-caddy
+#     restart: unless-stopped
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#     environment:
+#       - DOMAIN=${DOMAIN}
+#       - ACME_EMAIL=${ACME_EMAIL}
+#     volumes:
+#       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+#       - caddy_data:/data
+#       - caddy_config:/config
+#     depends_on:
+#       - vaultengine-web
+#
+# volumes:
+#   caddy_data:
+#   caddy_config:
