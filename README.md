@@ -32,6 +32,7 @@ A growing collection of production-ready applications built to professional engi
 | **011** | **Digital QR Menu Board** | Restaurant menu display, category browsing, and diner order workflow | [`projects/011-digital-qr-menu-board/`](projects/011-digital-qr-menu-board/) |
 | **041** | **Minimalist Employee Attendance** | PIN-based time-clock, shift verification, and staff attendance logs | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
 | **042** | **OpenSheets** | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
+| **101** | **QRShield (Anti-Ransom Dynamic QR Studio)** | Sovereign dynamic QR codes with editable redirects, custom gradients, SVG export & scan analytics | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
 
 ---
 

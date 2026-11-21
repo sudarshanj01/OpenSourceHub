@@ -7,9 +7,9 @@
 
 ## 📈 Overall Progress
 
-- **Completed:** 3 / 100
-- **In Progress:** 0 / 100
-- **Planned:** 97 / 100
+- **Completed:** 5
+- **In Progress:** 0
+- **Planned:** 96
 
 | Status Legend | Meaning |
 | :--- | :--- |
@@ -74,6 +74,7 @@
 | **049** | `049-internship-certificate-generator`| 1-Click Internship Completion Certificate | Startup Founders | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/049-internship-certificate-generator` |
 | **050** | `050-nda-vendor-agreement-vault` | Simple Signed NDA & Vendor Agreement Archive | Business Owners | Next.js, Prisma, PostgreSQL 16 | `⏳ PLANNED` | `projects/050-nda-vendor-agreement-vault` |
 | **051-100** | *(See [`PROJECTS_100.md`](PROJECTS_100.md))* | Sector 6–11 (Retail, Trades, Real Estate, Logistics, Personal) | Various Occupations | Next.js, Go, Java, Python, PostgreSQL 16 | `⏳ PLANNED` | `projects/...` |
+| **101** | `101-sovereign-dynamic-qr-studio` | **QRShield — Sovereign Dynamic QR & Anti-Ransom Campaign Studio** | Marketing, Hospitality & Campaign Tracking | Next.js 16, React 19, @ui-sdk/react, PostgreSQL 16 | `✅ DONE` | [`projects/101-sovereign-dynamic-qr-studio`](projects/101-sovereign-dynamic-qr-studio/) |
 
 ---
 

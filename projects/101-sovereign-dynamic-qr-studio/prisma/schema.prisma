@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Campaign {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  description     String?
+  destinationUrl  String
+  type            String    @default("DYNAMIC") // "DYNAMIC" or "STATIC"
+  qrType          String    @default("URL")     // "URL", "WIFI", "VCARD", "TEXT"
+  passcode        String?   // optional password protection
+  isActive        Boolean   @default(true)
+  expiresAt       DateTime?
+  stylingConfig   String    @default("{}")      // JSON payload of colors, dots, corners, logo, frame
+  totalScans      Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  scans           Scan[]
+
+  @@index([slug])
+  @@index([createdAt])
+}
+
+model Scan {
+  id          String    @id @default(cuid())
+  campaignId  String
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  device      String?   // "Mobile", "Desktop", "Tablet", "Unknown"
+  os          String?   // "iOS", "Android", "macOS", "Windows", "Linux"
+  browser     String?   // "Safari", "Chrome", "Firefox", "Edge", "Other"
+  ipHash      String?   // Hashed for strict privacy compliance (no raw IPs stored)
+  referer     String?
+  scannedAt   DateTime  @default(now())
+
+  @@index([campaignId])
+  @@index([scannedAt])
+}

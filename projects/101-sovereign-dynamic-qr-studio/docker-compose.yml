@@ -1,0 +1,65 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: qrshield-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-qrshielddb}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-qrshielddb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qrshield-app
+    restart: unless-stopped
+    ports:
+      - "3101:3101"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-qrshielddb}?schema=public
+      - NODE_ENV=production
+      - PORT=3101
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:3101/api/campaigns || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+# =========================================================================
+# 🌐 PRODUCTION READY DEPLOYMENT (CUSTOM DOMAIN + AUTOMATIC SSL/HTTPS)
+# =========================================================================
+# When deploying to production with your own custom domain (e.g. qr.mybusiness.com):
+#
+# Step 1: Point DNS 'A' record for your domain to your server's public IP.
+# Step 2: Configure your .env file with:
+#           DOMAIN=qr.mybusiness.com
+#           ACME_EMAIL=admin@mybusiness.com
+# Step 3: Uncomment the 'caddy' service below and update the app port to internal.
+# Step 4: Run: docker compose up -d
+#
+#  caddy:
+#    image: caddy:2.9-alpine
+#    container_name: qrshield-caddy
+#    restart: unless-stopped
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+#      - ./data/caddy_data:/data
+#      - ./data/caddy_config:/config
+#    depends_on:
+#      - app
