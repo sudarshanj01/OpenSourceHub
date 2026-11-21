@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: capflow-app
+    restart: unless-stopped
+    ports:
+      - "3102:3102"
+    environment:
+      - PORT=3102
+      - RUST_LOG=info
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:3102/api/recordings || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+# =========================================================================
+# 🌐 PRODUCTION READY DEPLOYMENT (CUSTOM DOMAIN + AUTOMATIC SSL/HTTPS)
+# =========================================================================
+# To deploy to production with your custom domain (e.g. record.mybusiness.com):
+#
+# Step 1: Point DNS 'A' record for your domain to your server's public IP.
+# Step 2: Configure your .env file with:
+#           DOMAIN=record.mybusiness.com
+#           ACME_EMAIL=admin@mybusiness.com
+# Step 3: Uncomment the 'caddy' service below:
+#
+#  caddy:
+#    image: caddy:2.9-alpine
+#    container_name: capflow-caddy
+#    restart: unless-stopped
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+#      - ./data/caddy_data:/data
+#      - ./data/caddy_config:/config
+#    depends_on:
+#      - app

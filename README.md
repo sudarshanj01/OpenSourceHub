@@ -33,6 +33,7 @@ A growing collection of production-ready applications built to professional engi
 | **041** | **Minimalist Employee Attendance** | PIN-based time-clock, shift verification, and staff attendance logs | [`projects/041-minimalist-employee-attendance/`](projects/041-minimalist-employee-attendance/) |
 | **042** | **OpenSheets** | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
 | **101** | **QRShield (Anti-Ransom Dynamic QR Studio)** | Sovereign dynamic QR codes with editable redirects, custom gradients, SVG export & scan analytics | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
+| **102** | **CapFlow (Sovereign Screen & Cam Studio)** | Browser screen & camera bubble recording, real-time compositor, video trimming & self-hosted links | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
 
 ---
 

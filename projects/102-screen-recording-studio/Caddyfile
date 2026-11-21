@@ -1,0 +1,17 @@
+{$DOMAIN:localhost} {
+    tls {$ACME_EMAIL:internal}
+
+    encode zstd gzip
+
+    reverse_proxy app:3102 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+
+    log {
+        output stdout
+        format console
+    }
+}
