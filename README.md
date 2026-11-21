@@ -37,6 +37,16 @@ A growing collection of production-ready applications built to professional engi
 
 ---
 
+## 🌟 Featured Usable Products
+
+These applications are deployed live in production and ready for immediate public use:
+
+| Product | Live Production URL | Primary Use Case & Capabilities | Source Directory |
+| :--- | :--- | :--- | :--- |
+| **VaultEngine** | [https://vaultengine-pitr.vercel.app](https://vaultengine-pitr.vercel.app) | Sovereign continuous database archiving & second-precision Point-in-Time Recovery (PITR) to Amazon S3 for PostgreSQL & MySQL on raw EC2. Zero-secret IMDSv2 IAM discovery, in-memory AES-256 encryption, and 1-line installer. | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
+
+---
+
 ## ⚡ How to Run Any Project
 
 Each project in OpenSourceHub is completely self-contained. To run any application:
