@@ -1,0 +1,20 @@
+[package]
+name = "envshield"
+version = "0.1.0"
+edition = "2021"
+description = "Sovereign Kernel-Level .env Guard & AI Agent DLP for Developers"
+authors = ["OpenSourceHub Community"]
+license = "MIT"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+libc = "0.2"
+argon2 = "0.5"
+password-hash = { version = "0.5", features = ["rand_core"] }
+rand_core = { version = "0.6", features = ["getrandom"] }
+rpassword = "7.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+colored = "2.1"
+chrono = "0.4"
+which = "8.0.6"

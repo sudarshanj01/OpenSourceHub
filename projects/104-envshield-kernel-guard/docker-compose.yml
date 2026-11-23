@@ -1,0 +1,37 @@
+services:
+  envshield-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: envshield-web
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3104}:3104"
+    environment:
+      - PORT=3104
+      - NODE_ENV=production
+
+  # ----------------------------------------------------------------------------
+  # Production Reverse Proxy with Automatic Let's Encrypt SSL
+  # Uncomment the block below and set DOMAIN and ACME_EMAIL in .env
+  # ----------------------------------------------------------------------------
+  # caddy:
+  #   image: caddy:2.9-alpine
+  #   container_name: envshield-caddy
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   environment:
+  #     - DOMAIN=${DOMAIN}
+  #     - ACME_EMAIL=${ACME_EMAIL}
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile:ro
+  #     - caddy_data:/data
+  #     - caddy_config:/config
+  #   depends_on:
+  #     - envshield-web
+
+# volumes:
+#   caddy_data:
+#   caddy_config:

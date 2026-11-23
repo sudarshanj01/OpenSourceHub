@@ -51,6 +51,7 @@ A growing collection of production-ready applications built to professional engi
 | **101** | **QRShield** | Sovereign dynamic QR codes, UTM campaign tracking, editable redirects & SVG exports | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
 | **102** | **CapFlow** | Browser screen & camera bubble recording, real-time compositor & video trimming | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
 | **103** | **VaultEngine** | Sovereign database continuous archiving & second-precision Point-in-Time Recovery to Amazon S3 | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
+| **104** | **EnvShield** | Sovereign kernel-level .env guard & AI agent DLP via fanotify & Argon2id desktop modal | [`projects/104-envshield-kernel-guard/`](projects/104-envshield-kernel-guard/) |
 
 </div>
 

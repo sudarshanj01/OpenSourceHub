@@ -1,0 +1,12 @@
+{$DOMAIN:localhost} {
+    tls {$ACME_EMAIL:internal}
+
+    reverse_proxy envshield-web:3104 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+
+    encode gzip zstd
+}

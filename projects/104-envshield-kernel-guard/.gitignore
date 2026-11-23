@@ -1,0 +1,4 @@
+daemon/target/
+web/node_modules/
+web/.next/
+.env
