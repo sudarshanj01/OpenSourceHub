@@ -289,10 +289,20 @@ fn main() {
                 command.join(" ").bold()
             );
 
-            let status = Command::new(exe)
-                .args(args)
-                .envs(env_vars)
-                .status();
+            let mut cmd = Command::new(exe);
+            cmd.args(args).envs(env_vars);
+
+            // On Linux: Hardened against /proc/<pid>/environ inspection
+            #[cfg(target_os = "linux")]
+            unsafe {
+                use std::os::unix::process::CommandExt;
+                cmd.pre_exec(|| {
+                    libc::prctl(libc::PR_SET_DUMPABLE, 0, 0, 0, 0);
+                    Ok(())
+                });
+            }
+
+            let status = cmd.status();
 
             match status {
                 Ok(s) => {

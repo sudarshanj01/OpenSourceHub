@@ -243,6 +243,7 @@ dependencies = [
  "argon2",
  "clap",
  "colored",
+ "libc",
  "rand",
  "rand_core",
  "rpassword",

@@ -16,3 +16,6 @@ rpassword = "7.3"
 colored = "2.1"
 zeroize = { version = "1.8", features = ["derive"] }
 which = "8.0"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+libc = "0.2"
