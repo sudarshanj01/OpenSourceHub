@@ -1,60 +1,106 @@
 # 🔒 EnvShield
 
-> **Sovereign Kernel-Level `.env` Guard & AI Agent Data Loss Prevention (DLP)**  
-> Intercepts all `.env` file access attempts at the Linux kernel boundary (`fanotify`).  
-> Demands a master password via native desktop pop-up before a single byte of secrets can be read.
+> **Sovereign In-Memory Secret Vault & AI Agent Data Loss Prevention (DLP)**  
+> Seals `.env` files with **Argon2id + AES-256-GCM** so AI agents (Claude Code, Cursor, Aider) and scripts cannot read plaintext secrets from disk.  
+> Runs across **Linux, macOS, and Windows** with **zero root/admin privileges**.
 
 ---
 
-## ⚡ The Problem: The AI Agent Secret Leak
+## ⚡ The Problem: AI Agents Leak Plaintext Secrets
 
-In the agentic AI era, coding agents like **Claude Code**, **Cursor**, **Aider**, and **OpenDevin** run with your exact developer user permissions (`UID 1000`). If a `.env` file exists with database passwords, OpenAI keys, or Stripe secrets, any background agent command (`cat .env`, `grep`, or file indexing) reads those secrets directly into LLM prompts, context tokens, and telemetry logs.
+In the agentic AI era, coding agents like **Claude Code**, **Cursor**, **Aider**, and **OpenDevin** run with full access to your workspace folder. 
+- Ignore files like `.gitignore`, `.cursorignore`, and `.claudeignore` **fail to protect secrets** because agents can still execute terminal commands (`cat .env`, `python -c ...`) or accidentally commit `.env` into context tokens.
+- Tools like `dotenvx` write private keys in plaintext to `.env.keys` on disk, which agents can easily read!
 
-**EnvShield stops this at the Linux kernel boundary.**
-
----
-
-## 🛡️ Key Features
-
-- **Kernel-Level Interception (`fanotify`)**: Attaches to `FAN_OPEN_PERM`. When any process attempts to open any `.env` file anywhere on the system, the Linux kernel **freezes process execution** in kernel space.
-- **Desktop Modal Prompt**: EnvShield queries the active human screen via a native desktop dialog (`zenity`/`pinentry`). The AI agent in the terminal cannot see, type into, or bypass the modal.
-- **Argon2id Cryptographic Vault**: The master password is encrypted with modern Argon2id hashing and salt.
-- **Global Scope (Zero-Config)**: Protects all `.env`, `.env.local`, and `.env.production` files across every directory on your machine without requiring per-project initialization.
-- **Tamper-Resistant Root Daemon**: Runs as an untouchable systemd service. A user-level AI agent cannot `kill -9` the process or delete the guard.
-- **Sub-Microsecond Latency**: Non-secret file operations bypass the filter in `< 0.5 µs`.
+**EnvShield makes it mathematically impossible for an AI agent to read `.env` by shredding plaintext from disk and injecting secrets only into application RAM.**
 
 ---
 
-## 🚀 Quickstart
+## 🛡️ The 4-Step Workflow
 
-### 1. Build and Install the Rust Binary
+### 1. Seal your project (`.env` $\rightarrow$ `.env.vault`)
+```bash
+envshield seal
+```
+- Prompts for your Master Password.
+- Derives a 256-bit key via **Argon2id** (memory-hard, GPU-resistant).
+- Encrypts secrets into `.env.vault` using **AES-256-GCM**.
+- **Securely shreds and deletes the plaintext `.env` from your storage.**
+- Automatically appends `.env` to `.gitignore`.
+
+If an AI agent now runs `cat .env`, it gets:
+```text
+cat: .env: No such file or directory
+```
+If it runs `cat .env.vault`, it sees unreadable binary ciphertext.
+
+---
+
+### 2. Run your application with In-Memory Secrets
+```bash
+envshield run -- npm run dev
+# or
+envshield run -- docker compose up
+# or
+envshield run -- python main.py
+```
+- Asks for your Master Password.
+- Decrypts secrets **directly into process RAM**.
+- Injects environment variables into the child process.
+- **Plaintext `.env` is NEVER written to the hard drive or SSD.**
+
+---
+
+### 3. Edit your secrets in RAM
+```bash
+envshield edit
+```
+- Decrypts into `/dev/shm` (temporary RAM disk).
+- Opens your favorite editor (`nano`, `vim`, `$EDITOR`).
+- On exit, automatically re-encrypts into `.env.vault` with fresh salt & nonce, then shreds the RAM file.
+
+---
+
+### 4. View or Unseal
+```bash
+# View secrets in terminal stdout
+envshield view
+
+# Restore plaintext .env and remove .env.vault
+envshield unseal
+
+# Check protection state
+envshield status
+```
+
+---
+
+## 🚀 Installation
+
+### One-Line Install (Zero Root Needed)
+```bash
+curl -sSL https://raw.githubusercontent.com/sudarshanj01/OpenSourceHub/main/projects/104-envshield-kernel-guard/install.sh | bash
+```
+
+### Or Build with Cargo
 ```bash
 cd daemon
 cargo build --release
-sudo cp target/release/envshield /usr/local/bin/
-```
-
-### 2. Establish Master Password
-```bash
-sudo envshield init --install-service
-```
-
-### 3. Check Status & Guarded Files
-```bash
-envshield status
-envshield scan --path ~/workspace
+cp target/release/envshield ~/.local/bin/
 ```
 
 ---
 
-## 🌐 Web Showcase & Simulator
+## 🔒 Threat Model & Security Guarantees
 
-EnvShield includes an interactive Next.js 16 Web Showcase featuring a live kernel interception simulator:
-
-```bash
-docker compose up -d
-```
-Open **`http://localhost:3104`** in your browser.
+| Attack Vector | Standard Setup | With EnvShield Active |
+| :--- | :--- | :--- |
+| **Agent runs `cat .env`** | 🚨 Plaintext leaked to prompt context | ❌ `No such file or directory` (Shredded) |
+| **Agent runs `cat .env.vault`** | N/A | 🔒 Unreadable AES-256-GCM ciphertext |
+| **Agent runs `envshield unseal`** | N/A | 🛑 Denied: Prompts for human Master Password |
+| **Attacker gains `root` access** | 🚨 Can read all `.env` files | 🔒 Cannot decrypt vault (Password not on disk) |
+| **Accidental `git commit -a`** | 🚨 Pushed to GitHub | 🔒 `.env` does not exist; vault is encrypted |
+| **Kernel / System Crash Risk** | N/A | **0% (Pure userspace; zero kernel hooks)** |
 
 ---
 
