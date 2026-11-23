@@ -236,22 +236,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "envshield"
-version = "0.2.0"
-dependencies = [
- "aes-gcm",
- "argon2",
- "clap",
- "colored",
- "libc",
- "rand",
- "rand_core",
- "rpassword",
- "which",
- "zeroize",
-]
-
-[[package]]
 name = "generic-array"
 version = "0.14.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -426,6 +410,22 @@ checksum = "9a1efe12a1469752d0e6ff5ebec0b6ef4924cc5c4c71046b0ec730040535819d"
 dependencies = [
  "libc",
  "windows-sys 0.61.2",
+]
+
+[[package]]
+name = "shield"
+version = "0.3.0"
+dependencies = [
+ "aes-gcm",
+ "argon2",
+ "clap",
+ "colored",
+ "libc",
+ "rand",
+ "rand_core",
+ "rpassword",
+ "which",
+ "zeroize",
 ]
 
 [[package]]
