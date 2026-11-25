@@ -76,7 +76,7 @@
 | **051-100** | *(See [`PROJECTS_100.md`](PROJECTS_100.md))* | Sector 6–11 (Retail, Trades, Real Estate, Logistics, Personal) | Various Occupations | Next.js, Go, Java, Python, PostgreSQL 16 | `⏳ PLANNED` | `projects/...` |
 | **101** | `101-sovereign-dynamic-qr-studio` | **QRShield — Sovereign Dynamic QR & Anti-Ransom Campaign Studio** | Marketing, Hospitality & Campaign Tracking | Next.js 16, React 19, @ui-sdk/react, PostgreSQL 16 | `✅ DONE` | [`projects/101-sovereign-dynamic-qr-studio`](projects/101-sovereign-dynamic-qr-studio/) |
 | **102** | `102-screen-recording-studio` | **CapFlow — Sovereign Screen & Cam Studio** | Developers, Creators & Async Teams | Rust (Axum 0.8), Tokio, SQLite, HTML5 Canvas | `✅ DONE` | [`projects/102-screen-recording-studio`](projects/102-screen-recording-studio/) |
-| **103** | `103-sovereign-db-vault` | **VaultEngine — Sovereign Database PITR & Continuous S3 Archiver** | Database Administrators & Backend Engineers | Rust (CLI/Daemon), Next.js 16 (SEO Web App) | `✅ DONE` | [`projects/103-sovereign-db-vault`](projects/103-sovereign-db-vault/) |
+| **103** | `103-vaultengine` | **VaultEngine — Sovereign Database PITR & Continuous S3 Archiver** | Database Administrators & Backend Engineers | Rust (CLI/Daemon), Next.js 16 (SEO Web App) | `✅ DONE` | [`projects/103-vaultengine`](projects/103-vaultengine/) |
 | **104** | `104-shield` | **Shield — In-Memory Secret Isolation for AI Agents** | Developers, Security Teams & AI Engineers | Rust (Argon2id + AES-256-GCM Vault), Next.js 16 (Showcase & Docs) | `🔄 IN_PROGRESS` | [`projects/104-shield`](projects/104-shield/) |
 
 ---

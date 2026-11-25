@@ -13,7 +13,7 @@ export default function QuickstartTabs() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const installCmd = "curl -sSL https://vaultengine-pitr.vercel.app/install.sh | sudo bash";
+  const installCmd = "curl -sSL https://vaultengine.opensourcehub.dpdns.org/install.sh | sudo bash";
 
   const postgresConfig = `# Add to /etc/postgresql/<version>/main/postgresql.conf:
 wal_level = replica
@@ -78,12 +78,15 @@ enforce_gtid_consistency = ON`;
             </span>
             <span className="text-xs text-emerald-400 font-mono">Linux x86_64 / arm64</span>
           </div>
-          <div className="flex items-center justify-between bg-zinc-950 p-4 rounded-xl border border-zinc-800/80 font-mono text-sm overflow-x-auto gap-4">
-            <span className="text-indigo-300 select-all">$ {installCmd}</span>
+          <div className="flex items-center gap-3 bg-zinc-950 px-4 py-3 rounded-xl border border-zinc-800/80 font-mono text-xs sm:text-sm">
+            <div className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap text-emerald-300 select-all">
+              <span className="text-zinc-500 mr-2 select-none">$</span>
+              <span>{installCmd}</span>
+            </div>
             <button
               type="button"
               onClick={() => copyToClipboard(installCmd, 'install')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors flex-shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors shrink-0 border border-zinc-700/60"
             >
               {copied === 'install' ? (
                 <>

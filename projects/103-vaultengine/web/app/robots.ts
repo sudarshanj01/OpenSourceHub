@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/'],
     },
-    sitemap: 'https://vaultengine.io/sitemap.xml',
+    sitemap: 'https://vaultengine.opensourcehub.dpdns.org/sitemap.xml',
   };
 }

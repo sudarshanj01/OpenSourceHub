@@ -13,7 +13,7 @@ YELLOW="\033[33m"
 RED="\033[31m"
 RESET="\033[0m"
 
-BASE_URL="https://vaultengine-pitr.vercel.app"
+BASE_URL="https://vaultengine.opensourcehub.dpdns.org"
 
 echo -e "${CYAN}${BOLD}"
 echo "  ██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗███████╗███╗   ██╗ ██████╗ ██╗███╗   ██╗███████╗"

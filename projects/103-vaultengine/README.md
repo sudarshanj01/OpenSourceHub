@@ -1,4 +1,4 @@
-# 🛡️ VaultEngine (`103-sovereign-db-vault`)
+# 🛡️ VaultEngine (`103-vaultengine`)
 
 > **Sovereign Database Continuous Archiving & Point-in-Time Recovery (PITR) to Amazon S3**  
 > Ditch the 120% AWS RDS markup. Enterprise-grade database protection on raw EC2.
@@ -16,7 +16,7 @@ Visit `http://localhost:3103` to view the promotional platform, live cost saving
 ### 2. Install the Standalone CLI on your Database Server
 ```bash
 # 1-Line Installer from Live Production URL
-curl -sSL https://vaultengine-pitr.vercel.app/install.sh | sudo bash
+curl -sSL https://vaultengine.opensourcehub.dpdns.org/install.sh | sudo bash
 
 # Or compile locally from source
 cd cli && cargo build --release

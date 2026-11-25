@@ -27,7 +27,7 @@ Every project solves a concrete, high-utility operational challenge without ente
 | Product | Live URL | Summary | Stack & Source |
 | :--- | :--- | :--- | :--- |
 | **Shield** | [shield.opensourcehub.dpdns.org](https://shield.opensourcehub.dpdns.org) | Zero-disk `.env` isolation in RAM for AI agents | Rust, Next.js · [`104-shield`](projects/104-shield/) |
-| **VaultEngine** | [vaultengine-pitr.vercel.app](https://vaultengine-pitr.vercel.app) | Continuous PostgreSQL/MySQL PITR to S3 | Rust, Next.js · [`103-sovereign-db-vault`](projects/103-sovereign-db-vault/) |
+| **VaultEngine** | [vaultengine.opensourcehub.dpdns.org](https://vaultengine.opensourcehub.dpdns.org) | Continuous PostgreSQL/MySQL PITR to S3 | Rust, Next.js · [`103-vaultengine`](projects/103-vaultengine/) |
 
 ---
 
@@ -45,7 +45,7 @@ A growing collection of production-ready applications built to professional engi
 | **042** | **OpenSheets** | Enterprise-grade timesheets, weekly matrix grids, project hours & payroll exports | [`projects/042-monthly-employee-timesheets/`](projects/042-monthly-employee-timesheets/) |
 | **101** | **QRShield** | Sovereign dynamic QR codes, UTM campaign tracking, editable redirects & SVG exports | [`projects/101-sovereign-dynamic-qr-studio/`](projects/101-sovereign-dynamic-qr-studio/) |
 | **102** | **CapFlow** | Browser screen & camera bubble recording, real-time compositor & video trimming | [`projects/102-screen-recording-studio/`](projects/102-screen-recording-studio/) |
-| **103** | **VaultEngine** | Sovereign database continuous archiving & second-precision Point-in-Time Recovery to Amazon S3 | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
+| **103** | **VaultEngine** | Sovereign database continuous archiving & second-precision Point-in-Time Recovery to Amazon S3 | [`projects/103-vaultengine/`](projects/103-vaultengine/) |
 | **104** | **Shield** | Zero-disk secret isolation for AI agents via Argon2id + AES-256-GCM & in-RAM injection | [`projects/104-shield/`](projects/104-shield/) |
 
 </div>

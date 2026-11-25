@@ -29,14 +29,17 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'OpenSourceHub Sovereign Team' }],
   creator: 'OpenSourceHub',
-  metadataBase: new URL('https://vaultengine-pitr.vercel.app'),
+  metadataBase: new URL('https://vaultengine.opensourcehub.dpdns.org'),
+  icons: {
+    icon: '/logo.svg',
+  },
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'VaultEngine — Continuous Point-in-Time Recovery to S3 on Raw EC2',
     description: 'Save 60%–120% on cloud database fees. Single static memory-safe daemon providing sub-second continuous WAL/binlog streaming and instant second-precision recovery.',
-    url: 'https://vaultengine-pitr.vercel.app',
+    url: 'https://vaultengine.opensourcehub.dpdns.org',
     siteName: 'VaultEngine',
     type: 'website',
     locale: 'en_US',

@@ -1,6 +1,6 @@
 # 🤖 VaultEngine — Project Agent Manual (`agent.md`)
 
-Welcome to **VaultEngine** (`103-sovereign-db-vault`) — the sovereign continuous database transaction archiver and Point-in-Time Recovery (PITR) engine.
+Welcome to **VaultEngine** (`103-vaultengine`) — the sovereign continuous database transaction archiver and Point-in-Time Recovery (PITR) engine.
 
 ---
 
@@ -48,7 +48,7 @@ Welcome to **VaultEngine** (`103-sovereign-db-vault`) — the sovereign continuo
 ## 🚀 5. Local Deployment Steps
 1. Navigate into project folder:
    ```bash
-   cd projects/103-sovereign-db-vault
+   cd projects/103-vaultengine
    ```
 2. Build and launch container:
    ```bash
