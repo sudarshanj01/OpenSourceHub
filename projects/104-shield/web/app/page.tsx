@@ -4,6 +4,7 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import HowItSolves from '@/components/HowItSolves';
+import FaqSection from '@/components/FaqSection';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <HowItSolves />
+        <FaqSection />
       </main>
 
       <Footer />
