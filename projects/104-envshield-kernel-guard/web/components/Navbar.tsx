@@ -52,14 +52,11 @@ export default function Navbar() {
           <Link href="/" className="hover:text-[#ef9846] transition-colors">
             Home
           </Link>
+          <Link href="/#how-it-works" className="hover:text-[#ef9846] transition-colors">
+            How It Works
+          </Link>
           <Link href="/doc" className="hover:text-[#ef9846] transition-colors">
             Docs
-          </Link>
-          <Link href="/#how-it-works" className="hover:text-[#ef9846] transition-colors">
-            Architecture
-          </Link>
-          <Link href="/#security" className="hover:text-[#ef9846] transition-colors">
-            Security
           </Link>
         </nav>
 
@@ -105,25 +102,18 @@ export default function Navbar() {
             Home
           </Link>
           <Link
+            href="/#how-it-works"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-sm text-[#cfb8a2] hover:text-[#ef9846]"
+          >
+            How It Works
+          </Link>
+          <Link
             href="/doc"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-sm text-[#cfb8a2] hover:text-[#ef9846]"
           >
             Docs
-          </Link>
-          <Link
-            href="/#how-it-works"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm text-[#cfb8a2] hover:text-[#ef9846]"
-          >
-            Architecture
-          </Link>
-          <Link
-            href="/#security"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-sm text-[#cfb8a2] hover:text-[#ef9846]"
-          >
-            Security
           </Link>
           <div className="pt-2 border-t border-white/5 flex flex-col gap-3">
             <Link

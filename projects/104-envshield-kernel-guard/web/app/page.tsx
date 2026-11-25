@@ -3,29 +3,19 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import TwoPillars from '@/components/TwoPillars';
-import SecuritySection from '@/components/SecuritySection';
+import HowItSolves from '@/components/HowItSolves';
 import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-[#14110f] text-[#cfb8a2] font-sans selection:bg-[#ef9846]/30 selection:text-[#fbfbf9]">
-      {/* Top Fixed Navigation */}
       <Navbar />
 
-      {/* Main Content Sections */}
       <main className="flex-1">
-        {/* Hero Section with Installation options & high-level value prop */}
         <Hero />
-
-        {/* The Two Pillars: Agent Quarantine vs Seamless Execution */}
-        <TwoPillars />
-
-        {/* Cryptographic and OS-level Security Deep-Dive */}
-        <SecuritySection />
+        <HowItSolves />
       </main>
 
-      {/* Footer with final CTA, links, and domain info */}
       <Footer />
     </div>
   );
