@@ -7,9 +7,64 @@ use colored::*;
 use flate2::Compression;
 use indicatif::{ProgressBar, ProgressStyle};
 use sha2::{Digest, Sha256};
+use std::collections::HashMap;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::Command;
+
+pub fn is_binlog_filename(name: &str) -> bool {
+    if name.ends_with(".index") {
+        return false;
+    }
+    if let Some((prefix, ext)) = name.rsplit_once('.') {
+        let is_binlog_prefix = prefix.ends_with("-bin") || prefix == "binlog";
+        let is_numeric_ext = !ext.is_empty() && ext.bytes().all(|b| b.is_ascii_digit());
+        return is_binlog_prefix && is_numeric_ext;
+    }
+    false
+}
+
+pub fn list_binlog_files(data_dir: &Path) -> Result<Vec<(String, PathBuf, u64)>> {
+    if !data_dir.exists() {
+        return Ok(Vec::new());
+    }
+    let mut files = Vec::new();
+    for entry in fs::read_dir(data_dir)? {
+        let entry = entry?;
+        let path = entry.path();
+        if !path.is_file() {
+            continue;
+        }
+        if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
+            if is_binlog_filename(name) {
+                let len = entry.metadata()?.len();
+                files.push((name.to_string(), path, len));
+            }
+        }
+    }
+    files.sort_by(|a, b| a.0.cmp(&b.0));
+    Ok(files)
+}
+
+pub async fn sync_mysql_binlogs(
+    cfg: &VaultConfig,
+    uploaded_sizes: &mut HashMap<String, u64>,
+) -> Result<usize> {
+    let files = list_binlog_files(&cfg.data_dir)?;
+    let mut synced = 0usize;
+
+    for (name, path, len) in files {
+        let prev_len = uploaded_sizes.get(&name).copied();
+        if prev_len == Some(len) {
+            continue;
+        }
+        archive_binlog_segment(cfg, &path, &name).await?;
+        uploaded_sizes.insert(name, len);
+        synced += 1;
+    }
+
+    Ok(synced)
+}
 
 pub async fn archive_binlog_segment(
     cfg: &VaultConfig,
@@ -125,4 +180,32 @@ pub async fn take_mysql_snapshot(cfg: &VaultConfig, label: Option<&str>) -> Resu
     println!("{} Size: {} bytes | SHA256: {}", "✓".green().bold(), size_bytes, checksum);
 
     Ok(snapshot_id)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_binlog_filename() {
+        assert!(is_binlog_filename("mysql-bin.000001"));
+        assert!(is_binlog_filename("binlog.000042"));
+        assert!(!is_binlog_filename("mysql-bin.index"));
+        assert!(!is_binlog_filename("ibdata1"));
+        assert!(!is_binlog_filename("auto.cnf"));
+    }
+
+    #[test]
+    fn test_list_binlog_files() {
+        let dir = tempfile::tempdir().unwrap();
+        fs::write(dir.path().join("mysql-bin.000002"), b"bin2").unwrap();
+        fs::write(dir.path().join("mysql-bin.000001"), b"bin1").unwrap();
+        fs::write(dir.path().join("mysql-bin.index"), b"idx").unwrap();
+        fs::write(dir.path().join("ibdata1"), b"ib").unwrap();
+
+        let files = list_binlog_files(dir.path()).unwrap();
+        assert_eq!(files.len(), 2);
+        assert_eq!(files[0].0, "mysql-bin.000001");
+        assert_eq!(files[1].0, "mysql-bin.000002");
+    }
 }
