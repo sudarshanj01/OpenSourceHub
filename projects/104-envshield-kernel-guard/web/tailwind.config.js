@@ -7,16 +7,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        zinc: {
-          950: '#09090b',
-          900: '#18181b',
-          850: '#202024',
-          800: '#27272a',
+        orac: {
+          bg: '#14110f',
+          deep: '#1a1613',
+          card: '#201b17',
+          cardHover: '#28221d',
+          border: 'rgba(239, 152, 70, 0.18)',
+          borderHover: 'rgba(239, 152, 70, 0.45)',
+          copper: '#ef9846',
+          copperLight: '#f8cba2',
+          copperDark: '#d97e28',
+          sand: '#cfb8a2',
+          sandDark: '#8c7866',
+          ivory: '#fbfbf9',
         },
-        emerald: {
-          500: '#10b981',
-          400: '#34d399',
-        },
+      },
+      fontFamily: {
+        display: ['Funnel Display', 'Geist', 'system-ui', 'sans-serif'],
+        sans: ['Geist', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['GeistMono', 'JetBrains Mono', 'Fira Code', 'monospace'],
+      },
+      boxShadow: {
+        'copper-glow': '0 0 35px -5px rgba(239, 152, 70, 0.35)',
+        'copper-sm': '0 0 15px -3px rgba(239, 152, 70, 0.25)',
       },
     },
   },
