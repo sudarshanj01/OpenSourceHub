@@ -4,9 +4,6 @@ import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import TwoPillars from '@/components/TwoPillars';
-import InteractiveTerminal from '@/components/InteractiveTerminal';
-import CommandsGrid from '@/components/CommandsGrid';
-import ThreatMatrix from '@/components/ThreatMatrix';
 import SecuritySection from '@/components/SecuritySection';
 import Footer from '@/components/Footer';
 
@@ -23,15 +20,6 @@ export default function Home() {
 
         {/* The Two Pillars: Agent Quarantine vs Seamless Execution */}
         <TwoPillars />
-
-        {/* Live Interactive Terminal Simulator */}
-        <InteractiveTerminal />
-
-        {/* Complete Command Line Workflow Reference */}
-        <CommandsGrid />
-
-        {/* Real-world Threat Matrix comparison */}
-        <ThreatMatrix />
 
         {/* Cryptographic and OS-level Security Deep-Dive */}
         <SecuritySection />

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Shield, Github, ArrowUpRight, Copy, Check, Terminal, Globe, Heart } from 'lucide-react';
 
 export default function Footer() {
@@ -79,9 +80,11 @@ export default function Footer() {
           {/* Col 1: Brand & Domain */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#ef9846]/20 border border-[#ef9846]/40 flex items-center justify-center text-[#ef9846]">
-                <Shield className="w-4 h-4" />
-              </div>
+              <img
+                src="/logo.png"
+                alt="Shield Logo"
+                className="w-8 h-8 rounded-lg object-cover border border-[#ef9846]/30"
+              />
               <span className="font-display font-bold text-xl text-[#fbfbf9] tracking-tight">
                 Shield
               </span>
@@ -127,24 +130,19 @@ export default function Footer() {
             </div>
             <ul className="space-y-2 text-xs text-[#a89785]">
               <li>
-                <a href="#demo" className="hover:text-[#ef9846] transition-colors">
-                  Interactive Terminal
-                </a>
+                <Link href="/doc" className="hover:text-[#ef9846] transition-colors">
+                  CLI Documentation
+                </Link>
               </li>
               <li>
-                <a href="#how-it-works" className="hover:text-[#ef9846] transition-colors">
+                <Link href="/#how-it-works" className="hover:text-[#ef9846] transition-colors">
                   Zero-Disk Quarantine
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#matrix" className="hover:text-[#ef9846] transition-colors">
-                  Threat Matrix
-                </a>
-              </li>
-              <li>
-                <a href="#security" className="hover:text-[#ef9846] transition-colors">
+                <Link href="/#security" className="hover:text-[#ef9846] transition-colors">
                   Cryptographic Design
-                </a>
+                </Link>
               </li>
               <li>
                 <a
