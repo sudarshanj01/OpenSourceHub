@@ -45,6 +45,22 @@ pub enum Commands {
         filename: String,
     },
 
+    /// Fetch a PostgreSQL WAL segment from S3 (invoked by restore_command)
+    FetchWal {
+        /// File name of WAL segment (%f in restore_command)
+        filename: String,
+        /// Destination path (%p in restore_command)
+        dest: PathBuf,
+    },
+
+    /// Archive a MySQL binary log segment to S3
+    ArchiveBinlog {
+        /// Path to binlog file
+        source: PathBuf,
+        /// File name of binlog segment
+        filename: String,
+    },
+
     /// Trigger an immediate, non-blocking hot physical base snapshot
     Backup {
         /// Optional label/description for this snapshot
@@ -57,7 +73,7 @@ pub enum Commands {
 
     /// Restore database to an exact historical point-in-time (second-precision)
     Restore {
-        /// Target timestamp (e.g. '2026-11-21 21:00:00 UTC' or '15m ago')
+        /// Target timestamp (e.g. '2026-11-25 17:00:00 UTC' or 'latest')
         #[arg(short, long)]
         target_time: Option<String>,
 
@@ -78,7 +94,13 @@ pub enum Commands {
 async fn main() -> Result<()> {
     let cli = Cli::parse();
 
-    print_banner();
+    let quiet = matches!(
+        cli.command,
+        Commands::ArchiveWal { .. } | Commands::FetchWal { .. } | Commands::ArchiveBinlog { .. }
+    );
+    if !quiet {
+        print_banner();
+    }
 
     match cli.command {
         Commands::Init { force } => {
@@ -93,6 +115,14 @@ async fn main() -> Result<()> {
             let cfg = config::load_config(&cli.config)?;
             engine::postgres::archive_wal_segment(&cfg, &source, &filename).await?;
         }
+        Commands::FetchWal { filename, dest } => {
+            let cfg = config::load_config(&cli.config)?;
+            engine::postgres::fetch_wal_segment(&cfg, &filename, &dest).await?;
+        }
+        Commands::ArchiveBinlog { source, filename } => {
+            let cfg = config::load_config(&cli.config)?;
+            engine::mysql::archive_binlog_segment(&cfg, &source, &filename).await?;
+        }
         Commands::Backup { label } => {
             let cfg = config::load_config(&cli.config)?;
             engine::run_base_backup(&cfg, label.as_deref()).await?;
@@ -103,7 +133,7 @@ async fn main() -> Result<()> {
         }
         Commands::Restore { target_time, into, dry_run } => {
             let cfg = config::load_config(&cli.config)?;
-            engine::run_restore(&cfg, target_time, into, dry_run).await?;
+            engine::run_restore(&cfg, &cli.config, target_time, into, dry_run).await?;
         }
         Commands::Doctor => {
             aws::run_doctor().await?;

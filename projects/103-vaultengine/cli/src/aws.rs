@@ -46,7 +46,6 @@ pub async fn get_imds_credentials() -> Result<AwsCredentials> {
         .timeout(Duration::from_secs(3))
         .build()?;
 
-    // 1. Fetch IMDSv2 Token
     let token = client
         .put(IMDS_TOKEN_URL)
         .header("X-aws-ec2-metadata-token-ttl-seconds", "21600")
@@ -56,7 +55,6 @@ pub async fn get_imds_credentials() -> Result<AwsCredentials> {
         .text()
         .await?;
 
-    // 2. Fetch Attached IAM Role Name
     let role_name = client
         .get(IMDS_IAM_URL)
         .header("X-aws-ec2-metadata-token", &token)
@@ -70,7 +68,6 @@ pub async fn get_imds_credentials() -> Result<AwsCredentials> {
         anyhow::bail!("No IAM role attached to this EC2 instance. Attach an IAM role with S3 permissions.");
     }
 
-    // 3. Fetch Temporary STS Credentials
     let creds_url = format!("{}{}", IMDS_IAM_URL, role_name);
     let creds_json = client
         .get(&creds_url)
@@ -90,7 +87,6 @@ pub async fn resolve_credentials(use_iam: bool) -> Result<AwsCredentials> {
         }
     }
 
-    // Fallback to environment variables
     let access_key = std::env::var("AWS_ACCESS_KEY_ID")
         .or_else(|_| std::env::var("S3_ACCESS_KEY"))
         .context("No AWS IAM role detected and AWS_ACCESS_KEY_ID environment variable is missing")?;
@@ -106,7 +102,7 @@ pub async fn resolve_credentials(use_iam: bool) -> Result<AwsCredentials> {
     })
 }
 
-/// S3 Client with SigV4 Signing
+/// S3 Client with SigV4 Signing (supports AWS S3 virtual-hosted & custom path-style endpoints like MinIO)
 pub struct S3Client {
     pub bucket: String,
     pub region: String,
@@ -124,7 +120,7 @@ impl S3Client {
     ) -> Result<Self> {
         let creds = resolve_credentials(use_iam).await?;
         let client = reqwest::Client::builder()
-            .timeout(Duration::from_secs(120))
+            .timeout(Duration::from_secs(300))
             .build()?;
 
         Ok(Self {
@@ -147,61 +143,70 @@ impl S3Client {
         }
     }
 
+    pub fn canonical_uri(&self, key: &str) -> String {
+        let clean = key.trim_start_matches('/');
+        if self.endpoint.is_some() {
+            if clean.is_empty() {
+                format!("/{}", self.bucket)
+            } else {
+                format!("/{}/{}", self.bucket, clean)
+            }
+        } else if clean.is_empty() {
+            "/".to_string()
+        } else {
+            format!("/{}", clean)
+        }
+    }
+
     pub fn s3_url(&self, key: &str) -> String {
         let clean_key = key.trim_start_matches('/');
         if let Some(ref ep) = self.endpoint {
             let base = ep.trim_end_matches('/');
-            format!("{}/{}/{}", base, self.bucket, clean_key)
+            if clean_key.is_empty() {
+                format!("{}/{}", base, self.bucket)
+            } else {
+                format!("{}/{}/{}", base, self.bucket, clean_key)
+            }
+        } else if clean_key.is_empty() {
+            format!("https://{}.s3.{}.amazonaws.com/", self.bucket, self.region)
         } else {
             format!("https://{}.s3.{}.amazonaws.com/{}", self.bucket, self.region, clean_key)
         }
     }
 
-    pub async fn put_object(&self, key: &str, data: Vec<u8>, content_type: &str) -> Result<String> {
-        let url = self.s3_url(key);
-        let now = Utc::now();
-        let amz_date = now.format("%Y%m%dT%H%M%SZ").to_string();
-        let date_stamp = now.format("%Y%m%d").to_string();
+    pub async fn ensure_bucket(&self) -> Result<()> {
+        let url = self.s3_url("");
+        let canonical_uri = self.canonical_uri("");
+        let payload_hash = hex::encode(Sha256::digest(b""));
 
-        let mut hasher = Sha256::new();
-        hasher.update(&data);
-        let payload_hash = hex::encode(hasher.finalize());
-
-        let host = self.s3_host();
-        let clean_key = format!("/{}", key.trim_start_matches('/'));
-
-        let mut headers = HeaderMap::new();
-        headers.insert(reqwest::header::HOST, HeaderValue::from_str(&host)?);
-        headers.insert(
-            HeaderName::from_static("x-amz-date"),
-            HeaderValue::from_str(&amz_date)?,
-        );
-        headers.insert(
-            HeaderName::from_static("x-amz-content-sha256"),
-            HeaderValue::from_str(&payload_hash)?,
-        );
-        headers.insert(
-            reqwest::header::CONTENT_TYPE,
-            HeaderValue::from_str(content_type)?,
-        );
-
-        if let Some(ref token) = self.creds.session_token {
-            headers.insert(
-                HeaderName::from_static("x-amz-security-token"),
-                HeaderValue::from_str(token)?,
-            );
+        let headers = self.build_signed_headers("HEAD", &canonical_uri, "", &payload_hash, None)?;
+        let res = self.client.head(&url).headers(headers).send().await?;
+        if res.status().is_success() {
+            return Ok(());
         }
 
-        // Generate SigV4 authorization header
-        let auth_header = self.sign_request(
+        let put_headers = self.build_signed_headers("PUT", &canonical_uri, "", &payload_hash, None)?;
+        let put_res = self.client.put(&url).headers(put_headers).send().await?;
+        if !put_res.status().is_success() && put_res.status().as_u16() != 409 {
+            let status = put_res.status();
+            let body = put_res.text().await.unwrap_or_default();
+            anyhow::bail!("S3 CreateBucket failed ({}): {}", status, body);
+        }
+        Ok(())
+    }
+
+    pub async fn put_object(&self, key: &str, data: Vec<u8>, content_type: &str) -> Result<String> {
+        let url = self.s3_url(key);
+        let canonical_uri = self.canonical_uri(key);
+        let payload_hash = hex::encode(Sha256::digest(&data));
+
+        let headers = self.build_signed_headers(
             "PUT",
-            &clean_key,
-            &headers,
+            &canonical_uri,
+            "",
             &payload_hash,
-            &amz_date,
-            &date_stamp,
+            Some(content_type),
         )?;
-        headers.insert(reqwest::header::AUTHORIZATION, HeaderValue::from_str(&auth_header)?);
 
         let res = self
             .client
@@ -222,13 +227,63 @@ impl S3Client {
 
     pub async fn get_object(&self, key: &str) -> Result<Vec<u8>> {
         let url = self.s3_url(key);
+        let canonical_uri = self.canonical_uri(key);
+        let payload_hash = hex::encode(Sha256::digest(b""));
+
+        let headers = self.build_signed_headers("GET", &canonical_uri, "", &payload_hash, None)?;
+        let res = self.client.get(&url).headers(headers).send().await?;
+        if !res.status().is_success() {
+            anyhow::bail!(
+                "S3 GetObject failed ({}): {}",
+                res.status(),
+                res.text().await.unwrap_or_default()
+            );
+        }
+
+        Ok(res.bytes().await?.to_vec())
+    }
+
+    pub async fn list_objects(&self, prefix: &str) -> Result<Vec<String>> {
+        let encoded_prefix = url_encode_query(prefix.trim_start_matches('/'));
+        // Parameters in canonical query string must be sorted alphabetically by name
+        let canonical_query = format!("list-type=2&prefix={}", encoded_prefix);
+        let url = format!("{}?{}", self.s3_url(""), canonical_query);
+        let canonical_uri = self.canonical_uri("");
+        let payload_hash = hex::encode(Sha256::digest(b""));
+
+        let headers = self.build_signed_headers(
+            "GET",
+            &canonical_uri,
+            &canonical_query,
+            &payload_hash,
+            None,
+        )?;
+
+        let res = self.client.get(&url).headers(headers).send().await?;
+        if !res.status().is_success() {
+            anyhow::bail!(
+                "S3 ListObjectsV2 failed ({}): {}",
+                res.status(),
+                res.text().await.unwrap_or_default()
+            );
+        }
+
+        let xml = res.text().await?;
+        Ok(parse_list_objects_xml(&xml))
+    }
+
+    fn build_signed_headers(
+        &self,
+        method: &str,
+        canonical_uri: &str,
+        canonical_query: &str,
+        payload_hash: &str,
+        content_type: Option<&str>,
+    ) -> Result<HeaderMap> {
         let now = Utc::now();
         let amz_date = now.format("%Y%m%dT%H%M%SZ").to_string();
         let date_stamp = now.format("%Y%m%d").to_string();
-        let payload_hash = hex::encode(Sha256::digest(b""));
-
         let host = self.s3_host();
-        let clean_key = format!("/{}", key.trim_start_matches('/'));
 
         let mut headers = HeaderMap::new();
         headers.insert(reqwest::header::HOST, HeaderValue::from_str(&host)?);
@@ -238,8 +293,12 @@ impl S3Client {
         );
         headers.insert(
             HeaderName::from_static("x-amz-content-sha256"),
-            HeaderValue::from_str(&payload_hash)?,
+            HeaderValue::from_str(payload_hash)?,
         );
+
+        if let Some(ct) = content_type {
+            headers.insert(reqwest::header::CONTENT_TYPE, HeaderValue::from_str(ct)?);
+        }
 
         if let Some(ref token) = self.creds.session_token {
             headers.insert(
@@ -248,21 +307,25 @@ impl S3Client {
             );
         }
 
-        let auth = self.sign_request("GET", &clean_key, &headers, &payload_hash, &amz_date, &date_stamp)?;
+        let auth = self.sign_request(
+            method,
+            canonical_uri,
+            canonical_query,
+            &headers,
+            payload_hash,
+            &amz_date,
+            &date_stamp,
+        )?;
         headers.insert(reqwest::header::AUTHORIZATION, HeaderValue::from_str(&auth)?);
-
-        let res = self.client.get(&url).headers(headers).send().await?;
-        if !res.status().is_success() {
-            anyhow::bail!("S3 GetObject failed ({}): {}", res.status(), res.text().await.unwrap_or_default());
-        }
-
-        Ok(res.bytes().await?.to_vec())
+        Ok(headers)
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn sign_request(
         &self,
         method: &str,
         canonical_uri: &str,
+        canonical_query: &str,
         headers: &HeaderMap,
         payload_hash: &str,
         amz_date: &str,
@@ -283,8 +346,8 @@ impl S3Client {
         }
 
         let canonical_request = format!(
-            "{}\n{}\n\n{}\n{}\n{}",
-            method, canonical_uri, canonical_headers, signed_headers, payload_hash
+            "{}\n{}\n{}\n{}\n{}\n{}",
+            method, canonical_uri, canonical_query, canonical_headers, signed_headers, payload_hash
         );
 
         let canonical_request_hash = hex::encode(Sha256::digest(canonical_request.as_bytes()));
@@ -294,7 +357,6 @@ impl S3Client {
             amz_date, credential_scope, canonical_request_hash
         );
 
-        // Calculate signature
         let k_secret = format!("AWS4{}", self.creds.secret_access_key);
         let k_date = hmac_sha256(k_secret.as_bytes(), date_stamp.as_bytes())?;
         let k_region = hmac_sha256(&k_date, self.region.as_bytes())?;
@@ -307,6 +369,34 @@ impl S3Client {
             self.creds.access_key_id, credential_scope, signed_headers, signature
         ))
     }
+}
+
+pub fn parse_list_objects_xml(xml: &str) -> Vec<String> {
+    let mut keys = Vec::new();
+    let mut rest = xml;
+    while let Some(start) = rest.find("<Key>") {
+        let after_start = &rest[start + 5..];
+        if let Some(end) = after_start.find("</Key>") {
+            keys.push(after_start[..end].to_string());
+            rest = &after_start[end + 6..];
+        } else {
+            break;
+        }
+    }
+    keys
+}
+
+fn url_encode_query(input: &str) -> String {
+    let mut out = String::with_capacity(input.len());
+    for b in input.bytes() {
+        match b {
+            b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
+                out.push(b as char);
+            }
+            _ => out.push_str(&format!("%{:02X}", b)),
+        }
+    }
+    out
 }
 
 fn hmac_sha256(key: &[u8], data: &[u8]) -> Result<Vec<u8>> {
@@ -344,4 +434,56 @@ pub async fn run_doctor() -> Result<()> {
 
     println!("\n{} Diagnostics complete.", "[DONE]".green().bold());
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn mock_client(endpoint: Option<&str>) -> S3Client {
+        S3Client {
+            bucket: "my-vault-bucket".to_string(),
+            region: "us-east-1".to_string(),
+            endpoint: endpoint.map(|s| s.to_string()),
+            creds: AwsCredentials {
+                access_key_id: "AKIAIOSFODNN7EXAMPLE".to_string(),
+                secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY".to_string(),
+                session_token: None,
+            },
+            client: reqwest::Client::new(),
+        }
+    }
+
+    #[test]
+    fn test_canonical_uri_and_url_aws() {
+        let c = mock_client(None);
+        assert_eq!(c.s3_host(), "my-vault-bucket.s3.us-east-1.amazonaws.com");
+        assert_eq!(c.canonical_uri("wal/0001.gz"), "/wal/0001.gz");
+        assert_eq!(
+            c.s3_url("wal/0001.gz"),
+            "https://my-vault-bucket.s3.us-east-1.amazonaws.com/wal/0001.gz"
+        );
+    }
+
+    #[test]
+    fn test_canonical_uri_and_url_minio_path_style() {
+        let c = mock_client(Some("http://127.0.0.1:9000"));
+        assert_eq!(c.s3_host(), "127.0.0.1:9000");
+        assert_eq!(c.canonical_uri("wal/0001.gz"), "/my-vault-bucket/wal/0001.gz");
+        assert_eq!(c.canonical_uri(""), "/my-vault-bucket");
+        assert_eq!(
+            c.s3_url("wal/0001.gz"),
+            "http://127.0.0.1:9000/my-vault-bucket/wal/0001.gz"
+        );
+    }
+
+    #[test]
+    fn test_parse_list_objects_xml() {
+        let xml = r#"<ListBucketResult><Contents><Key>vault/snapshots/base_1.tar.gz</Key></Contents><Contents><Key>vault/wal/0001.gz</Key></Contents></ListBucketResult>"#;
+        let keys = parse_list_objects_xml(xml);
+        assert_eq!(
+            keys,
+            vec!["vault/snapshots/base_1.tar.gz", "vault/wal/0001.gz"]
+        );
+    }
 }
