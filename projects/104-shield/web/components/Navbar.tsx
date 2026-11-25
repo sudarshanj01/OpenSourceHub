@@ -20,7 +20,7 @@ export default function Navbar() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-[#14110f]/85 backdrop-blur-md border-b border-[#ef9846]/15 py-3.5 shadow-xl'
+          ? 'bg-[#14110f]/90 backdrop-blur-md py-3.5'
           : 'bg-transparent py-5'
       }`}
     >
@@ -63,7 +63,7 @@ export default function Navbar() {
         {/* Right CTA */}
         <div className="hidden lg:flex items-center gap-4 whitespace-nowrap">
           <a
-            href="https://github.com/sudarshanj01/OpenSourceHub/tree/main/projects/104-envshield-kernel-guard"
+            href="https://github.com/sudarshanj01/OpenSourceHub/tree/main/projects/104-shield"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-2 text-xs text-[#cfb8a2] hover:text-[#fbfbf9] transition-colors"

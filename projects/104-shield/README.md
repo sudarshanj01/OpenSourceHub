@@ -79,7 +79,7 @@ envshield status
 
 ### One-Line Install (Zero Root Needed)
 ```bash
-curl -sSL https://raw.githubusercontent.com/sudarshanj01/OpenSourceHub/main/projects/104-envshield-kernel-guard/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/sudarshanj01/OpenSourceHub/main/projects/104-shield/install.sh | bash
 ```
 
 ### Or Build with Cargo

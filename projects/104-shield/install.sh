@@ -4,7 +4,7 @@ set -e
 # ==============================================================================
 # EnvShield — Universal 1-Line Installer (Zero-Root Required)
 # Usage:
-#   curl -sSL https://raw.githubusercontent.com/sudarshanj01/OpenSourceHub/main/projects/104-envshield-kernel-guard/install.sh | bash
+#   curl -sSL https://raw.githubusercontent.com/sudarshanj01/OpenSourceHub/main/projects/104-shield/install.sh | bash
 # ==============================================================================
 
 BOLD='\033[1m'

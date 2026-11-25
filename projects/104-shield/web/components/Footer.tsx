@@ -44,7 +44,7 @@ export default function Footer() {
               CLI Docs
             </Link>
             <a
-              href="https://github.com/sudarshanj01/OpenSourceHub/tree/main/projects/104-envshield-kernel-guard"
+              href="https://github.com/sudarshanj01/OpenSourceHub/tree/main/projects/104-shield"
               target="_blank"
               rel="noreferrer"
               className="hover:text-[#ef9846] transition-colors inline-flex items-center gap-1"
