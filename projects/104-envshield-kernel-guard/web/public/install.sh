@@ -4,7 +4,7 @@ set -e
 # ==============================================================================
 # Shield — Sovereign Secret Isolation CLI Installer
 # Usage:
-#   curl -sSL https://opensourcehub.dpdns.org/install.sh | bash
+#   curl -sSL https://shield.opensourcehub.dpdns.org/install.sh | bash
 # ==============================================================================
 
 BOLD='\033[1m'

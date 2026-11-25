@@ -5,7 +5,7 @@ import { Shield, Github, ArrowUpRight, Copy, Check, Terminal, Globe, Heart } fro
 
 export default function Footer() {
   const [copied, setCopied] = useState(false);
-  const installCmd = 'curl -sSL https://opensourcehub.dpdns.org/install.sh | bash';
+  const installCmd = 'curl -sSL https://shield.opensourcehub.dpdns.org/install.sh | bash';
 
   const copyCmd = () => {
     navigator.clipboard.writeText(installCmd);
@@ -96,12 +96,12 @@ export default function Footer() {
               <Globe className="w-3.5 h-3.5 text-[#ef9846]" />
               <span>Domain:</span>
               <a
-                href="https://opensourcehub.dpdns.org"
+                href="https://shield.opensourcehub.dpdns.org"
                 target="_blank"
                 rel="noreferrer"
                 className="text-[#ef9846] hover:underline"
               >
-                opensourcehub.dpdns.org
+                shield.opensourcehub.dpdns.org
               </a>
             </div>
           </div>

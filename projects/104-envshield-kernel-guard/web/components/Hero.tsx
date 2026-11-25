@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Shield, Terminal, Copy, Check, Lock, Sparkles, ArrowRight, ShieldCheck, Cpu } from 'lucide-react';
 
 const INSTALL_COMMANDS = {
-  unix: 'curl -sSL https://opensourcehub.dpdns.org/install.sh | bash',
-  powershell: 'irm https://opensourcehub.dpdns.org/install.ps1 | iex',
+  unix: 'curl -sSL https://shield.opensourcehub.dpdns.org/install.sh | bash',
+  powershell: 'irm https://shield.opensourcehub.dpdns.org/install.ps1 | iex',
   cargo: 'cargo install --git https://github.com/sudarshanj01/OpenSourceHub shield',
 };
 
