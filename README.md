@@ -30,6 +30,7 @@ Production-grade applications deployed live on the web and ready for immediate p
 
 | Product | Live Production URL | Primary Use Case & Capabilities | Technology Stack | Source Code |
 | :--- | :--- | :--- | :--- | :--- |
+| **Shield** | [https://shield.opensourcehub.dpdns.org](https://shield.opensourcehub.dpdns.org) | Zero-disk secret isolation for AI coding agents. Encrypts `.env` with Argon2id + AES-256-GCM, shreds plaintext from disk, and injects secrets strictly into RAM via `shield <cmd>` with `PR_SET_DUMPABLE=0` protection. | Rust (CLI), Next.js 16, Tailwind CSS | [`projects/104-shield/`](projects/104-shield/) |
 | **VaultEngine** | [https://vaultengine-pitr.vercel.app](https://vaultengine-pitr.vercel.app) | Sovereign continuous database transaction archiving & second-precision Point-in-Time Recovery (PITR) to Amazon S3 for PostgreSQL and MySQL on raw EC2. Features zero-secret AWS IMDSv2 IAM auto-discovery, in-memory AES-256 encryption, and a 1-line shell installer. | Rust (CLI/Daemon), Next.js 16, Three.js, Tailwind CSS | [`projects/103-sovereign-db-vault/`](projects/103-sovereign-db-vault/) |
 
 </div>
